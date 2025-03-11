@@ -1,0 +1,14 @@
+# Carpeta del backend
+/backend/target/
+/backend/.idea/
+/backend/*.iml
+
+# Carpeta del frontend
+/frontend/node_modules/
+/frontend/dist/
+
+# Archivos temporales de Docker
+db/data/
+
+# Otros archivos del sistema
+.DS_Store
