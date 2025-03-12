@@ -1,0 +1,42 @@
+version: '3.8'  # Versión de Docker Compose
+
+services:
+  db:
+    image: postgres:13
+    container_name: postgres_db  # Nombre del contenedor (Contenedor de PostgreSQL)
+    environment:
+      POSTGRES_USER: erp_user  # (Usuario de PostgreSQL)
+      POSTGRES_PASSWORD: erp_pass  # (Contraseña)
+      POSTGRES_DB: ERP_Ventas  # (Nombre de la base de datos)
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql  # Inicialización de la base de datos
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"  # Mapping de puertos para PostgreSQL
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: spring_boot_backend  # Contenedor del backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ERP_Ventas
+      SPRING_DATASOURCE_USERNAME: erp_user
+      SPRING_DATASOURCE_PASSWORD: erp_pass
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: angular_frontend  # Contenedor del frontend
+    ports:
+      - "4200:80"  # Se asigna el puerto 4200 para acceso (Frontend en Nginx)
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
