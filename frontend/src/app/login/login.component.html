@@ -1,0 +1,23 @@
+<!-- src/app/login/login.component.html -->
+<div>
+    <h2>Login</h2>
+    <form (ngSubmit)="onLogin()">
+      <label>Usuario:</label>
+      <input [(ngModel)]="username" name="username" required />
+      <br />
+  
+      <label>Password:</label>
+      <input [(ngModel)]="password" name="password" type="password" required />
+      <br />
+  
+      <button type="submit">Iniciar Sesión</button>
+    </form>
+  
+    <div *ngIf="twoFARequired">
+      <h3>Verificar 2FA</h3>
+      <label>Token:</label>
+      <input [(ngModel)]="twoFactorCode" name="twoFactorCode" />
+      <button (click)="onVerify2FA()">Verificar</button>
+    </div>
+  </div>
+  
