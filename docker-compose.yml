@@ -1,8 +1,6 @@
-version: '3.8'  # Versión de Docker Compose
-
 services:
   db:
-    image: postgres:13
+    image: postgres:17
     container_name: postgres_db  # Nombre del contenedor (Contenedor de PostgreSQL)
     environment:
       POSTGRES_USER: erp_user  # (Usuario de PostgreSQL)
