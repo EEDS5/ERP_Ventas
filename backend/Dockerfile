@@ -1,14 +1,28 @@
-# Dockerfile for Spring Boot Backend (Dockerfile para el backend de Spring Boot)
-FROM openjdk:17-jdk-slim
+# Dockerfile for Spring Boot Backend (Compilación y ejecución automática)
 
-# Establece el directorio de trabajo (WORKDIR = Directorio de trabajo)
+# Etapa 1: Compilación del proyecto usando Maven + JDK
+FROM maven:3.9.4-eclipse-temurin-17 AS build
+
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia el archivo JAR compilado al contenedor (COPY = Copiar)
-COPY target/backend-0.0.1-SNAPSHOT.jar backend.jar
+# Copia todos los archivos necesarios del proyecto
+COPY . .
 
-# Expone el puerto 8080 (EXPOSE = Exponer)
+# Compila el proyecto y genera el JAR
+RUN mvn clean package -DskipTests
+
+# Etapa 2: Contenedor liviano solo para ejecutar el JAR
+FROM openjdk:17-jdk-slim
+
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Copia el JAR compilado desde la etapa anterior
+COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar backend.jar
+
+# Expone el puerto 8080
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación (CMD = Comando)
+# Comando para ejecutar la aplicación
 CMD ["java", "-jar", "backend.jar"]

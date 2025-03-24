@@ -1,8 +1,20 @@
 package com.proyecto.erpventas.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+
 public class RegisterUserDTO {
+
+    @NotBlank(message = "El nombre de usuario no puede estar vacío.")
+    @JsonProperty("nombreUsuario")
     private String nombreUsuario;
+
+    @NotBlank(message = "El email no puede estar vacío.")
+    @JsonProperty("email")
     private String email;
+
+    @NotBlank(message = "La contraseña no puede estar vacía.")
+    @JsonProperty("password")
     private String password;
 
     // Getters y setters

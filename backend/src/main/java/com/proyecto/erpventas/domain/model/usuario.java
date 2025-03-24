@@ -1,87 +1,39 @@
 package com.proyecto.erpventas.domain.model;
 
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Usuarios")
+@Getter
+@Setter
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "usuarioid")
     private Long usuarioID;
 
-    @Column(unique = true, nullable = false, length = 50)
+    @Column(name = "nombreusuario", unique = true, nullable = false)
     private String nombreUsuario;
 
-    @Column(nullable = false, length = 255)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(unique = true, nullable = false, length = 100)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private Boolean is2FAEnabled = false;
+    @Column(name = "is2faenabled")
+    private boolean twoFAEnabled = false;
 
-    @Column(length = 100)
+    @Column(name = "secret2fa")
     private String secret2FA;
 
-    private LocalDateTime fechaRegistro = LocalDateTime.now();
-
-    // Getters y setters
-    public Long getUsuarioID() {
-        return usuarioID;
-    }
-
-    public void setUsuarioID(Long usuarioID) {
-        this.usuarioID = usuarioID;
-    }
-
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Boolean getIs2FAEnabled() {
-        return is2FAEnabled;
-    }
-
-    public void setIs2FAEnabled(Boolean is2FAEnabled) {
-        this.is2FAEnabled = is2FAEnabled;
-    }
-
-    public String getSecret2FA() {
-        return secret2FA;
-    }
-
-    public void setSecret2FA(String secret2FA) {
-        this.secret2FA = secret2FA;
-    }
-
-    public LocalDateTime getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    public void setFechaRegistro(LocalDateTime fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
+    @Column(name = "fecharegistro", nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime fechaRegistro;
 }

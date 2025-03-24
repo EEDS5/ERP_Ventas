@@ -4,7 +4,9 @@ import com.proyecto.erpventas.application.dto.RegisterUserDTO;
 import com.proyecto.erpventas.domain.model.Usuario;
 import com.proyecto.erpventas.infrastructure.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RegisterUserUseCase {
 
     private final UserRepository userRepository;
@@ -31,6 +33,11 @@ public class RegisterUserUseCase {
         nuevoUsuario.setEmail(dto.getEmail());
         nuevoUsuario.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        return userRepository.save(nuevoUsuario);
+        // Intentar guardar usuario
+        try {
+            return userRepository.save(nuevoUsuario);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al guardar el usuario: " + e.getMessage(), e);
+        }
     }
 }
