@@ -1,6 +1,6 @@
-package com.proyecto.erpventas.controller;
+package com.proyecto.erpventas.infrastructure.controller;
 
-import com.proyecto.erpventas.service.TestService;
+import com.proyecto.erpventas.domain.service.TestService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

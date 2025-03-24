@@ -1,4 +1,4 @@
-package com.proyecto.erpventas.service;
+package com.proyecto.erpventas.domain.service;
 
 import org.springframework.stereotype.Service;
 

@@ -1,30 +1,32 @@
-// aplicaciones/dto/RegisterUserDTO.java
-package aplicaciones.dto;
+package com.proyecto.erpventas.application.dto;
 
 public class RegisterUserDTO {
-  private String nombreUsuario;
-  private String email;
-  private String password;
+    private String nombreUsuario;
+    private String email;
+    private String password;
 
-  // Getters y setters
-}
+    // Getters y setters
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
 
-// aplicaciones/dto/LoginUserDTO.java
-package aplicaciones.dto;
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
 
-public class LoginUserDTO {
-  private String nombreUsuario;
-  private String password;
+    public String getEmail() {
+        return email;
+    }
 
-  // Getters y setters
-}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-// aplicaciones/dto/TwoFactorVerificationDTO.java
-package aplicaciones.dto;
+    public String getPassword() {
+        return password;
+    }
 
-public class TwoFactorVerificationDTO {
-  private String nombreUsuario;
-  private String token2FA;
-
-  // Getters y setters
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
