@@ -8,6 +8,7 @@ import com.proyecto.erpventas.infrastructure.repository.UserRepository;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
 import jakarta.validation.Valid;
 
@@ -24,11 +25,49 @@ public class UserController {
   @Autowired
   private VerifyTwoFactorUseCase verifyUC;
   
+  // Use Cases de CRUD
+  @Autowired
+  private ListUsersUseCase listUsersUC;
+
+  @Autowired
+  private GetUserByIdUseCase getUserByIdUC;
+
+  @Autowired
+  private UpdateUserUseCase updateUserUC;
+
+  @Autowired
+  private DeleteUserUseCase deleteUserUC;
+
   @Autowired
   private AuthDomainService authService;
 
   @Autowired
   private UserRepository userRepository;
+
+  @GetMapping
+  public List<Usuario> getAllUsers() {
+      return listUsersUC.listAll();
+  }
+
+  @GetMapping("/{id}")
+  public Usuario getUserById(@PathVariable Integer id) {
+      return getUserByIdUC.getById(id)
+              .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+  }
+
+  @PutMapping("/{id}")
+  public Usuario updateUser(
+          @PathVariable Integer id,
+          @Valid @RequestBody UpdateUserDTO dto
+  ) {
+      return updateUserUC.updateUser(id, dto);
+  }
+
+  @DeleteMapping("/{id}")
+  public String deleteUser(@PathVariable Integer id) {
+      deleteUserUC.delete(id);
+      return "Usuario eliminado correctamente";
+  }
 
   @PostMapping("/register")
   public Usuario register(@Valid @RequestBody RegisterUserDTO dto) {
