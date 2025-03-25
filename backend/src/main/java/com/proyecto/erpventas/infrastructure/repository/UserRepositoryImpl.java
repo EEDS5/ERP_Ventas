@@ -3,6 +3,7 @@ package com.proyecto.erpventas.infrastructure.repository;
 import com.proyecto.erpventas.domain.model.Usuario;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -37,5 +38,21 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Usuario saveAndFlush(Usuario usuario) {
         return jpaRepository.saveAndFlush(usuario);
+    }
+
+    // Métodos nuevos para CRUD
+    @Override
+    public Optional<Usuario> findById(Integer id) {
+        return jpaRepository.findById(id.longValue());
+    }
+
+    @Override
+    public List<Usuario> findAll() {
+        return jpaRepository.findAll();
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        jpaRepository.deleteById(id.longValue());
     }
 }
