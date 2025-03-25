@@ -27,7 +27,9 @@ CREATE TABLE Clientes (
     Correo VARCHAR(100) UNIQUE NOT NULL CHECK (Correo ~ '^[^@]+@[^@]+\.[^@]+$'),
     Telefono VARCHAR(20),
     Direccion VARCHAR(255),
-    FechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    FechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CreadoPorUsuarioID INT NOT NULL,
+    FOREIGN KEY (CreadoPorUsuarioID) REFERENCES Usuarios(UsuarioID)
 );
 
 --------------------------------------------------
@@ -47,8 +49,10 @@ CREATE TABLE Ventas (
     FechaVenta TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Total DECIMAL(10,2) NOT NULL CHECK (Total >= 0),
     MetodoPagoID INT NOT NULL,
+    CreadoPorUsuarioID INT NOT NULL,
     FOREIGN KEY (ClienteID) REFERENCES Clientes(ClienteID),
-    FOREIGN KEY (MetodoPagoID) REFERENCES MetodosPago(MetodoPagoID)
+    FOREIGN KEY (MetodoPagoID) REFERENCES MetodosPago(MetodoPagoID),
+    FOREIGN KEY (CreadoPorUsuarioID) REFERENCES Usuarios(UsuarioID)
 );
 
 --------------------------------------------------
@@ -85,7 +89,9 @@ CREATE TABLE Facturas (
     NumeroFactura VARCHAR(50) UNIQUE NOT NULL,
     FechaEmision TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     XMLFactura XML,
-    FOREIGN KEY (VentaID) REFERENCES Ventas(VentaID)
+    CreadoPorUsuarioID INT NOT NULL,
+    FOREIGN KEY (VentaID) REFERENCES Ventas(VentaID),
+    FOREIGN KEY (CreadoPorUsuarioID) REFERENCES Usuarios(UsuarioID)
 );
 
 --------------------------------------------------
@@ -132,8 +138,10 @@ CREATE TABLE TransaccionesPasarela (
     FechaTransaccion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Monto DECIMAL(10,2) NOT NULL CHECK (Monto >= 0),
     ReferenciaTransaccion VARCHAR(100) NOT NULL,
+    IniciadaPorUsuarioID INT NOT NULL,
     FOREIGN KEY (VentaID) REFERENCES Ventas(VentaID),
-    FOREIGN KEY (PasarelaID) REFERENCES PasarelasPago(PasarelaID)
+    FOREIGN KEY (PasarelaID) REFERENCES PasarelasPago(PasarelaID),
+    FOREIGN KEY (IniciadaPorUsuarioID) REFERENCES Usuarios(UsuarioID)
 );
 
 --------------------------------------------------
