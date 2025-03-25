@@ -5,6 +5,7 @@ import com.proyecto.erpventas.application.usecases.*;
 import com.proyecto.erpventas.domain.model.Usuario;
 import com.proyecto.erpventas.domain.service.AuthDomainService;
 import com.proyecto.erpventas.infrastructure.repository.UserRepository;
+import com.proyecto.erpventas.infrastructure.security.JwtTokenProvider;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,15 @@ public class UserController {
 
   @Autowired
   private VerifyTwoFactorUseCase verifyUC;
-  
+
   @Autowired
   private AuthDomainService authService;
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private JwtTokenProvider jwtTokenProvider;
 
   @PostMapping("/register")
   public Usuario register(@Valid @RequestBody RegisterUserDTO dto) {
@@ -36,19 +40,24 @@ public class UserController {
   }
 
   @PostMapping("/login")
-public String login(@RequestBody LoginUserDTO dto) {
+  public String login(@RequestBody LoginUserDTO dto) {
     Usuario user = loginUC.login(dto);
     if (Boolean.TRUE.equals(user.getTwoFAEnabled())) {
       return "2FA_REQUIRED";
     }
     return "LOGIN_OK";
-}
+  }
 
-@PostMapping("/login-2fa")
-public String login2FA(@RequestBody TwoFactorVerificationDTO dto) {
-    // Este endpoint utiliza el use case de verificación 2FA.
+  @PostMapping("/login-2fa")
+public JwtResponseDTO login2FA(@RequestBody TwoFactorVerificationDTO dto) {
     boolean valid = verifyUC.verify2FA(dto);
-    return valid ? "LOGIN_OK" : "2FA_INVALID";
+    if (!valid) {
+        throw new RuntimeException("2FA inválido");
+    }
+    Usuario user = userRepository.findByNombreUsuario(dto.getNombreUsuario())
+        .orElseThrow(() -> new RuntimeException("No existe"));
+    String token = jwtTokenProvider.generateToken(user.getNombreUsuario());
+    return new JwtResponseDTO(token);
 }
 
   @PostMapping("/verify-2fa")
@@ -63,11 +72,11 @@ public String login2FA(@RequestBody TwoFactorVerificationDTO dto) {
   }
 
   @PostMapping("/test-update-2fa")
-public String testUpdate2FA(@RequestParam String nombreUsuario) {
+  public String testUpdate2FA(@RequestParam String nombreUsuario) {
     Usuario user = userRepository.findByNombreUsuario(nombreUsuario)
         .orElseThrow(() -> new RuntimeException("No existe"));
     user.setTwoFAEnabled(true);
     userRepository.save(user);
     return "Actualizado!";
-}
+  }
 }
