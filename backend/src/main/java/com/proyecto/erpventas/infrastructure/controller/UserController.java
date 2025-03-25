@@ -38,7 +38,7 @@ public class UserController {
   @PostMapping("/login")
 public String login(@RequestBody LoginUserDTO dto) {
     Usuario user = loginUC.login(dto);
-    if (user.isTwoFAEnabled()) {   // Usamos isTwoFAEnabled()
+    if (Boolean.TRUE.equals(user.getTwoFAEnabled())) {
       return "2FA_REQUIRED";
     }
     return "LOGIN_OK";

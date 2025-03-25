@@ -16,7 +16,7 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usuarioid")
-    private Long usuarioID;
+    private Integer usuarioID;
 
     @Column(name = "nombreusuario", unique = true, nullable = false)
     private String nombreUsuario;
@@ -28,7 +28,7 @@ public class Usuario {
     private String email;
 
     @Column(name = "is2faenabled")
-    private boolean twoFAEnabled = false;
+    private Boolean twoFAEnabled = false;
 
     @Column(name = "secret2fa")
     private String secret2FA;

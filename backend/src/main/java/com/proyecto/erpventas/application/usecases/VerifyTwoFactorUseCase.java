@@ -30,16 +30,14 @@ public class VerifyTwoFactorUseCase {
         int code = Integer.parseInt(dto.getToken2FA());
         boolean valid = gAuth.authorize(user.getSecret2FA(), code);
         System.out.println("Token validado correctamente.");
-        // Si bien en el flujo de configuración se puede activar 2FA,
-        // en el flujo de login quizá no queramos modificar el flag,
-        // o lo actualizamos solo la primera vez.
-        if (valid && !user.isTwoFAEnabled()) {
+        if (valid && !Boolean.TRUE.equals(user.getTwoFAEnabled())) {
             System.out.println("Actualizando el estado 2FA para el usuario " + user.getNombreUsuario());
             user.setTwoFAEnabled(true);
             userRepository.save(user);
             entityManager.flush();
             entityManager.clear();
-            System.out.println("Actualización de 2FA realizada.");
+            Usuario updated = entityManager.find(Usuario.class, user.getUsuarioID());
+            System.out.println("Valor final en BD: " + updated.getTwoFAEnabled());
         }
         return valid;
     }
