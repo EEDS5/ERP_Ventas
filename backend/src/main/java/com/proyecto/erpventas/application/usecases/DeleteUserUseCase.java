@@ -1,7 +1,9 @@
 package com.proyecto.erpventas.application.usecases;
 
 import com.proyecto.erpventas.infrastructure.repository.UserRepository;
+import com.proyecto.erpventas.domain.model.Usuario;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 @Service
 public class DeleteUserUseCase {
@@ -13,9 +15,12 @@ public class DeleteUserUseCase {
     }
 
     public void delete(Integer id) {
-        if (!userRepository.findById(id).isPresent()) {
-            throw new RuntimeException("Usuario no encontrado");
+        Optional<Usuario> optionalUser = userRepository.findById(id);
+        if (!optionalUser.isPresent()) {
+            throw new RuntimeException("No existe usuario con ID: " + id);
         }
-        userRepository.deleteById(id);
+        Usuario user = optionalUser.get();
+        user.setActivo(false);
+        userRepository.save(user);
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -14,45 +15,67 @@ public class UserRepositoryImpl implements UserRepository {
     public UserRepositoryImpl(SpringUserJpaRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
     }
-
+    
     @Override
     public Optional<Usuario> findByNombreUsuario(String nombreUsuario) {
-        return jpaRepository.findByNombreUsuario(nombreUsuario);
+        return jpaRepository.findByNombreUsuario(nombreUsuario)
+                            .filter(Usuario::getActivo);
     }
-
+    
     @Override
     public boolean existsByNombreUsuario(String nombreUsuario) {
         return jpaRepository.existsByNombreUsuario(nombreUsuario);
     }
-
+    
     @Override
     public boolean existsByEmail(String email) {
         return jpaRepository.existsByEmail(email);
     }
-
+    
     @Override
     public Usuario save(Usuario usuario) {
         return jpaRepository.save(usuario);
     }
-
+    
     @Override
     public Usuario saveAndFlush(Usuario usuario) {
         return jpaRepository.saveAndFlush(usuario);
     }
-
-    // Métodos nuevos para CRUD
+    
     @Override
     public Optional<Usuario> findById(Integer id) {
-        return jpaRepository.findById(id.longValue());
+        return jpaRepository.findById(id.longValue())
+                            .filter(Usuario::getActivo);
     }
-
+    
     @Override
     public List<Usuario> findAll() {
-        return jpaRepository.findAll();
+        return jpaRepository.findAll().stream()
+                            .filter(Usuario::getActivo)
+                            .collect(Collectors.toList());
     }
-
+    
+    @Override
+    public List<Usuario> findAllByActivoTrue() {
+        // Se puede reutilizar findAll() ya que filtra usuarios activos.
+        return findAll();
+    }
+    
+    @Override
+    public void softDeleteById(Integer id) {
+        Optional<Usuario> optUser = jpaRepository.findById(id.longValue());
+        if (optUser.isPresent()) {
+            Usuario user = optUser.get();
+            user.setActivo(false); // Borrado lógico: marcamos como inactivo
+            jpaRepository.save(user);
+        } else {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+    }
+    
     @Override
     public void deleteById(Integer id) {
-        jpaRepository.deleteById(id.longValue());
+        // En lugar de eliminar físicamente, se realiza el borrado lógico
+        softDeleteById(id);
     }
 }

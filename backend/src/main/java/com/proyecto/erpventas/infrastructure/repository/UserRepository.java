@@ -11,9 +11,11 @@ public interface UserRepository {
     
     Usuario save(Usuario usuario);
     Usuario saveAndFlush(Usuario usuario);
-
-    // Métodos que faltan para un CRUD completo:
+    
+    // Métodos CRUD para usuarios activos (borrado lógico)
     Optional<Usuario> findById(Integer id);
     List<Usuario> findAll();
-    void deleteById(Integer id);
+    List<Usuario> findAllByActivoTrue();
+    void deleteById(Integer id);    // ahora invoca borrado lógico
+    void softDeleteById(Integer id);
 }

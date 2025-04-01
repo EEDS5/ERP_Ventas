@@ -1,0 +1,74 @@
+🧱 1. Levantar el entorno con Docker
+
+docker-compose up --build      # Construye y levanta los contenedores
+docker-compose up -d           # Levanta los contenedores en segundo plano
+docker-compose down            # Detiene y elimina los contenedores
+
+👤 2. Registro de Usuario
+Endpoint: POST http://localhost:8080/api/users/register
+Headers:
+Content-Type: application/json
+
+Body:
+json
+{
+  "nombreUsuario": "elias_test",
+  "email": "elias@test.com",
+  "password": "123456"
+}
+🔐 3. Generar Secreto 2FA
+Endpoint: GET http://localhost:8080/api/users/2fa-secret?usyername=elias_test
+
+🔴 Nota: Hay un error tipográfico en usyername, debería ser username.
+
+🔓 4. Login - Autenticación Inicial
+Endpoint: POST http://localhost:8080/api/users/login
+Headers:
+Content-Type: application/json
+
+Body:
+json
+{
+  "nombreUsuario": "elias_test",
+  "password": "123456"
+}
+✅ 5. Verificación del Token 2FA
+Endpoint: POST http://localhost:8080/api/users/login-2fa
+Headers:
+Content-Type: application/json
+
+Body:
+json
+
+{
+  "nombreUsuario": "elias_test",
+  "token2FA": "919713"
+}
+🔍 6. Verificación Manual del 2FA
+Endpoint: POST http://localhost:8080/api/users/verify-2fa
+Headers:
+Content-Type: application/json
+
+Body:
+
+
+{
+  "nombreUsuario": "elias_test",
+  "token2FA": "123456"
+}
+📁 7. Consultar Usuarios
+Estos endpoints requieren autenticación con JWT.
+
+Headers:
+
+http
+Authorization: Bearer TU_JWT_GENERADO
+Listar todos los usuarios:
+GET http://localhost:8080/api/users
+
+Obtener un usuario específico:
+GET http://localhost:8080/api/users/1
+
+XDEXXOFN5VOANECN
+
+eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbGlhcyBkdXJhbiIsImlhdCI6MTc0MzUxNzY1MiwiZXhwIjoxNzQzNTIxMjUyfQ.u29g7vYHLRChMQ65CJ1WxkX-Msuk5TxA0hWuH8CHTuU

@@ -36,4 +36,8 @@ public class Usuario {
     @Column(name = "fecharegistro", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime fechaRegistro;
+    
+    // Campo para el borrado lógico (soft-delete)
+    @Column(name = "activo", nullable = false)
+    private Boolean activo = true;
 }
