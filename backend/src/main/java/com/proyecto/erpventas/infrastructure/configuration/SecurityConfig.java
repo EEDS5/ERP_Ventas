@@ -35,7 +35,8 @@ public class SecurityConfig {
                     "/api/users/login",
                     "/api/users/login-2fa", 
                     "/api/users/2fa-secret",
-                    "/api/users/verify-2fa"
+                    "/api/users/verify-2fa",
+                    "/docs/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

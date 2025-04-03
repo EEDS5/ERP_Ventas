@@ -16,13 +16,13 @@ json
   "email": "elias@test.com",
   "password": "123456"
 }
-🔐 3. Generar Secreto 2FA
-Endpoint: GET http://localhost:8080/api/users/2fa-secret?usyername=elias_test
 
-🔴 Nota: Hay un error tipográfico en usyername, debería ser username.
+🔐 3. Generar Secreto 2FA
+Endpoint: GET http://localhost:8080/api/users/2fa-secret?username=elias_test
 
 🔓 4. Login - Autenticación Inicial
 Endpoint: POST http://localhost:8080/api/users/login
+
 Headers:
 Content-Type: application/json
 
@@ -32,6 +32,7 @@ json
   "nombreUsuario": "elias_test",
   "password": "123456"
 }
+
 ✅ 5. Verificación del Token 2FA
 Endpoint: POST http://localhost:8080/api/users/login-2fa
 Headers:

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentación de Endpoints - Autenticación y 2FA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+    h1, h2, h3 {
+      color: #343a40;
+    }
+    .endpoint {
+      background-color: #ffffff;
+      border-left: 6px solid #007bff;
+      margin-bottom: 20px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    code {
+      background-color: #e9ecef;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    pre {
+      background-color: #e9ecef;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table, th, td {
+      border: 1px solid #dee2e6;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    .badge {
+      display: inline-block;
+      background-color: #007bff;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+  </style>
+</head>
+<body>
+  <h1>📄 Documentación de Endpoints - Autenticación y 2FA</h1>
+
+  <div class="endpoint">
+    <h2>1️⃣ Registrar un Usuario</h2>
+    <p><span class="badge">POST</span> <code>/api/users/register</code></p>
+    <p><strong>Headers:</strong> <code>Content-Type: application/json</code></p>
+    <p><strong>Body:</strong></p>
+    <pre>{
+  "nombreUsuario": "elias_test",
+  "email": "elias@test.com",
+  "password": "123456"
+}</pre>
+    <p><strong>Resultado:</strong> Usuario creado con campos iniciales y 2FA desactivado.</p>
+  </div>
+
+  <div class="endpoint">
+    <h2>2️⃣ Generar el Secreto 2FA</h2>
+    <p><span class="badge">POST</span> <code>/api/users/2fa-secret?username=elias_test</code></p>
+    <p><strong>Headers:</strong> <code>Content-Type: application/json</code></p>
+    <p><strong>Body:</strong> (vacío)</p>
+    <p><strong>Resultado:</strong></p>
+    <pre>{
+  "secret": "IXXGDNRV7KDDI7AX",
+  "qrUrl": "otpauth://totp/elias_test@ERP_Ventas?secret=IXXGDNRV7KDDI7AX&issuer=ERP_Ventas"
+}</pre>
+  </div>
+
+  <div class="endpoint">
+    <h2>3️⃣ Iniciar Sesión (Login sin 2FA)</h2>
+    <p><span class="badge">POST</span> <code>/api/users/login</code></p>
+    <p><strong>Headers:</strong> <code>Content-Type: application/json</code></p>
+    <pre>{
+  "nombreUsuario": "elias_test",
+  "password": "123456"
+}</pre>
+    <p><strong>Resultado:</strong> "2FA_REQUIRED" o "LOGIN_OK" según el estado de 2FA.</p>
+  </div>
+
+  <div class="endpoint">
+    <h2>4️⃣ Iniciar Sesión con 2FA (Obtener JWT)</h2>
+    <p><span class="badge">POST</span> <code>/api/users/login-2fa</code></p>
+    <p><strong>Headers:</strong> <code>Content-Type: application/json</code></p>
+    <pre>{
+  "nombreUsuario": "elias_test",
+  "token2FA": "CODIGO_VALIDO"
+}</pre>
+    <p><strong>Resultado:</strong> Retorna el token JWT.</p>
+  </div>
+
+  <div class="endpoint">
+    <h2>5️⃣ Verificar 2FA</h2>
+    <p><span class="badge">POST</span> <code>/api/users/verify-2fa</code></p>
+    <p><strong>Headers:</strong> <code>Content-Type: application/json</code></p>
+    <pre>{
+  "nombreUsuario": "elias_test",
+  "token2FA": "CODIGO_VALIDO"
+}</pre>
+    <p><strong>Resultado:</strong> "2FA_OK" o "2FA_INVALID".</p>
+  </div>
+
+  <div class="endpoint">
+    <h2>6️⃣ Test de Activación Directa de 2FA</h2>
+    <p><span class="badge">POST</span> <code>/api/users/test-update-2fa?nombreUsuario=elias_test</code></p>
+    <p><strong>Body:</strong> (vacío)</p>
+    <p><strong>Resultado:</strong> "Actualizado!" y en la base de datos se activa el 2FA.</p>
+  </div>
+
+  <h2>🧾 Resumen del Flujo</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Paso</th>
+        <th>Endpoint</th>
+        <th>Método</th>
+        <th>Resultado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>/api/users/register</td><td>POST</td><td>Usuario creado</td></tr>
+      <tr><td>2</td><td>/api/users/2fa-secret</td><td>POST</td><td>Secret y QR</td></tr>
+      <tr><td>3</td><td>/api/users/login</td><td>POST</td><td>"2FA_REQUIRED" / "LOGIN_OK"</td></tr>
+      <tr><td>4</td><td>/api/users/login-2fa</td><td>POST</td><td>JWT Token</td></tr>
+      <tr><td>5</td><td>/api/users/verify-2fa</td><td>POST</td><td>"2FA_OK" / "2FA_INVALID"</td></tr>
+      <tr><td>6</td><td>/api/users/test-update-2fa</td><td>POST</td><td>"Actualizado!"</td></tr>
+    </tbody>
+  </table>
+
+  <h2>🛡️ Endpoints CRUD con Autenticación</h2>
+  <p><strong>Header necesario:</strong> <code>Authorization: Bearer TU_JWT_GENERADO</code></p>
+
+  <div class="endpoint">
+    <h3>📋 Obtener Todos los Usuarios</h3>
+    <p><span class="badge">GET</span> <code>/api/users</code></p>
+  </div>
+
+  <div class="endpoint">
+    <h3>🔎 Obtener Usuario por ID</h3>
+    <p><span class="badge">GET</span> <code>/api/users/1</code></p>
+  </div>
+
+</body>
+</html>
