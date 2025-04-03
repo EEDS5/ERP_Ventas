@@ -1,20 +1,20 @@
 --------------------------------------------------
--- Tabla de Usuarios (con columna Activo)
+-- Tabla de Usuarios: Para autenticación con doble factor
+-- Se recomienda utilizar TOTP (por ejemplo, Google Authenticator) para doble autenticación.
 --------------------------------------------------
 CREATE TABLE Usuarios (
     UsuarioID SERIAL PRIMARY KEY,
     NombreUsuario VARCHAR(50) UNIQUE NOT NULL,
-    Password VARCHAR(255) NOT NULL,  -- Almacenar hash
+    Password VARCHAR(255) NOT NULL,  -- Almacenar hash de la contraseña
     Email VARCHAR(100) UNIQUE NOT NULL CHECK (Email ~ '^[^@]+@[^@]+\.[^@]+$'),
     Is2FAEnabled BOOLEAN DEFAULT FALSE,
-    Secret2FA VARCHAR(100),
+    Secret2FA VARCHAR(100),  -- Clave secreta para TOTP si 2FA está activada
     FechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    -- Campo para soft-delete
     Activo BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 --------------------------------------------------
--- Tabla de Clientes (con columna Activo)
+-- Tabla de Clientes: Datos de los clientes con validación de correo
 --------------------------------------------------
 CREATE TABLE Clientes (
     ClienteID SERIAL PRIMARY KEY,
@@ -29,7 +29,7 @@ CREATE TABLE Clientes (
 );
 
 --------------------------------------------------
--- Tabla de Métodos de Pago
+-- Tabla de Métodos de Pago: Métodos aceptados por el sistema
 --------------------------------------------------
 CREATE TABLE MetodosPago (
     MetodoPagoID SERIAL PRIMARY KEY,
@@ -38,7 +38,7 @@ CREATE TABLE MetodosPago (
 );
 
 --------------------------------------------------
--- Tabla de Ventas
+-- Tabla de Ventas: Registro de ventas con referencias a clientes y métodos de pago
 --------------------------------------------------
 CREATE TABLE Ventas (
     VentaID SERIAL PRIMARY KEY,
@@ -54,7 +54,7 @@ CREATE TABLE Ventas (
 );
 
 --------------------------------------------------
--- Tabla de Productos
+-- Tabla de Productos: Almacena productos disponibles con restricciones
 --------------------------------------------------
 CREATE TABLE Productos (
     ProductoID SERIAL PRIMARY KEY,
@@ -66,7 +66,7 @@ CREATE TABLE Productos (
 );
 
 --------------------------------------------------
--- Tabla de Detalle de Ventas
+-- Tabla de Detalle de Ventas: Relaciona ventas y productos con subtotal generado
 --------------------------------------------------
 CREATE TABLE DetalleVentas (
     DetalleID SERIAL PRIMARY KEY,
@@ -81,7 +81,7 @@ CREATE TABLE DetalleVentas (
 );
 
 --------------------------------------------------
--- Tabla de Facturas
+-- Tabla de Facturas: Facturación electrónica asociada a una venta única
 --------------------------------------------------
 CREATE TABLE Facturas (
     FacturaID SERIAL PRIMARY KEY,
@@ -96,10 +96,7 @@ CREATE TABLE Facturas (
 );
 
 --------------------------------------------------
--- Tabla de Cuentas por Cobrar
--- IMPORTANTE: esta tabla YA tiene una columna "Estado"
--- con valores ('Pendiente', 'Pagado', 'Vencido').
--- Para el borrado lógico usaremos 'Activo'.
+-- Tabla de Cuentas por Cobrar: Gestión de pagos pendientes con estado definido
 --------------------------------------------------
 CREATE TABLE CuentasPorCobrar (
     CuentaID SERIAL PRIMARY KEY,
@@ -114,7 +111,7 @@ CREATE TABLE CuentasPorCobrar (
 );
 
 --------------------------------------------------
--- Tabla de Pagos
+-- Tabla de Pagos: Registro de pagos realizados a cuentas por cobrar
 --------------------------------------------------
 CREATE TABLE Pagos (
     PagoID SERIAL PRIMARY KEY,
@@ -126,7 +123,7 @@ CREATE TABLE Pagos (
 );
 
 --------------------------------------------------
--- Tabla de Pasarelas de Pago
+-- Tabla de Pasarelas de Pago: Información sobre pasarelas (por ejemplo, Stripe, PayPal)
 --------------------------------------------------
 CREATE TABLE PasarelasPago (
     PasarelaID SERIAL PRIMARY KEY,
@@ -135,9 +132,7 @@ CREATE TABLE PasarelasPago (
 );
 
 --------------------------------------------------
--- Tabla de Transacciones con Pasarela
--- También tiene una columna "Estado" con valores ('Pendiente','Aprobado','Rechazado').
--- Para el borrado lógico usaremos 'Activo'.
+-- Tabla de Transacciones con Pasarela: Registra la interacción con las pasarelas de pago
 --------------------------------------------------
 CREATE TABLE TransaccionesPasarela (
     TransaccionID SERIAL PRIMARY KEY,
@@ -153,31 +148,3 @@ CREATE TABLE TransaccionesPasarela (
     FOREIGN KEY (PasarelaID) REFERENCES PasarelasPago(PasarelaID),
     FOREIGN KEY (IniciadaPorUsuarioID) REFERENCES Usuarios(UsuarioID)
 );
-
---------------------------------------------------
--- Vistas para Reportes
--- (No cambia nada respecto a los campos "Activo", ya que están en tablas)
---------------------------------------------------
-
-CREATE VIEW ReporteHistorialVentas AS
-SELECT 
-    C.ClienteID, 
-    C.Nombre AS Cliente, 
-    V.VentaID, 
-    V.FechaVenta, 
-    V.Total
-FROM 
-    Clientes C
-JOIN 
-    Ventas V ON C.ClienteID = V.ClienteID;
-
-CREATE VIEW ReporteFacturacionMensual AS
-SELECT 
-    to_char(F.FechaEmision, 'YYYY-MM') AS Mes, 
-    SUM(V.Total) AS TotalFacturado
-FROM 
-    Facturas F
-JOIN 
-    Ventas V ON F.VentaID = V.VentaID
-GROUP BY 
-    to_char(F.FechaEmision, 'YYYY-MM');

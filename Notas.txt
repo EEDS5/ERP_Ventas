@@ -63,12 +63,9 @@ Headers:
 
 http
 Authorization: Bearer TU_JWT_GENERADO
+
 Listar todos los usuarios:
 GET http://localhost:8080/api/users
 
 Obtener un usuario específico:
 GET http://localhost:8080/api/users/1
-
-XDEXXOFN5VOANECN
-
-eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbGlhcyBkdXJhbiIsImlhdCI6MTc0MzUxNzY1MiwiZXhwIjoxNzQzNTIxMjUyfQ.u29g7vYHLRChMQ65CJ1WxkX-Msuk5TxA0hWuH8CHTuU
