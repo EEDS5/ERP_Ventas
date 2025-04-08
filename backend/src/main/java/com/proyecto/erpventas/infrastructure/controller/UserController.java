@@ -16,9 +16,6 @@ import jakarta.validation.Valid;
 public class UserController {
 
     @Autowired
-    private RegisterUserUseCase registerUC;
-
-    @Autowired
     private LoginUserUseCase loginUC;
 
     @Autowired
@@ -72,13 +69,6 @@ public class UserController {
         // Realiza el borrado lógico
         deleteUserUC.delete(id);
         return "Usuario eliminado correctamente (borrado lógico)";
-    }
-
-    
-
-    @PostMapping("/register")
-    public Usuario register(@Valid @RequestBody RegisterUserDTO dto) {
-        return registerUC.register(dto);
     }
 
     @PostMapping("/login")

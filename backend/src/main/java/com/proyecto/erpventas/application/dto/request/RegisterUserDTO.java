@@ -1,4 +1,4 @@
-package com.proyecto.erpventas.application.dto;
+package com.proyecto.erpventas.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;

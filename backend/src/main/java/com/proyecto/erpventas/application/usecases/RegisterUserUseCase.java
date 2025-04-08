@@ -1,6 +1,6 @@
 package com.proyecto.erpventas.application.usecases;
 
-import com.proyecto.erpventas.application.dto.RegisterUserDTO;
+import com.proyecto.erpventas.application.dto.request.RegisterUserDTO;
 import com.proyecto.erpventas.domain.model.Usuario;
 import com.proyecto.erpventas.infrastructure.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
