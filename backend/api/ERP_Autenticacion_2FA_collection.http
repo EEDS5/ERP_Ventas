@@ -1,0 +1,71 @@
+@development
+
+### Registrar Usuario
+POST http://localhost:8080/api/users/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "nombreUsuario": "elias_test",
+  "email": "elias@test.com",
+  "password": "123456"
+}
+
+### Generar Secreto 2FA
+POST http://localhost:8080/api/users/2fa-secret?username=elias_test HTTP/1.1
+Content-Type: application/json
+
+### Login
+POST http://localhost:8080/api/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "nombreUsuario": "elias_test",
+  "password": "123456"
+}
+
+### Login con 2FA (Obtener JWT y guardarlo)
+POST http://localhost:8080/api/users/login-2fa HTTP/1.1
+Content-Type: application/json
+
+{
+  "nombreUsuario": "elias_test",
+  "token2FA": "747365"
+}
+
+#> {% 
+#  const res = JSON.parse(responseBody);
+#  client.global.set("jwt", res.token);
+#%}
+
+### Verificar 2FA
+POST http://localhost:8080/api/users/verify-2fa HTTP/1.1
+Content-Type: application/json
+
+{
+  "nombreUsuario": "elias_test",
+  "token2FA": "211824"
+}
+
+### Test Update 2FA
+POST http://localhost:8080/api/users/test-update-2fa?nombreUsuario=elias_test HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+### Obtener Todos los Usuarios
+GET http://localhost:8080/api/users HTTP/1.1
+Authorization: Bearer {{jwt}}
+
+### Obtener Usuario por ID
+GET http://localhost:8080/api/users/1 HTTP/1.1
+Authorization: Bearer {{jwt}}
+
+### ### Asignar variable global manualmente (Prueba)
+### GET https://httpbin.org/anything HTTP/1.1
+###
+### > {% 
+###   client.global.set("jwt", "valor_de_prueba");
+### %}
+
+### Probar variable jwt
+GET https://httpbin.org/anything HTTP/1.1
+Authorization: Bearer {{jwt}}

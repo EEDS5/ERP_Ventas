@@ -1,4 +1,10 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "automatic"
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "rest-client.environmentVariables": {
+    "$shared": {},
+    "development": {
+      "jwt": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbGlhc190ZXN0IiwiaWF0IjoxNzQ0MTI1MTIxLCJleHAiOjE3NDQxMjg3MjF9.bhDboomWZbdHs55S2wmZ7UE-U5AjA4sIh34jbTbVT0M"
+    }
+  }
 }
