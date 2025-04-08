@@ -1,21 +1,21 @@
 @development
 
 ### Registrar Usuario
-POST http://localhost:8080/api/register HTTP/1.1
+POST http://localhost:8080/api/auth/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "nombreUsuario": "elias_test8",
-  "email": "elias@test8.com",
+  "nombreUsuario": "elias_test9",
+  "email": "elias@test9.com",
   "password": "123456"
 }
 
 ### Generar Secreto 2FA
-POST http://localhost:8080/api/users/2fa-secret?username=elias_test HTTP/1.1
+POST http://localhost:8080/api/auth/2fa-secret?username=elias_test9 HTTP/1.1
 Content-Type: application/json
 
 ### Login
-POST http://localhost:8080/api/users/login HTTP/1.1
+POST http://localhost:8080/api/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
@@ -24,12 +24,12 @@ Content-Type: application/json
 }
 
 ### Login con 2FA (Obtener JWT y guardarlo)
-POST http://localhost:8080/api/users/login-2fa HTTP/1.1
+POST http://localhost:8080/api/auth/login-2fa HTTP/1.1
 Content-Type: application/json
 
 {
-  "nombreUsuario": "elias_test",
-  "token2FA": "747365"
+  "nombreUsuario": "elias_test9",
+  "token2FA": "122888"
 }
 
 #> {% 
@@ -38,16 +38,16 @@ Content-Type: application/json
 #%}
 
 ### Verificar 2FA
-POST http://localhost:8080/api/users/verify-2fa HTTP/1.1
+POST http://localhost:8080/api/auth/verify-2fa HTTP/1.1
 Content-Type: application/json
 
 {
-  "nombreUsuario": "elias_test",
-  "token2FA": "211824"
+  "nombreUsuario": "elias_test9",
+  "token2FA": "072585"
 }
 
 ### Test Update 2FA
-POST http://localhost:8080/api/users/test-update-2fa?nombreUsuario=elias_test HTTP/1.1
+POST http://localhost:8080/api/auth/test-update-2fa?nombreUsuario=elias_test HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
@@ -56,7 +56,31 @@ GET http://localhost:8080/api/users HTTP/1.1
 Authorization: Bearer {{jwt}}
 
 ### Obtener Usuario por ID
-GET http://localhost:8080/api/users/1 HTTP/1.1
+GET http://localhost:8080/api/users/2 HTTP/1.1
+Authorization: Bearer {{jwt}}
+
+### Actualizar Usuario (sin contraseña)
+PUT http://localhost:8080/api/users/2 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+{
+  "nombreUsuario": "elias duran",
+  "email": "eliasefrain27@gmail.com"
+}
+
+### Actualizar Contraseña del Usuario
+PUT http://localhost:8080/api/users/2/password HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+{
+  "currentPassword": "123456",
+  "newPassword": "nuevaClave123"
+}
+
+### Eliminar Usuario por ID (borrado lógico)
+DELETE http://localhost:8080/api/users/2 HTTP/1.1
 Authorization: Bearer {{jwt}}
 
 ### ### Asignar variable global manualmente (Prueba)

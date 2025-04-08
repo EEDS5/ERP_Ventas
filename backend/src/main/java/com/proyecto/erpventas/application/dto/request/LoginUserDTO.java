@@ -1,4 +1,4 @@
-package com.proyecto.erpventas.application.dto;
+package com.proyecto.erpventas.application.dto.request;
 
 public class LoginUserDTO {
     private String nombreUsuario;

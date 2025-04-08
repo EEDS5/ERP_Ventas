@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentación de Comandos Docker - WSL</title>
+  <meta name="description" content="Guía práctica de comandos para Docker y Docker Compose en entornos WSL, con ejemplos esenciales para optimizar tu flujo de trabajo.">
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    header {
+      background-color: #343a40;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    header h1 {
+      font-size: 2rem;
+    }
+    main {
+      margin-bottom: 40px;
+    }
+    .section {
+      background-color: #fff;
+      border-left: 5px solid #198754;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .section:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    h2 {
+      color: #343a40;
+      margin-bottom: 10px;
+    }
+    code {
+      background-color: #e9ecef;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    pre {
+      background-color: #e9ecef;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+    ul {
+      list-style: disc inside;
+      margin: 10px 0 0 0;
+    }
+    .badge {
+      display: inline-block;
+      background-color: #198754;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      margin-right: 6px;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.9em;
+      color: #777;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+    }
+    footer a {
+      color: #198754;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🐳 Documentación de Comandos Principales para Docker y Docker Compose (WSL)</h1>
+    </header>
+    <main>
+      <section class="section">
+        <h2>🧱 1. Levantar el entorno con Docker</h2>
+        <pre>
+<span class="badge">Construir y levantar</span> docker-compose up --build
+<span class="badge">Levantamiento rápido</span> docker-compose up -d
+<span class="badge">Apagar contenedores</span> docker-compose down
+        </pre>
+      </section>
+
+      <section class="section">
+        <h2>🔁 2. Reconstrucción de contenedores</h2>
+        <ul>
+          <li><code>docker-compose build</code> — Reconstruye todos los servicios sin levantarlos.</li>
+          <li><code>docker-compose build backend</code> — Reconstruye solamente el servicio <code>backend</code>.</li>
+          <li><code>docker-compose up -d --build backend</code> — Reconstruye y levanta solo <code>backend</code> en segundo plano.</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>⚙️ 3. Levantar o reiniciar contenedores individuales</h2>
+        <ul>
+          <li><code>docker-compose up -d backend</code> — Levanta solo el contenedor <code>backend</code>.</li>
+          <li><code>docker-compose restart backend</code> — Reinicia el contenedor <code>backend</code>.</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>🔍 4. Ver logs</h2>
+        <ul>
+          <li><code>docker-compose logs</code> — Ver logs de todos los servicios.</li>
+          <li><code>docker-compose logs -f</code> — Ver logs en tiempo real (follow).</li>
+          <li><code>docker-compose logs backend</code> — Ver logs solo del contenedor <code>backend</code>.</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>🛠️ 5. Ejecutar comandos dentro de un contenedor</h2>
+        <ul>
+          <li><code>docker exec -it nombre_contenedor bash</code> — Abrir shell <code>bash</code> en un contenedor en ejecución.</li>
+          <li><code>docker-compose exec backend sh</code> — Usar shell dentro del contenedor <code>backend</code> (útil para Alpine).</li>
+          <li><code>docker-compose exec backend ls</code> — Ejecutar un comando simple como <code>ls</code>.</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>🧹 6. Limpiar contenedores, imágenes y volúmenes</h2>
+        <ul>
+          <li><code>docker container prune</code> — Elimina contenedores detenidos.</li>
+          <li><code>docker volume prune</code> — Elimina volúmenes no utilizados.</li>
+          <li><code>docker image prune</code> — Elimina imágenes no utilizadas.</li>
+          <li><code>docker network prune</code> — Elimina redes no utilizadas.</li>
+          <li><code>docker system prune -a</code> — Elimina todo lo que no se esté usando (¡ten cuidado!).</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>🧠 7. Comandos útiles adicionales</h2>
+        <ul>
+          <li><code>docker ps</code> — Ver contenedores en ejecución.</li>
+          <li><code>docker ps -a</code> — Ver todos los contenedores (incluidos los detenidos).</li>
+          <li><code>docker images</code> — Ver imágenes locales.</li>
+          <li><code>docker-compose config</code> — Validar el archivo <code>docker-compose.yml</code>.</li>
+        </ul>
+      </section>
+    </main>
+    <footer>
+      Documentación generada para Spring Boot 3.4.4 | Contexto: <a href="http://localhost:8080/docs/docker-wsl-comandos.html" target="_blank">docker-wsl-comandos.html</a>
+    </footer>
+  </div>
+</body>
+</html>

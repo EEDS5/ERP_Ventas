@@ -1,116 +1,95 @@
 package com.proyecto.erpventas.infrastructure.controller;
 
-import com.proyecto.erpventas.application.dto.*;
-import com.proyecto.erpventas.application.usecases.*;
+import com.proyecto.erpventas.application.dto.request.UpdateUserDataDTO;
+import com.proyecto.erpventas.application.dto.request.UpdateUserPasswordDTO;
+import com.proyecto.erpventas.application.dto.response.UsuarioResponseDTO;
+import com.proyecto.erpventas.application.usecases.DeleteUserUseCase;
+import com.proyecto.erpventas.application.usecases.GetUserByIdUseCase;
+import com.proyecto.erpventas.application.usecases.ListUsersUseCase;
+import com.proyecto.erpventas.application.usecases.UpdateUserPasswordUseCase;
+import com.proyecto.erpventas.application.usecases.UpdateUserUseCase;
 import com.proyecto.erpventas.domain.model.Usuario;
-import com.proyecto.erpventas.domain.service.AuthDomainService;
-import com.proyecto.erpventas.infrastructure.repository.UserRepository;
-import com.proyecto.erpventas.infrastructure.security.JwtTokenProvider;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import jakarta.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private LoginUserUseCase loginUC;
+    private final ListUsersUseCase listUsersUC;
+    private final GetUserByIdUseCase getUserByIdUC;
+    private final UpdateUserUseCase updateUserUC;
+    private final DeleteUserUseCase deleteUserUC;
 
     @Autowired
-    private VerifyTwoFactorUseCase verifyUC;
+    public UserController(ListUsersUseCase listUsersUC, GetUserByIdUseCase getUserByIdUC,
+            UpdateUserUseCase updateUserUC, DeleteUserUseCase deleteUserUC) {
+        this.listUsersUC = listUsersUC;
+        this.getUserByIdUC = getUserByIdUC;
+        this.updateUserUC = updateUserUC;
+        this.deleteUserUC = deleteUserUC;
+    }
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
-    // Use Cases de CRUD
-    @Autowired
-    private ListUsersUseCase listUsersUC;
-
-    @Autowired
-    private GetUserByIdUseCase getUserByIdUC;
-
-    @Autowired
-    private UpdateUserUseCase updateUserUC;
-
-    @Autowired
-    private DeleteUserUseCase deleteUserUC;
-
-    @Autowired
-    private AuthDomainService authService;
-
+    private UpdateUserPasswordUseCase updateUserPasswordUseCase;
 
     @GetMapping
-    public List<Usuario> getAllUsers() {
-        // Se obtienen solo los usuarios activos
-        return listUsersUC.listAll();
+    public ResponseEntity<List<UsuarioResponseDTO>> getAllUsers() {
+        List<Usuario> users = listUsersUC.listAll();
+        List<UsuarioResponseDTO> response = users.stream().map(u -> new UsuarioResponseDTO(
+                u.getUsuarioID(),
+                u.getNombreUsuario(),
+                u.getEmail(),
+                u.getTwoFAEnabled(),
+                u.getFechaRegistro(),
+                u.getActivo())).toList();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public Usuario getUserById(@PathVariable Integer id) {
-        // Se retorna el usuario solo si está activo
-        return getUserByIdUC.getById(id)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado o inactivo"));
+    public ResponseEntity<UsuarioResponseDTO> getUserById(@PathVariable Integer id) {
+        Usuario user = getUserByIdUC.getById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado o inactivo"));
+        UsuarioResponseDTO dto = new UsuarioResponseDTO(
+                user.getUsuarioID(),
+                user.getNombreUsuario(),
+                user.getEmail(),
+                user.getTwoFAEnabled(),
+                user.getFechaRegistro(),
+                user.getActivo());
+        return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/{id}")
-    public Usuario updateUser(
-        @PathVariable Integer id,
-        @Valid @RequestBody UpdateUserDTO dto) {
-        return updateUserUC.updateUser(id, dto);
+    public ResponseEntity<UsuarioResponseDTO> updateUser(
+            @PathVariable Integer id,
+            @Valid @RequestBody UpdateUserDataDTO dto) {
+        Usuario updatedUser = updateUserUC.updateUserData(id, dto);
+        UsuarioResponseDTO responseDTO = new UsuarioResponseDTO(
+                updatedUser.getUsuarioID(),
+                updatedUser.getNombreUsuario(),
+                updatedUser.getEmail(),
+                updatedUser.getTwoFAEnabled(),
+                updatedUser.getFechaRegistro(),
+                updatedUser.getActivo());
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PutMapping("/{id}/password")
+    public ResponseEntity<String> updateUserPassword(
+            @PathVariable Integer id,
+            @Valid @RequestBody UpdateUserPasswordDTO dto) {
+        updateUserPasswordUseCase.updatePassword(id, dto);
+        return ResponseEntity.ok("Contraseña actualizada correctamente");
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable Integer id) {
-        // Realiza el borrado lógico
+    public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
         deleteUserUC.delete(id);
-        return "Usuario eliminado correctamente (borrado lógico)";
-    }
-
-    @PostMapping("/login")
-    public String login(@RequestBody LoginUserDTO dto) {
-        Usuario user = loginUC.login(dto);
-        if (Boolean.TRUE.equals(user.getTwoFAEnabled())) {
-            return "2FA_REQUIRED";
-        }
-        return "LOGIN_OK";
-    }
-
-    @PostMapping("/login-2fa")
-    public JwtResponseDTO login2FA(@RequestBody TwoFactorVerificationDTO dto) {
-        boolean valid = verifyUC.verify2FA(dto);
-        if (!valid) {
-            throw new RuntimeException("2FA inválido");
-        }
-        // Se obtiene el usuario activo
-        Usuario user = userRepository.findByNombreUsuario(dto.getNombreUsuario())
-            .orElseThrow(() -> new RuntimeException("Usuario no existe o está inactivo"));
-        String token = jwtTokenProvider.generateToken(user.getNombreUsuario());
-        return new JwtResponseDTO(token);
-    }
-
-    @PostMapping("/verify-2fa")
-    public String verify2FA(@RequestBody TwoFactorVerificationDTO dto) {
-        boolean valid = verifyUC.verify2FA(dto);
-        return valid ? "2FA_OK" : "2FA_INVALID";
-    }
-
-    @PostMapping("/2fa-secret")
-    public TwoFactorSetupResponseDTO generate2FASecret(@RequestParam String username) {
-        return authService.generate2FASetup(username);
-    }
-
-    @PostMapping("/test-update-2fa")
-    public String testUpdate2FA(@RequestParam String nombreUsuario) {
-        // Se busca y actualiza el usuario solo si está activo
-        Usuario user = userRepository.findByNombreUsuario(nombreUsuario)
-            .orElseThrow(() -> new RuntimeException("Usuario no existe o está inactivo"));
-        user.setTwoFAEnabled(true);
-        userRepository.save(user);
-        return "2FA actualizado correctamente!";
+        return ResponseEntity.ok("Usuario eliminado correctamente (borrado lógico)");
     }
 }

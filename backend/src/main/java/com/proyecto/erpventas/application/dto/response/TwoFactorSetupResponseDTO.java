@@ -1,4 +1,4 @@
-package com.proyecto.erpventas.application.dto;
+package com.proyecto.erpventas.application.dto.response;
 
 public class TwoFactorSetupResponseDTO {
     private String secret;

@@ -27,29 +27,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/api/register", 
-                    "/api/users/login",
-                    "/api/users/login-2fa", 
-                    "/api/users/2fa-secret",
-                    "/api/users/verify-2fa",
-                    "/docs/**",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**"
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/api/auth/register",
+                                "/api/auth/login",
+                                "/api/auth/login-2fa",
+                                "/api/auth/2fa-secret",
+                                "/api/auth/verify-2fa",
+                                "/docs/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
 
-                ).permitAll()
-                .anyRequest().authenticated()
-            )
-            .sessionManagement(sm -> 
-                sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .addFilterBefore(
-                new JwtAuthenticationFilter(jwtTokenProvider),
-                org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class
-            );
+                        ).permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(
+                        new JwtAuthenticationFilter(jwtTokenProvider),
+                        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
