@@ -1,7 +1,7 @@
 package com.proyecto.erpventas.application.usecases;
 
 import com.proyecto.erpventas.application.dto.request.UpdateUserPasswordDTO;
-import com.proyecto.erpventas.domain.model.Usuario;
+import com.proyecto.erpventas.domain.model.people.Usuario;
 import com.proyecto.erpventas.infrastructure.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

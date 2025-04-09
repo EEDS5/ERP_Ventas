@@ -8,7 +8,8 @@ import com.proyecto.erpventas.application.usecases.GetUserByIdUseCase;
 import com.proyecto.erpventas.application.usecases.ListUsersUseCase;
 import com.proyecto.erpventas.application.usecases.UpdateUserPasswordUseCase;
 import com.proyecto.erpventas.application.usecases.UpdateUserUseCase;
-import com.proyecto.erpventas.domain.model.Usuario;
+import com.proyecto.erpventas.domain.model.people.Usuario;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

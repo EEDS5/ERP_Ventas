@@ -1,8 +1,9 @@
 package com.proyecto.erpventas.infrastructure.repository;
 
-import com.proyecto.erpventas.domain.model.Usuario;
 import java.util.List;
 import java.util.Optional;
+
+import com.proyecto.erpventas.domain.model.people.Usuario;
 
 public interface UserRepository {
     Optional<Usuario> findByNombreUsuario(String nombreUsuario);

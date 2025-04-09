@@ -1,7 +1,9 @@
 package com.proyecto.erpventas.infrastructure.repository;
 
-import com.proyecto.erpventas.domain.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.proyecto.erpventas.domain.model.people.Usuario;
+
 import java.util.Optional;
 import java.util.List;
 

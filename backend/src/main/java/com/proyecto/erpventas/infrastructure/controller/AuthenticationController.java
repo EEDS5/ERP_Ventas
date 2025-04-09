@@ -9,7 +9,7 @@ import com.proyecto.erpventas.application.dto.response.UsuarioResponseDTO;
 import com.proyecto.erpventas.application.usecases.LoginUserUseCase;
 import com.proyecto.erpventas.application.usecases.RegisterUserUseCase;
 import com.proyecto.erpventas.application.usecases.VerifyTwoFactorUseCase;
-import com.proyecto.erpventas.domain.model.Usuario;
+import com.proyecto.erpventas.domain.model.people.Usuario;
 import com.proyecto.erpventas.domain.service.AuthDomainService;
 import com.proyecto.erpventas.infrastructure.repository.UserRepository;
 import com.proyecto.erpventas.infrastructure.security.JwtTokenProvider;

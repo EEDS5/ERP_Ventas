@@ -1,7 +1,8 @@
 package com.proyecto.erpventas.application.usecases;
 
+import com.proyecto.erpventas.domain.model.people.Usuario;
 import com.proyecto.erpventas.infrastructure.repository.UserRepository;
-import com.proyecto.erpventas.domain.model.Usuario;
+
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 

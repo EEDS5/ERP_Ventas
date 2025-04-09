@@ -1,7 +1,8 @@
 package com.proyecto.erpventas.infrastructure.repository;
 
-import com.proyecto.erpventas.domain.model.Usuario;
 import org.springframework.stereotype.Repository;
+
+import com.proyecto.erpventas.domain.model.people.Usuario;
 
 import java.util.List;
 import java.util.Optional;

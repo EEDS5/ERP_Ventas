@@ -1,4 +1,4 @@
-package com.proyecto.erpventas.domain.model;
+package com.proyecto.erpventas.domain.model.people;
 
 import jakarta.persistence.*;
 import lombok.Getter;
