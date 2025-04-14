@@ -31,7 +31,7 @@ public class Factura {
     @CreationTimestamp
     private LocalDateTime fechaEmision;
 
-    @Column(name = "xmlfactura")
+    @Column(name = "xmlfactura", columnDefinition = "xml")
     private String xmlFactura;
 
     @ManyToOne
