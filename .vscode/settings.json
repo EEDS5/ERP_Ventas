@@ -4,7 +4,7 @@
   "rest-client.environmentVariables": {
     "$shared": {},
     "development": {
-      "jwt": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbGlhc190ZXN0OSIsImlhdCI6MTc0NDE0MjYyOCwiZXhwIjoxNzQ0MTQ2MjI4fQ.3RHyAc-L64m7jpwC52GCEJOmVxW8a0hDD32LdOXb51E"
+      "jwt": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbGlhc190ZXN0OSIsImlhdCI6MTc0NDY3MDczMywiZXhwIjoxNzQ0Njc0MzMzfQ.vtq2AEfqWF_tGQKIbQyf_w11cnuWmT69iuts8SjRkSM"
     }
   }
 }
