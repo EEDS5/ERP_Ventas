@@ -1,0 +1,8 @@
+Apagar el contenedor:
+docker-compose down
+
+Reconstruir el contenedor:
+docker-compose build backend
+
+Iniciar el contenedor:
+docker-compose up -d
