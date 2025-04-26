@@ -1,0 +1,14 @@
+# Ignorar carpetas y archivos de compilación de backend
+
+target/
+
+# Controles de versión
+.git
+.gitignore
+
+# Archivos de configuración y documentación local
+Dockerfile
+README.md
+
+# Logs y archivos temporales
+*.log

@@ -5,13 +5,13 @@ POST http://localhost:8080/api/auth/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "nombreUsuario": "elias_test9",
-  "email": "elias@test9.com",
+  "nombreUsuario": "elias_test11",
+  "email": "elias@test11.com",
   "password": "123456"
 }
 
 ### Generar Secreto 2FA
-POST http://localhost:8080/api/auth/2fa-secret?username=elias_test9 HTTP/1.1
+POST http://localhost:8080/api/auth/2fa-secret?username=elias_test10 HTTP/1.1
 Content-Type: application/json
 
 ### Login
@@ -19,7 +19,7 @@ POST http://localhost:8080/api/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "nombreUsuario": "elias_test",
+  "nombreUsuario": "elias_test10",
   "password": "123456"
 }
 
@@ -28,8 +28,8 @@ POST http://localhost:8080/api/auth/login-2fa HTTP/1.1
 Content-Type: application/json
 
 {
-  "nombreUsuario": "elias_test9",
-  "token2FA": "176807"
+  "nombreUsuario": "elias_test10",
+  "token2FA": "381408"
 }
 
 #> {% 
@@ -42,8 +42,8 @@ POST http://localhost:8080/api/auth/verify-2fa HTTP/1.1
 Content-Type: application/json
 
 {
-  "nombreUsuario": "elias_test9",
-  "token2FA": "072585"
+  "nombreUsuario": "elias_test10",
+  "token2FA": "148574"
 }
 
 ### Test Update 2FA
@@ -65,7 +65,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
 {
-  "nombreUsuario": "elias duran",
+  "nombreUsuario": "Elias Duran",
   "email": "eliasefrain27@gmail.com"
 }
 
@@ -75,8 +75,8 @@ Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
 {
-  "currentPassword": "123456",
-  "newPassword": "nuevaClave123"
+  "currentPassword": "nuevaClave123",
+  "newPassword": "123456"
 }
 
 ### Eliminar Usuario por ID (borrado lógico)
