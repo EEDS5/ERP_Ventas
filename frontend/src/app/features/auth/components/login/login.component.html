@@ -1,0 +1,24 @@
+<div class="login-container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="nombreUsuario">Usuario</label>
+      <input id="nombreUsuario" formControlName="nombreUsuario" />
+    </div>
+
+    <div>
+      <label for="password">Contraseña</label>
+      <input id="password" type="password" formControlName="password" />
+    </div>
+
+    <div *ngIf="twoFactorRequired">
+      <label for="verificationCode">Código 2FA</label>
+      <input id="verificationCode" formControlName="verificationCode" />
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <button type="submit">Iniciar Sesión</button>
+  </form>
+</div>

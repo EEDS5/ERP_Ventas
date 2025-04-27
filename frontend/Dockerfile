@@ -30,7 +30,10 @@ RUN mkdir -p /var/cache/nginx/client_temp \
 # RUN rm /etc/nginx/conf.d/default.conf
 
 # Copiar el build de Angular a Nginx
-COPY --from=build /app/dist/ /usr/share/nginx/html
+COPY --from=build /app/dist/frontend-app/browser/ /usr/share/nginx/html
+
+# Copiar la configuración personalizada de Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Exponer el puerto 80
 EXPOSE 80
