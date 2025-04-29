@@ -1,7 +1,8 @@
 package com.proyecto.erpventas.infrastructure.mapper;
 
-import com.proyecto.erpventas.application.dto.response.CuentaPorCobrarResponse;
 import org.springframework.stereotype.Component;
+
+import com.proyecto.erpventas.application.dto.response.reportecuentas.CuentaPorCobrarResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

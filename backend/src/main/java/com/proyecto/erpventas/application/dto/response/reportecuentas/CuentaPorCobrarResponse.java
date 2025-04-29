@@ -1,4 +1,4 @@
-package com.proyecto.erpventas.application.dto.response;
+package com.proyecto.erpventas.application.dto.response.reportecuentas;
 
 import lombok.Getter;
 import java.math.BigDecimal;

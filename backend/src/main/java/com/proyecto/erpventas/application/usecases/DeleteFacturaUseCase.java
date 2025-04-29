@@ -1,7 +1,8 @@
 package com.proyecto.erpventas.application.usecases;
 
 import com.proyecto.erpventas.domain.model.sales.Factura;
-import com.proyecto.erpventas.infrastructure.repository.FacturaRepository;
+import com.proyecto.erpventas.infrastructure.repository.factura.FacturaRepository;
+
 import org.springframework.stereotype.Service;
 
 @Service

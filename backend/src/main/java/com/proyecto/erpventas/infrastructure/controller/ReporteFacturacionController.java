@@ -1,7 +1,8 @@
 package com.proyecto.erpventas.infrastructure.controller;
 
-import com.proyecto.erpventas.application.dto.response.MesFacturado;
-import com.proyecto.erpventas.application.usecases.ReporteFacturacionUseCase;
+import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturado;
+import com.proyecto.erpventas.application.usecases.reportefacturacion.ReporteFacturacionUseCase;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

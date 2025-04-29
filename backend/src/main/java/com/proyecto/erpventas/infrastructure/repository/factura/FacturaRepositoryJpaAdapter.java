@@ -1,6 +1,6 @@
-package com.proyecto.erpventas.infrastructure.repository;
+package com.proyecto.erpventas.infrastructure.repository.factura;
 
-import com.proyecto.erpventas.application.dto.response.MesFacturado;
+import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturado;
 import com.proyecto.erpventas.domain.service.FacturaRepository;
 import com.proyecto.erpventas.infrastructure.mapper.FacturacionMensualMapper;
 import jakarta.persistence.EntityManager;

@@ -1,7 +1,8 @@
 package com.proyecto.erpventas.infrastructure.mapper;
 
-import com.proyecto.erpventas.application.dto.response.MesFacturado;
 import org.springframework.stereotype.Component;
+
+import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturado;
 
 import java.math.BigDecimal;
 

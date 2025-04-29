@@ -1,7 +1,8 @@
 package com.proyecto.erpventas.infrastructure.controller;
 
-import com.proyecto.erpventas.application.dto.response.CuentaPorCobrarResponse;
-import com.proyecto.erpventas.application.usecases.ReporteCuentasPorCobrarUseCase;
+import com.proyecto.erpventas.application.dto.response.reportecuentas.CuentaPorCobrarResponse;
+import com.proyecto.erpventas.application.usecases.reportecuentas.ReporteCuentasPorCobrarUseCase;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

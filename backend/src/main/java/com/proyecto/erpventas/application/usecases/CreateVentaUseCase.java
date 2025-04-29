@@ -6,6 +6,8 @@ import com.proyecto.erpventas.domain.model.people.Usuario;
 import com.proyecto.erpventas.domain.model.sales.MetodoPago;
 import com.proyecto.erpventas.domain.model.sales.Venta;
 import com.proyecto.erpventas.infrastructure.repository.*;
+import com.proyecto.erpventas.infrastructure.repository.venta.VentaRepository;
+
 import org.springframework.stereotype.Service;
 
 @Service

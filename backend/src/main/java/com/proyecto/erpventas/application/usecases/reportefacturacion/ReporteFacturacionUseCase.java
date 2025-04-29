@@ -1,6 +1,6 @@
-package com.proyecto.erpventas.application.usecases;
+package com.proyecto.erpventas.application.usecases.reportefacturacion;
 
-import com.proyecto.erpventas.application.dto.response.MesFacturado;
+import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturado;
 import com.proyecto.erpventas.domain.service.FacturaRepository;
 import org.springframework.stereotype.Service;
 

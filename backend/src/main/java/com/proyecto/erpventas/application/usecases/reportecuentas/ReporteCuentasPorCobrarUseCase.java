@@ -1,6 +1,6 @@
-package com.proyecto.erpventas.application.usecases;
+package com.proyecto.erpventas.application.usecases.reportecuentas;
 
-import com.proyecto.erpventas.application.dto.response.CuentaPorCobrarResponse;
+import com.proyecto.erpventas.application.dto.response.reportecuentas.CuentaPorCobrarResponse;
 import com.proyecto.erpventas.domain.service.CuentaPorCobrarRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;

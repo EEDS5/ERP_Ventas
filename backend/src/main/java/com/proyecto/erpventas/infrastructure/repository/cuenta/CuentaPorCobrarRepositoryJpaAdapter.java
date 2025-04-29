@@ -1,6 +1,6 @@
-package com.proyecto.erpventas.infrastructure.repository;
+package com.proyecto.erpventas.infrastructure.repository.cuenta;
 
-import com.proyecto.erpventas.application.dto.response.CuentaPorCobrarResponse;
+import com.proyecto.erpventas.application.dto.response.reportecuentas.CuentaPorCobrarResponse;
 import com.proyecto.erpventas.domain.service.CuentaPorCobrarRepository;
 import com.proyecto.erpventas.infrastructure.mapper.CuentaPorCobrarMapper;
 import jakarta.persistence.EntityManager;

@@ -1,4 +1,4 @@
-package com.proyecto.erpventas.infrastructure.repository;
+package com.proyecto.erpventas.infrastructure.repository.cuenta;
 
 import com.proyecto.erpventas.domain.model.sales.CuentaPorCobrar;
 import org.springframework.stereotype.Repository;
