@@ -1,8 +1,6 @@
 {
   "name": "frontend-app",
   "version": "0.0.0",
-  "private": true,
-
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -11,9 +9,8 @@
     "test": "ng test",
     "lint": "ng lint"
   },
-
+  "private": true,
   "dependencies": {
-    
     "@angular/cdk": "^19.2.11",
     "@angular/common": "^19.2.8",
     "@angular/compiler": "^19.2.8",
@@ -23,40 +20,26 @@
     "@angular/platform-browser": "^19.2.8",
     "@angular/platform-browser-dynamic": "^19.2.8",
     "@angular/router": "^19.2.8",
-
- 
-    "@fortawesome/angular-fontawesome": "^0.15.0",
-    "@fortawesome/fontawesome-svg-core": "^6.5.1",
-    "@fortawesome/free-solid-svg-icons": "^6.5.1",
-
-    "@ng-icons/core": "^1.3.0",
-    "@ng-icons/heroicons": "^1.3.0",
-
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
-
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.9",
     "@angular/cli": "^19.2.9",
     "@angular/compiler-cli": "^19.2.8",
-
-   
     "@types/jasmine": "~5.1.0",
     "angular-eslint": "19.3.0",
     "eslint": "^9.25.1",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
-    "prettier": "^3.5.3",
-
     "jasmine-core": "~5.6.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-
+    "prettier": "^3.5.3",
     "typescript": "~5.7.2",
     "typescript-eslint": "8.27.0"
   }
