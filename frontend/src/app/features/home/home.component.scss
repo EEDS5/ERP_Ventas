@@ -1,185 +1,126 @@
-:host {
-  --bright-blue: oklch(51.01% 0.274 263.83);
-  --electric-violet: oklch(53.18% 0.28 296.97);
-  --french-violet: oklch(47.66% 0.246 305.88);
-  --vivid-pink: oklch(69.02% 0.277 332.77);
-  --hot-red: oklch(61.42% 0.238 15.34);
-  --orange-red: oklch(63.32% 0.24 31.68);
+/* --------------------  GOOGLE FONTS  -------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Bungee&display=swap');
 
-  --gray-900: oklch(19.37% 0.006 300.98);
-  --gray-700: oklch(36.98% 0.014 302.71);
-  --gray-400: oklch(70.9% 0.015 304.04);
+/* --------------------  COLORES  -------------------- */
+$rojo-bolivia:    #d32f2f;
+$amarillo-bolivia:#ffca28;
+$verde-bolivia:   #2e7d32;
+$celeste-laguna:  #00bcd4;
+$verde-cruceno:   #43a047;
 
-  --red-to-pink-to-purple-vertical-gradient: linear-gradient(
-    180deg,
-    var(--orange-red) 0%,
-    var(--vivid-pink) 50%,
-    var(--electric-violet) 100%
-  );
-
-  --red-to-pink-to-purple-horizontal-gradient: linear-gradient(
-    90deg,
-    var(--orange-red) 0%,
-    var(--vivid-pink) 50%,
-    var(--electric-violet) 100%
-  );
-
-  --pill-accent: var(--bright-blue);
-
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif,
-    'Apple Color Emoji',
-    'Segoe UI Emoji',
-    'Segoe UI Symbol';
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-h1 {
-  font-size: 3.125rem;
-  color: var(--gray-900);
-  font-weight: 500;
-  line-height: 100%;
-  letter-spacing: -0.125rem;
-  margin: 0;
-  font-family:
-    'Inter Tight',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif,
-    'Apple Color Emoji',
-    'Segoe UI Emoji',
-    'Segoe UI Symbol';
-}
-
-p {
-  margin: 0;
-  color: var(--gray-700);
-}
-
-main {
-  width: 100%;
-  min-height: 100%;
+/* --------------------  FONDO GENERAL  -------------------- */
+.home-container {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
-  box-sizing: inherit;
+  background: linear-gradient(180deg, $celeste-laguna 0%, lighten($celeste-laguna,15%) 100%);
+  color: #fff;
+}
+
+/* --------------------  ONDAS SVG  -------------------- */
+.wave {
+  position: absolute;
+  width: 200%;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: waveMove 15s linear infinite;
+  &-top   { top:   -50px; opacity: .9; }
+  &-mid   { top: 40vh;    opacity: .8; animation-delay: 3s; }
+  &-bottom{ bottom:-20px; opacity: .85; animation-delay: 6s;}
+}
+
+@keyframes waveMove {
+  from { transform: translateX(-50%) translateY(0); }
+  to   { transform: translateX(-45%) translateY(0); }
+}
+
+/* --------------------  HERO  -------------------- */
+.hero {
   position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 1rem 2rem;
 }
 
-.angular-logo {
-  max-width: 9.2rem;
+/* Badge bandera */
+.bolivia-badge{
+  font-size: 2.5rem;
+  filter: drop-shadow(0 0 4px rgba(0,0,0,.5));
+  animation: pop 1s ease-out both;
 }
 
-.content {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  max-width: 700px;
-  margin-bottom: 3rem;
+/* TITULO */
+.home-title {
+  font-family: 'Bungee', cursive;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+  margin: .5rem 0;
+  animation: fadeDown .8s .2s ease-out both;
 }
 
-.content h1 {
-  margin-top: 1.75rem;
+/* SUBTITULO */
+.home-subtitle {
+  font-family: 'Pacifico', cursive;
+  font-size: clamp(1.1rem, 2.8vw, 1.5rem);
+  margin-bottom: 2.2rem;
+  line-height: 1.4;
+  animation: fadeUp .8s .4s ease-out both;
 }
 
-.content p {
-  margin-top: 1.5rem;
-}
+/* BOTONES */
+.button-group{
+  display:flex;
+  justify-content:center;
+  gap:1rem;
+  animation: fadeUp .8s .6s ease-out both;
 
-.divider {
-  width: 1px;
-  background: var(--red-to-pink-to-purple-vertical-gradient);
-  margin-inline: 0.5rem;
-}
-
-.pill-group {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  flex-wrap: wrap;
-  gap: 1.25rem;
-}
-
-.pill {
-  display: flex;
-  align-items: center;
-  --pill-accent: var(--bright-blue);
-  background: color-mix(in srgb, var(--pill-accent) 5%, transparent);
-  color: var(--pill-accent);
-  padding-inline: 0.75rem;
-  padding-block: 0.375rem;
-  border-radius: 2.75rem;
-  border: 0;
-  transition: background 0.3s ease;
-  font-family: var(--inter-font);
-  font-size: 0.875rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.4rem;
-  letter-spacing: -0.00875rem;
-  text-decoration: none;
-}
-
-.pill:hover {
-  background: color-mix(in srgb, var(--pill-accent) 15%, transparent);
-}
-
-.pill-group .pill:nth-child(6n + 1) {
-  --pill-accent: var(--bright-blue);
-}
-.pill-group .pill:nth-child(6n + 2) {
-  --pill-accent: var(--french-violet);
-}
-.pill-group .pill:nth-child(6n + 3),
-.pill-group .pill:nth-child(6n + 4),
-.pill-group .pill:nth-child(6n + 5) {
-  --pill-accent: var(--hot-red);
-}
-
-.pill-group svg {
-  margin-inline-start: 0.25rem;
-}
-
-.social-links {
-  display: flex;
-  align-items: center;
-  gap: 0.73rem;
-  margin-top: 1.5rem;
-}
-
-.social-links path {
-  transition: fill 0.3s ease;
-  fill: var(--gray-400);
-}
-
-.social-links a:hover svg path {
-  fill: var(--gray-900);
-}
-
-@media screen and (max-width: 650px) {
-  .content {
-    flex-direction: column;
-    width: max-content;
+  @media (max-width: 576px){
+    flex-direction:column;
+    .btn{ width:100%; }
   }
+}
 
-  .divider {
-    height: 1px;
-    width: 100%;
-    background: var(--red-to-pink-to-purple-horizontal-gradient);
-    margin-block: 1.5rem;
+.btn{
+  padding:.8rem 2.4rem;
+  border-radius:50px;
+  font-weight:700;
+  transition: transform .3s ease, box-shadow .3s ease;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+
+  &:hover{
+    transform:translateY(-4px) scale(1.05);
+    box-shadow:0 12px 24px rgba(0,0,0,.25);
   }
+}
+
+.btn-primary{
+  background:$verde-cruceno;
+  border:none;
+  &:hover{ background:darken($verde-cruceno,6%); }
+}
+
+.btn-secondary{
+  background:$amarillo-bolivia;
+  color:#212529;
+  border:none;
+  &:hover{ background:darken($amarillo-bolivia,6%); }
+}
+
+/* --------------------  ANIMACIONES KEYFRAMES  -------------------- */
+@keyframes fadeDown {
+  from{opacity:0; transform:translateY(-20px);}
+  to  {opacity:1; transform:translateY(0);}
+}
+@keyframes fadeUp {
+  from{opacity:0; transform:translateY(20px);}
+  to  {opacity:1; transform:translateY(0);}
+}
+@keyframes pop{
+  0%{opacity:0; transform:scale(.3);}
+  80%{opacity:1; transform:scale(1.1);}
+  100%{transform:scale(1);}
 }

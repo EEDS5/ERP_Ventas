@@ -1,24 +1,54 @@
-<div class="login-container">
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div>
-      <label for="nombreUsuario">Usuario</label>
-      <input id="nombreUsuario" formControlName="nombreUsuario" />
-    </div>
+<div class="login-wrapper">
 
-    <div>
-      <label for="password">Contraseña</label>
-      <input id="password" type="password" formControlName="password" />
-    </div>
+  <!-- ICONOS DECORATIVOS -->
+  <i aria-hidden="true" class="fa-solid fa-tree-palms giant-icon left"></i>
+  <i aria-hidden="true" class="fa-solid fa-church giant-icon right"></i>
 
-    <div *ngIf="twoFactorRequired">
-      <label for="verificationCode">Código 2FA</label>
-      <input id="verificationCode" formControlName="verificationCode" />
-    </div>
+  <!-- TARJETA -->
+  <section class="login-card animate-drop">
 
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
+    <h2>Iniciar&nbsp;Sesión</h2>
 
-    <button type="submit">Iniciar Sesión</button>
-  </form>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <!-- USUARIO -->
+      <div class="form-group">
+        <label for="nombreUsuario">Usuario</label>
+        <div class="input-icon">
+          <i class="fa-solid fa-user"></i>
+          <input id="nombreUsuario"
+                 formControlName="nombreUsuario"
+                 placeholder="Tu usuario"/>
+        </div>
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <div class="input-icon">
+          <i class="fa-solid fa-lock"></i>
+          <input id="password"
+                 type="password"
+                 formControlName="password"
+                 placeholder="••••••••"/>
+        </div>
+      </div>
+
+      <!-- 2FA -->
+      <div *ngIf="twoFactorRequired" class="form-group">
+        <label for="verificationCode">Código&nbsp;2FA</label>
+        <div class="input-icon">
+          <i class="fa-solid fa-shield-halved"></i>
+          <input id="verificationCode"
+                 formControlName="verificationCode"
+                 placeholder="123456"/>
+        </div>
+      </div>
+
+      <!-- MENSAJE -->
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+      <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
+    </form>
+  </section>
 </div>

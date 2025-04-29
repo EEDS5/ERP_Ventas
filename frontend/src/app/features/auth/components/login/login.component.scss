@@ -1,42 +1,138 @@
-.login-container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 30px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: white;
+/* PALETA “Santa Cruz multicolor” */
+:root{
+  --verde-scz:#2e7d32;
+  --amarillo:#ffca28;
+  --rojo:    #d32f2f;
+  --celeste: #00bcd4;
+  --blanco:  #ffffff;
+}
 
-  form {
-    display: flex;
-    flex-direction: column;
+/* ─────── WRAPPER Y FONDO ─────── */
+.login-wrapper{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
 
-    div {
-      margin-bottom: 15px;
-    }
+  /* Cuatro franjas verticales que se mueven */
+  background:
+    linear-gradient( 90deg,
+      var(--verde-scz)  0 25%,
+      var(--amarillo)  25% 50%,
+      var(--rojo)      50% 75%,
+      var(--celeste)   75% 100%);
+  background-size:200% 100%;
+  animation:bgSlide 18s linear infinite;
+}
+@keyframes bgSlide{
+  0%,100%{background-position:0% 0;}
+  50%    {background-position:-100% 0;}
+}
 
-    label {
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
+/* ─────── ICONOS GIGANTES ─────── */
+.giant-icon{
+  position:absolute;
+  font-size:320px;
+  opacity:0;
+  color:rgba(255,255,255,.12);
+  filter:drop-shadow(0 6px 12px rgba(0,0,0,.25));
 
-    input {
-      padding: 8px;
-      font-size: 16px;
-    }
+  &.left { left:-330px; top:50%; transform:translateY(-50%); animation:iconLeft 1.1s .3s forwards; }
+  &.right{ right:-330px;top:45%; transform:translateY(-50%); animation:iconRight 1.1s .5s forwards;}
 
-    .error-message {
-      color: red;
-      margin-top: 10px;
-    }
+  @media(max-width:600px){
+    font-size:200px;
+  }
+}
+@keyframes iconLeft  { to{transform:translate(-30px,-50%); opacity:.9;} }
+@keyframes iconRight { to{transform:translate( 30px,-50%); opacity:.9;} }
 
-    button {
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 16px;
-      background-color: #1976d2;
-      color: white;
-      border: none;
-      cursor: pointer;
+/* ─────── TARJETA ─────── */
+.login-card{
+  backdrop-filter:blur(8px);
+  background:rgba(255,255,255,.93);
+  border-radius:16px;
+  width:95%;
+  max-width:460px;
+  padding:2.3rem 2.2rem;
+  text-align:center;
+  box-shadow:0 14px 32px rgba(0,0,0,.25);
+  font-family:'Roboto',sans-serif;
+}
+.animate-drop{
+  animation:drop .8s cubic-bezier(.2,.85,.4,1) both;
+}
+@keyframes drop{
+  0%{transform:translateY(-40px) scale(.9); opacity:0;}
+  100%{transform:translateY(0)    scale(1);  opacity:1;}
+}
+
+/* TÍTULO */
+h2{
+  font-family:'Bungee',cursive;
+  font-size:1.9rem;
+  color:var(--verde-scz);
+  margin-bottom:1.4rem;
+}
+
+/* ─────── FORM ─────── */
+.form-group{margin-bottom:1.15rem; text-align:left;}
+
+label{
+  display:block; margin-bottom:.4rem;
+  font-weight:600; color:var(--verde-scz);
+}
+
+.input-icon{
+  position:relative;
+
+  i{
+    position:absolute;
+    top:50%; left:.85rem;
+    transform:translateY(-50%);
+    color:var(--amarillo);
+    font-size:1.05rem;
+  }
+
+  input{
+    width:100%;
+    padding:.72rem .8rem .72rem 2.7rem;
+    font-size:1rem;
+    border:1px solid #ccc;
+    border-radius:8px;
+    box-sizing:border-box;
+    transition:border-color .2s,box-shadow .2s;
+
+    &:focus{
+      outline:none;
+      border-color:var(--verde-scz);
+      box-shadow:0 0 0 3px rgba(46,125,50,.25);
     }
   }
+}
+
+/* MENSAJE */
+.error-message{color:var(--rojo); margin-bottom:1rem;}
+
+/* BOTÓN */
+button{
+  width:100%; padding:.85rem;
+  font-size:1rem; font-weight:700;
+  color:var(--blanco); background:var(--verde-scz);
+  border:none; border-radius:8px; cursor:pointer;
+  transition:background .25s,transform .25s;
+
+  &:hover:not(:disabled){
+    background:darken(#2e7d32,8%);
+    transform:translateY(-2px);
+  }
+  &:disabled{background:#a5d6a7; cursor:not-allowed;}
+}
+
+/* ─────── RESPONSIVE ─────── */
+@media(max-width:480px){
+  .login-card{padding:2rem 1.5rem;}
+  h2{font-size:1.7rem;}
 }

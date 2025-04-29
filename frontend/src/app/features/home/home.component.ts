@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';   // ← importa el router
 
 @Component({
   standalone: true,
-  imports: [], // Add necessary imports here if required
   selector: 'app-home',
+
+  /* 👇 añade RouterModule en imports */
+  imports: [RouterModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

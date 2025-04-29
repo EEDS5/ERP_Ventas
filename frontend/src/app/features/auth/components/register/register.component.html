@@ -1,1 +1,54 @@
-<p>register works!</p>
+<div class="register-wrapper">
+
+  <!-- ICONOS DECORATIVOS -->
+  <i aria-hidden="true" class="fa-solid fa-sun giant-icon left"></i>
+  <i aria-hidden="true" class="fa-solid fa-tree-palms giant-icon right"></i>
+
+  <!-- TARJETA -->
+  <section class="register-card animate-pop">
+    <h2>Crear&nbsp;Cuenta</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- USUARIO -->
+      <div class="form-group">
+        <label for="nombreUsuario">Usuario</label>
+        <div class="input-icon">
+          <i class="fa-solid fa-user"></i>
+          <input id="nombreUsuario"
+                 formControlName="nombreUsuario"
+                 placeholder="Tu usuario"/>
+        </div>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-icon">
+          <i class="fa-solid fa-envelope"></i>
+          <input id="email"
+                 type="email"
+                 formControlName="email"
+                 placeholder="tu@correo.com"/>
+        </div>
+      </div>
+
+      <!-- CONTRASEÑA -->
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <div class="input-icon">
+          <i class="fa-solid fa-lock"></i>
+          <input id="password"
+                 type="password"
+                 formControlName="password"
+                 placeholder="••••••••"/>
+        </div>
+      </div>
+
+      <!-- MENSAJES -->
+      <div *ngIf="errorMessage"   class="error-message">{{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+
+      <button type="submit" [disabled]="registerForm.invalid">Registrar</button>
+    </form>
+  </section>
+</div>
