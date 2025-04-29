@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ### Generar Secreto 2FA
-POST http://localhost:8080/api/auth/2fa-secret?username=elias_test10 HTTP/1.1
+POST http://localhost:8080/api/auth/2fa-secret?username=elias_test11 HTTP/1.1
 Content-Type: application/json
 
 ### Login
@@ -28,8 +28,8 @@ POST http://localhost:8080/api/auth/login-2fa HTTP/1.1
 Content-Type: application/json
 
 {
-  "nombreUsuario": "elias_test10",
-  "token2FA": "638565"
+  "nombreUsuario": "elias_test11",
+  "token2FA": "421561"
 }
 
 #> {% 
@@ -42,8 +42,8 @@ POST http://localhost:8080/api/auth/verify-2fa HTTP/1.1
 Content-Type: application/json
 
 {
-  "nombreUsuario": "elias_test10",
-  "token2FA": "148574"
+  "nombreUsuario": "elias_test11",
+  "token2FA": "818718"
 }
 
 ### Test Update 2FA

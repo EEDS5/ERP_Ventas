@@ -1,4 +1,4 @@
-package com.proyecto.erpventas.infrastructure.repository;
+package com.proyecto.erpventas.infrastructure.repository.factura;
 
 import com.proyecto.erpventas.domain.model.sales.Factura;
 import org.springframework.data.jpa.repository.JpaRepository;

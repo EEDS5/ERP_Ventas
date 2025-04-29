@@ -1,4 +1,4 @@
-package com.proyecto.erpventas.application.dto.response;
+package com.proyecto.erpventas.application.dto.response.reporteventas;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

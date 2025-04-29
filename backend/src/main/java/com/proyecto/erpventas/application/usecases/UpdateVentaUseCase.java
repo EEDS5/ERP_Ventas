@@ -4,7 +4,8 @@ import com.proyecto.erpventas.application.dto.request.UpdateVentaDTO;
 import com.proyecto.erpventas.domain.model.sales.MetodoPago;
 import com.proyecto.erpventas.domain.model.sales.Venta;
 import com.proyecto.erpventas.infrastructure.repository.MetodoPagoRepository;
-import com.proyecto.erpventas.infrastructure.repository.VentaRepository;
+import com.proyecto.erpventas.infrastructure.repository.venta.VentaRepository;
+
 import org.springframework.stereotype.Service;
 
 @Service

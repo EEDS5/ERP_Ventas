@@ -1,8 +1,9 @@
 package com.proyecto.erpventas.domain.service;
 
-import com.proyecto.erpventas.application.dto.response.FacturacionMensualResponse;
 import java.util.List;
 
+import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturado;
+
 public interface FacturaRepository {
-    List<FacturacionMensualResponse> obtenerFacturacionMensual();
+    List<MesFacturado> obtenerFacturacionMensual();
 }
