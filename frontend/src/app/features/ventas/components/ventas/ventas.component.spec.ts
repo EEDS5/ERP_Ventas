@@ -1,5 +1,5 @@
+// frontend/src/app/features/ventas/components/ventas/ventas.component.spec.ts
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { VentasComponent } from './ventas.component';
 
 describe('VentasComponent', () => {
@@ -8,9 +8,8 @@ describe('VentasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [VentasComponent]
-    })
-    .compileComponents();
+      imports: [VentasComponent]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(VentasComponent);
     component = fixture.componentInstance;

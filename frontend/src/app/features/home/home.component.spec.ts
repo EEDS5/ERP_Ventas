@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HomeComponent],
+      imports: [HomeComponent, RouterTestingModule]
     }).compileComponents();
   });
 
@@ -24,7 +25,7 @@ describe('HomeComponent', () => {
     const fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, frontend-app');
+    expect(compiled.querySelector('h1')?.textContent)
+      .toContain('Bienvenido a MiApp Prueba 1');
   });
 });
-// This test suite is for the HomeComponent in the home module of the application.

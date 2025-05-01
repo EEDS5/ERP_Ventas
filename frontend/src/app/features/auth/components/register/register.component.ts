@@ -34,7 +34,7 @@ export class RegisterComponent {
     const { nombreUsuario, email, password } = this.registerForm.value;
     this.authService.register(nombreUsuario, email, password)
       .subscribe({
-        next: (user) => {
+        next: () => {
           this.successMessage = '¡Registro exitoso! Redirigiendo al login…';
           setTimeout(() => this.router.navigate(['/login']), 1500);
         },
