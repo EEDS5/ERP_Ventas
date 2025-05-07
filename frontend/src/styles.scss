@@ -1,4 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+// src/styles.scss
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// 1) Reset base (reboot)
+@import 'styles/_reboot';
+
+// 2) Variables de color y paletas
+@import 'styles/colors/index';
+
+// 3) Overrides o variables custom definidas por ti
+@import 'styles/custom/index';
+
+// 4) Helpers: mixins, funciones y utilidades CSS
+@import 'styles/helpers/index';
+
+// 5) Sistema de grid
+@import 'styles/grid/index';
+
+// 6) Plugins de Ng-Matero (componentes extendidos)
+@import 'styles/plugins/index';
+
+// 7) Definición de temas (light / dark)
+@import 'styles/_themes';
+
+// 8) Tus estilos globales adicionales
+html, body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

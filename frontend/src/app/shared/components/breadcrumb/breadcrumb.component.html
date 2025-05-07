@@ -1,0 +1,16 @@
+<nav aria-label="breadcrumb">
+  <ol class="matero-breadcrumb">
+    <li
+      *ngFor="let item of navItems; trackBy: trackByNavItem; let isFirst = first"
+      class="matero-breadcrumb-item"
+    >
+      <ng-container *ngIf="isFirst; else notFirst">
+        <a routerLink="/" class="link">{{ item }}</a>
+      </ng-container>
+      <ng-template #notFirst>
+        <mat-icon class="chevron">chevron_right</mat-icon>
+        <span>{{ item | translate }}</span>
+      </ng-template>
+    </li>
+  </ol>
+</nav>
