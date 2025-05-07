@@ -75,12 +75,21 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "200", description = "Resultado de inicio de sesión")
     })
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginUserDTO loginDTO) {
+    public ResponseEntity<JwtResponseDTO> login(@Valid @RequestBody LoginUserDTO loginDTO) {
+        // 1. Ejecuta el caso de uso de login
         Usuario user = loginUserUseCase.login(loginDTO);
+
+        // 2. Si el usuario tiene 2FA habilitado, devolvemos un token especial
         if (Boolean.TRUE.equals(user.getTwoFAEnabled())) {
-            return ResponseEntity.ok("2FA_REQUIRED");
+            // El cliente debe interpretar el campo `token` = "2FA_REQUIRED"
+            return ResponseEntity
+                    .ok(new JwtResponseDTO("2FA_REQUIRED"));
         }
-        return ResponseEntity.ok("LOGIN_OK");
+
+        // 3. Si no tiene 2FA, generamos un JWT normal
+        String jwt = jwtTokenProvider.generateToken(user.getNombreUsuario());
+        return ResponseEntity
+                .ok(new JwtResponseDTO(jwt));
     }
 
     @Operation(summary = "Iniciar sesión con 2FA", description = "Verifica el código 2FA y retorna un token JWT en caso de éxito.")
