@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'error-code',
+  selector: 'app-error-code',
   templateUrl: './error-code.component.html',
   styleUrl: './error-code.component.scss',
   encapsulation: ViewEncapsulation.None,

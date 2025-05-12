@@ -17,7 +17,7 @@ export interface LoginUserDTO {
 
 export interface TwoFactorVerificationDTO {
   nombreUsuario: string;
-  token2FA: string; 
+  token2FA: string;
 }
 
 export interface JwtResponseDTO {
@@ -34,8 +34,9 @@ export class UsuarioApiService {
     return this.http.post<Usuario>(`${this.apiUrl}/register`, user);
   }
 
-  login(user: LoginUserDTO): Observable<string> {
-    return this.http.post(`${this.apiUrl}/login`, user, { responseType: 'text' });
+  // Devuelve el DTO { token: string } con el campo `token`
+  login(user: LoginUserDTO): Observable<JwtResponseDTO> {
+    return this.http.post<JwtResponseDTO>(`${this.apiUrl}/login`, user);
   }
 
   login2FA(data: TwoFactorVerificationDTO): Observable<JwtResponseDTO> {
@@ -47,7 +48,10 @@ export class UsuarioApiService {
   }
 
   generate2FASecret(username: string): Observable<TwoFactorSetupResponseDTO> {
-    return this.http.post<TwoFactorSetupResponseDTO>(`${this.apiUrl}/2fa-secret?username=${username}`, {});
+    return this.http.post<TwoFactorSetupResponseDTO>(
+      `${this.apiUrl}/2fa-secret?username=${username}`,
+      {},
+    );
   }
 
   // Método adicional que falta: obtenerUsuarios()

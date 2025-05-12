@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { UsuarioApiService, JwtResponseDTO } from '../../infrastructure/api/usuario-api.service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Usuario } from '../../core/models/usuario.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private _user = new BehaviorSubject<Usuario | null>(null);
+  public user$ = this._user.asObservable();
+
   constructor(private usuarioApi: UsuarioApiService) {}
 
   isLoggedIn(): boolean {
@@ -12,7 +15,7 @@ export class AuthService {
     return !!token;
   }
 
-  login(nombreUsuario: string, password: string): Observable<string> {
+  login(nombreUsuario: string, password: string): Observable<JwtResponseDTO> {
     return this.usuarioApi.login({ nombreUsuario, password });
   }
 
@@ -26,5 +29,14 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
+    this._user.next(null); // limpiar usuario al hacer logout
+  }
+
+  setUser(usuario: Usuario) {
+    this._user.next(usuario);
+  }
+
+  getUser(): Usuario | null {
+    return this._user.getValue();
   }
 }

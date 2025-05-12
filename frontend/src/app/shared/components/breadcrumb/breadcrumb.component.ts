@@ -11,7 +11,7 @@ import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { filter, startWith } from 'rxjs';
-import { MenuService } from 'src/app/core/services/menu.service';
+import { MenuService } from '@core/services/menu.service';
 
 @Component({
   selector: 'app-breadcrumb',

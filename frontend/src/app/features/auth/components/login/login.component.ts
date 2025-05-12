@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { JwtResponseDTO } from '../../../../infrastructure/api/usuario-api.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,7 +10,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -20,12 +21,12 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {
     this.loginForm = this.fb.group({
       nombreUsuario: ['', Validators.required],
       password: ['', Validators.required],
-      verificationCode: [''] // Solo se usa si se requiere 2FA
+      verificationCode: [''], // Solo se usa si se requiere 2FA
     });
   }
 
@@ -40,18 +41,21 @@ export class LoginComponent {
   private loginInitial(): void {
     const { nombreUsuario, password } = this.loginForm.value;
     this.authService.login(nombreUsuario, password).subscribe({
-      next: (response) => {
-        if (response === '2FA_REQUIRED') {
+      next: (response: JwtResponseDTO) => {
+        // 1) Si el token es "2FA_REQUIRED", habilitamos el flujo de 2FA
+        if (response.token === '2FA_REQUIRED') {
           this.twoFactorRequired = true;
           this.nombreUsuario = nombreUsuario;
           this.loginForm.get('password')?.disable();
-        } else if (response === 'LOGIN_OK') {
-          this.router.navigate(['/dashboard']); // Ruta protegida
+        } else {
+          // 2) Si no, tenemos ya un JWT válido: lo guardamos y navegamos
+          localStorage.setItem('token', response.token);
+          this.router.navigate(['/dashboard']);
         }
       },
       error: () => {
         this.errorMessage = 'Credenciales inválidas o usuario inactivo';
-      }
+      },
     });
   }
 
@@ -64,7 +68,7 @@ export class LoginComponent {
       },
       error: () => {
         this.errorMessage = 'Código 2FA incorrecto';
-      }
+      },
     });
   }
 }
