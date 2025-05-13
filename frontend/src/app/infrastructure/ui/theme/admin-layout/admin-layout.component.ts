@@ -20,7 +20,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
-import { SettingsService, AppSettings } from '@core/services/settings';
+import { AppSettings } from '@core/settings';
+import { SettingsService } from '@core/services/settings.service';
 
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';

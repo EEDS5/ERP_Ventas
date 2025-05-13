@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { debounceTime, tap } from 'rxjs';
 
 import { AuthService } from '@core/services/auth.service';
-import { SettingsService } from '@core/services/settings';
+import { SettingsService } from '@core/services/settings.service';
 import { Usuario } from '@core/models/usuario.model';
 
 @Component({

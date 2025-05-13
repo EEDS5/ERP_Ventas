@@ -1,29 +1,47 @@
 // src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
+import { AdminLayoutComponent } from './infrastructure/ui/theme/admin-layout/admin-layout.component';
 
 export const routes: Routes = [
-  { path: '', loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule) },
-
-  { path: 'login',
-    loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule)
-  },
-  { path: 'register',
-    loadComponent: () => import('./features/auth/components/register/register.component').then(m => m.RegisterComponent)
-  },
-
-  // Rutas protegidas por el guardia de autenticación
+  // 1) Rutas públicas (login/register)
   {
-    path: 'dashboard',
-    loadComponent: () => import('./features/dashboard/pages/dashboard.component')
-                                   .then(m => m.DashboardComponent),
-    canActivate: [AuthGuard]
+    path: 'login',
+    loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule),
   },
   {
-    path: 'ventas',
-    loadChildren: () => import('./features/ventas/ventas.module').then(m => m.VentasModule),
-    canActivate: [AuthGuard]
+    path: 'register',
+    loadComponent: () =>
+      import('./features/auth/components/register/register.component')
+        .then(m => m.RegisterComponent),
   },
 
-  { path: '**', redirectTo: 'login' }           // ← Opcional: redirige a login si no coincide ruta
+  // 2) Shell protegido: aquí dentro va TODO lo que use el layout de Ng-Matero
+  {
+    path: '',
+    component: AdminLayoutComponent,
+    canActivate: [AuthGuard],     // protege todo el subtree
+    children: [
+      // ruta por defecto
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+
+      // dashboard
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/pages/dashboard.component')
+            .then(m => m.DashboardComponent),
+      },
+
+      // ventas (y cualquier otra ruta protegida)
+      {
+        path: 'ventas',
+        loadChildren: () =>
+          import('./features/ventas/ventas.module').then(m => m.VentasModule),
+      },
+    ],
+  },
+
+  // 3) Cualquier otra va a login
+  { path: '**', redirectTo: 'login' },
 ];

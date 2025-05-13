@@ -1,5 +1,5 @@
 // src/app/app.config.ts
-import { importProvidersFrom } from '@angular/core';
+import { importProvidersFrom, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { provideRouter, withHashLocation } from '@angular/router';
@@ -9,6 +9,10 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+
+import { initNgMateroLayoutFactory } from './core/config/init-layout.config';
+import { MenuService } from './core/services/menu.service';
+import { SettingsService } from './core/services/settings.service';
 
 // fábrica para cargar JSON de assets/i18n/*.json
 export function HttpLoaderFactory(http: HttpClient) {
@@ -28,11 +32,17 @@ export const appConfig = {
           useFactory: HttpLoaderFactory,
           deps: [HttpClient],
         },
-      })
+      }),
     ),
     provideRouter(routes, withHashLocation()),
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initNgMateroLayoutFactory,
+      deps: [MenuService, SettingsService],
+      multi: true,
+    },
   ],
 };
 // El interceptor de errores se encarga de gestionar los errores de las peticiones HTTP
