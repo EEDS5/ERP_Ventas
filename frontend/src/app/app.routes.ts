@@ -4,10 +4,19 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { AdminLayoutComponent } from './infrastructure/ui/theme/admin-layout/admin-layout.component';
 
 export const routes: Routes = [
-  // 1) Rutas públicas (login/register)
+  // 1) Pantalla de inicio públic­a (ruta exacta '/')
+  {
+    path: '',
+    pathMatch: 'full',
+    loadChildren: () =>
+      import('./features/home/home.module').then(m => m.HomeModule),
+  },
+
+  // 2) Autenticación pública
   {
     path: 'login',
-    loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule),
+    loadChildren: () =>
+      import('./features/auth/auth.module').then(m => m.AuthModule),
   },
   {
     path: 'register',
@@ -16,16 +25,16 @@ export const routes: Routes = [
         .then(m => m.RegisterComponent),
   },
 
-  // 2) Shell protegido: aquí dentro va TODO lo que use el layout de Ng-Matero
+  // 3) Shell protegido: AdminLayoutComponent envuelve todo lo demás
   {
     path: '',
     component: AdminLayoutComponent,
-    canActivate: [AuthGuard],     // protege todo el subtree
+    canActivate: [AuthGuard],
     children: [
-      // ruta por defecto
+      // 3.a) Redirige '' → dashboard si ya estás autenticado
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
-      // dashboard
+      // 3.b) Dashboard
       {
         path: 'dashboard',
         loadComponent: () =>
@@ -33,15 +42,16 @@ export const routes: Routes = [
             .then(m => m.DashboardComponent),
       },
 
-      // ventas (y cualquier otra ruta protegida)
+      // 3.c) Ventas (y resto de rutas protegidas)
       {
         path: 'ventas',
         loadChildren: () =>
           import('./features/ventas/ventas.module').then(m => m.VentasModule),
       },
+      // ← aquí podrías añadir más hijos protegidos
     ],
   },
 
-  // 3) Cualquier otra va a login
-  { path: '**', redirectTo: 'login' },
+  // 4) Cualquier otra ruta no válida
+  { path: '**', redirectTo: '' },
 ];
