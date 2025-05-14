@@ -6,3 +6,21 @@ docker-compose build backend
 
 Iniciar el contenedor:
 docker-compose up -d
+
+Reconstruir sin caché e iniciar el contenedor:
+docker-compose build --no-cache && docker-compose up -d
+
+Reconstruir e iniciar el contenedor:
+docker-compose build && docker-compose up -d
+
+Ver logs en tiempo real:
+docker-compose logs -f
+
+Reiniciar servicio específico:
+docker-compose restart backend
+
+Ver estado de los contenedores:
+docker-compose ps
+
+Apagar contenedor y eliminar volúmenes asociados:
+docker-compose down -v

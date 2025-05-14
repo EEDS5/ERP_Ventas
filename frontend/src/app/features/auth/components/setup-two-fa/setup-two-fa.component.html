@@ -1,0 +1,10 @@
+<div class="text-center">
+  <h2>Configurar Autenticación en Dos Pasos</h2>
+
+  <p>Escanea este código QR con Google Authenticator:</p>
+  <img *ngIf="qrUrl" [src]="qrUrl" alt="Código QR" width="200" height="200" />
+  <p>O ingresa este código manualmente:</p>
+  <p><strong>{{ secret }}</strong></p>
+
+  <button (click)="continuar()">Ya escaneé, continuar</button>
+</div>

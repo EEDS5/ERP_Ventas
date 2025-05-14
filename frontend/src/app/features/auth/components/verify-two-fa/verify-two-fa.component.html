@@ -1,0 +1,15 @@
+<div class="text-center">
+  <h2>Verificación del Código 2FA</h2>
+
+  <form [formGroup]="form" (ngSubmit)="enviar()">
+    <label for="token">Introduce el código de 6 dígitos:</label><br />
+    <input type="text" formControlName="token2FA" maxlength="6" required />
+
+    <div *ngIf="form.get('token2FA')?.invalid && form.get('token2FA')?.touched">
+      El código debe tener 6 dígitos.
+    </div>
+
+    <br />
+    <button type="submit" [disabled]="form.invalid">Verificar</button>
+  </form>
+</div>

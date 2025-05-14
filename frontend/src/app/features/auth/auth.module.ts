@@ -4,6 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { SetupTwoFaComponent } from './components/setup-two-fa/setup-two-fa.component';
+import { VerifyTwoFaComponent } from './components/verify-two-fa/verify-two-fa.component';
 
 @NgModule({
   imports: [
@@ -11,7 +13,9 @@ import { RegisterComponent } from './components/register/register.component';
     ReactiveFormsModule,
     AuthRoutingModule,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    SetupTwoFaComponent, 
+    VerifyTwoFaComponent
   ]
 })
 export class AuthModule {}
