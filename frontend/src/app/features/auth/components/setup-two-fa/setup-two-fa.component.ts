@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '@core/services/auth.service';
 import { TwoFactorSetupResponseDTO } from '@core/models/twofactor-setup-response.dto';
 
@@ -13,6 +14,7 @@ import { TwoFactorSetupResponseDTO } from '@core/models/twofactor-setup-response
 export class SetupTwoFaComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
   qrUrl = '';
   secret = '';
@@ -31,7 +33,7 @@ export class SetupTwoFaComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error generando QR 2FA:', err);
-        alert('Ocurrió un error al generar el código 2FA');
+        this.snackBar.open('Error al generar el código 2FA.', 'Cerrar', { duration: 5000 });
       },
     });
   }

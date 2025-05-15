@@ -6,7 +6,7 @@
     <input type="text" formControlName="token2FA" maxlength="6" required />
 
     <div *ngIf="form.get('token2FA')?.invalid && form.get('token2FA')?.touched">
-      El código debe tener 6 dígitos.
+      El código ingresado no es válido.
     </div>
 
     <br />

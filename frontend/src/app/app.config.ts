@@ -1,10 +1,13 @@
 // src/app/app.config.ts
 import { importProvidersFrom, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { provideRouter, withHashLocation } from '@angular/router';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 import { routes } from './app.routes';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
@@ -23,8 +26,10 @@ export const appConfig = {
   providers: [
     importProvidersFrom(
       BrowserModule,
+      BrowserAnimationsModule,
       HttpClientModule,
-      // <-- aquí añadimos TranslateModule
+      MatSnackBarModule,
+      // Modulo de traducción
       TranslateModule.forRoot({
         defaultLanguage: 'en-US',
         loader: {
