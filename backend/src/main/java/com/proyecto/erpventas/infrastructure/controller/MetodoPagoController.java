@@ -1,8 +1,8 @@
 package com.proyecto.erpventas.infrastructure.controller;
 
-import com.proyecto.erpventas.application.dto.request.CreateMetodoPagoDTO;
-import com.proyecto.erpventas.application.dto.request.UpdateMetodoPagoDTO;
-import com.proyecto.erpventas.application.dto.response.MetodoPagoResponseDTO;
+import com.proyecto.erpventas.application.dto.request.metodopago.CreateMetodoPagoDTO;
+import com.proyecto.erpventas.application.dto.request.metodopago.UpdateMetodoPagoDTO;
+import com.proyecto.erpventas.application.dto.response.metodopago.MetodoPagoResponseDTO;
 import com.proyecto.erpventas.application.usecases.*;
 import com.proyecto.erpventas.domain.model.sales.MetodoPago;
 import org.springframework.http.ResponseEntity;

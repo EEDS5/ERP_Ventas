@@ -1,6 +1,6 @@
 package com.proyecto.erpventas.application.usecases;
 
-import com.proyecto.erpventas.application.dto.request.UpdateFacturaDTO;
+import com.proyecto.erpventas.application.dto.request.factura.UpdateFacturaDTO;
 import com.proyecto.erpventas.domain.model.sales.Factura;
 import com.proyecto.erpventas.infrastructure.repository.factura.FacturaRepository;
 

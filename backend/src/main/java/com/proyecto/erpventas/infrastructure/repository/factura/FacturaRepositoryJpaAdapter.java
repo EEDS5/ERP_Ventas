@@ -1,6 +1,6 @@
 package com.proyecto.erpventas.infrastructure.repository.factura;
 
-import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturado;
+import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturadoResponse;
 import com.proyecto.erpventas.domain.service.FacturaRepository;
 import com.proyecto.erpventas.infrastructure.mapper.FacturacionMensualMapper;
 import jakarta.persistence.EntityManager;
@@ -22,7 +22,7 @@ public class FacturaRepositoryJpaAdapter implements FacturaRepository {
     }
 
     @Override
-    public List<MesFacturado> obtenerFacturacionMensual() {
+    public List<MesFacturadoResponse> obtenerFacturacionMensual() {
         String jpql = """
             SELECT FUNCTION('to_char', f.fechaEmision, 'YYYY-MM'),
                    SUM(v.total)

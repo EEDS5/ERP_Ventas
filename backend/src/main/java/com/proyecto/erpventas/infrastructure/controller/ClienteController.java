@@ -1,8 +1,8 @@
 package com.proyecto.erpventas.infrastructure.controller;
 
-import com.proyecto.erpventas.application.dto.request.CreateClienteDTO;
-import com.proyecto.erpventas.application.dto.request.UpdateClienteDTO;
-import com.proyecto.erpventas.application.dto.response.ClienteResponseDTO;
+import com.proyecto.erpventas.application.dto.request.cliente.CreateClienteDTO;
+import com.proyecto.erpventas.application.dto.request.cliente.UpdateClienteDTO;
+import com.proyecto.erpventas.application.dto.response.cliente.ClienteResponseDTO;
 import com.proyecto.erpventas.application.usecases.*;
 import com.proyecto.erpventas.domain.model.people.Cliente;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,8 @@
 package com.proyecto.erpventas.infrastructure.controller;
 
-import com.proyecto.erpventas.application.dto.request.UpdateUserDataDTO;
-import com.proyecto.erpventas.application.dto.request.UpdateUserPasswordDTO;
-import com.proyecto.erpventas.application.dto.response.UsuarioResponseDTO;
+import com.proyecto.erpventas.application.dto.request.auth.UpdateUserPasswordDTO;
+import com.proyecto.erpventas.application.dto.request.usuario.UpdateUserDataDTO;
+import com.proyecto.erpventas.application.dto.response.usuario.UsuarioResponseDTO;
 import com.proyecto.erpventas.application.usecases.DeleteUserUseCase;
 import com.proyecto.erpventas.application.usecases.GetUserByIdUseCase;
 import com.proyecto.erpventas.application.usecases.ListUsersUseCase;

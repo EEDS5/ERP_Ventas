@@ -1,6 +1,6 @@
 package com.proyecto.erpventas.application.usecases;
 
-import com.proyecto.erpventas.application.dto.request.UpdateDetalleVentaDTO;
+import com.proyecto.erpventas.application.dto.request.detalleventa.UpdateDetalleVentaDTO;
 import com.proyecto.erpventas.domain.model.sales.DetalleVenta;
 import com.proyecto.erpventas.infrastructure.repository.DetalleVentaRepository;
 import org.springframework.stereotype.Service;

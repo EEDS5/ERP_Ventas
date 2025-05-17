@@ -1,6 +1,6 @@
 package com.proyecto.erpventas.domain.service;
 
-import com.proyecto.erpventas.application.dto.response.TwoFactorSetupResponseDTO;
+import com.proyecto.erpventas.application.dto.response.auth.TwoFactorSetupResponseDTO;
 import com.proyecto.erpventas.application.service.QRCodeGeneratorService;
 import com.proyecto.erpventas.domain.model.people.Usuario;
 import com.proyecto.erpventas.infrastructure.repository.UserRepository;

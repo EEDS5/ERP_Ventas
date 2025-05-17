@@ -1,8 +1,8 @@
 package com.proyecto.erpventas.infrastructure.controller;
 
-import com.proyecto.erpventas.application.dto.request.CreateFacturaDTO;
-import com.proyecto.erpventas.application.dto.request.UpdateFacturaDTO;
-import com.proyecto.erpventas.application.dto.response.FacturaResponseDTO;
+import com.proyecto.erpventas.application.dto.request.factura.CreateFacturaDTO;
+import com.proyecto.erpventas.application.dto.request.factura.UpdateFacturaDTO;
+import com.proyecto.erpventas.application.dto.response.factura.FacturaResponseDTO;
 import com.proyecto.erpventas.application.usecases.*;
 import com.proyecto.erpventas.domain.model.sales.Factura;
 import org.springframework.http.ResponseEntity;

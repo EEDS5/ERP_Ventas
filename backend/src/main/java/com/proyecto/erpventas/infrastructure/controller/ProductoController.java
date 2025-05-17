@@ -1,8 +1,8 @@
 package com.proyecto.erpventas.infrastructure.controller;
 
-import com.proyecto.erpventas.application.dto.request.CreateProductoDTO;
-import com.proyecto.erpventas.application.dto.request.UpdateProductoDTO;
-import com.proyecto.erpventas.application.dto.response.ProductoResponseDTO;
+import com.proyecto.erpventas.application.dto.request.producto.CreateProductoDTO;
+import com.proyecto.erpventas.application.dto.request.producto.UpdateProductoDTO;
+import com.proyecto.erpventas.application.dto.response.producto.ProductoResponseDTO;
 import com.proyecto.erpventas.application.usecases.*;
 import com.proyecto.erpventas.domain.model.inventory.Producto;
 import org.springframework.http.ResponseEntity;

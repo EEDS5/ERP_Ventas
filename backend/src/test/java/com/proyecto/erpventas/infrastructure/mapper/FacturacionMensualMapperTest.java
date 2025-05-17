@@ -2,7 +2,7 @@ package com.proyecto.erpventas.infrastructure.mapper;
 
 import org.junit.jupiter.api.Test;
 
-import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturado;
+import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturadoResponse;
 
 import java.math.BigDecimal;
 
@@ -21,7 +21,7 @@ public class FacturacionMensualMapperTest {
         FacturacionMensualMapper mapper = new FacturacionMensualMapper();
 
         // Act
-        MesFacturado response = mapper.fromRow(row);
+        MesFacturadoResponse response = mapper.fromRow(row);
 
         // Assert
         assertThat(response).isNotNull();

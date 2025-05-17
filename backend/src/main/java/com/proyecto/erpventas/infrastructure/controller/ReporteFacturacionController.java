@@ -1,6 +1,6 @@
 package com.proyecto.erpventas.infrastructure.controller;
 
-import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturado;
+import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturadoResponse;
 import com.proyecto.erpventas.application.usecases.reportefacturacion.ReporteFacturacionUseCase;
 
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class ReporteFacturacionController {
     }
 
     @GetMapping("/facturacion-mensual")
-    public ResponseEntity<List<MesFacturado>> obtenerFacturacionMensual() {
+    public ResponseEntity<List<MesFacturadoResponse>> obtenerFacturacionMensual() {
         return ResponseEntity.ok(reporteFacturacionUseCase.obtenerFacturacionMensual());
     }
 }

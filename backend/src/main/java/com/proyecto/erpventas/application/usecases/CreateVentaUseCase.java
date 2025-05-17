@@ -1,6 +1,6 @@
 package com.proyecto.erpventas.application.usecases;
 
-import com.proyecto.erpventas.application.dto.request.CreateVentaDTO;
+import com.proyecto.erpventas.application.dto.request.venta.CreateVentaDTO;
 import com.proyecto.erpventas.domain.model.people.Cliente;
 import com.proyecto.erpventas.domain.model.people.Usuario;
 import com.proyecto.erpventas.domain.model.sales.MetodoPago;

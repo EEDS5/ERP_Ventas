@@ -1,6 +1,6 @@
 package com.proyecto.erpventas.application.usecases;
 
-import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturado;
+import com.proyecto.erpventas.application.dto.response.reportefacturacion.MesFacturadoResponse;
 import com.proyecto.erpventas.application.usecases.reportefacturacion.ReporteFacturacionUseCase;
 import com.proyecto.erpventas.domain.service.FacturaRepository;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ public class ReporteFacturacionUseCaseTest {
         FacturaRepository mockRepository = mock(FacturaRepository.class);
         ReporteFacturacionUseCase useCase = new ReporteFacturacionUseCase(mockRepository);
 
-        MesFacturado mockResponse = new MesFacturado(
+        MesFacturadoResponse mockResponse = new MesFacturadoResponse(
             "2025-04",
             new BigDecimal("25000.00")
         );
@@ -27,7 +27,7 @@ public class ReporteFacturacionUseCaseTest {
         when(mockRepository.obtenerFacturacionMensual()).thenReturn(List.of(mockResponse));
 
         // Act
-        List<MesFacturado> resultado = useCase.obtenerFacturacionMensual();
+        List<MesFacturadoResponse> resultado = useCase.obtenerFacturacionMensual();
 
         // Assert
         assertThat(resultado).isNotNull();

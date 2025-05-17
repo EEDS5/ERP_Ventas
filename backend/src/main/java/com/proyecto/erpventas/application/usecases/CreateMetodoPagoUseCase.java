@@ -1,6 +1,6 @@
 package com.proyecto.erpventas.application.usecases;
 
-import com.proyecto.erpventas.application.dto.request.CreateMetodoPagoDTO;
+import com.proyecto.erpventas.application.dto.request.metodopago.CreateMetodoPagoDTO;
 import com.proyecto.erpventas.domain.model.sales.MetodoPago;
 import com.proyecto.erpventas.infrastructure.repository.MetodoPagoRepository;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.proyecto.erpventas.application.usecases;
 
-import com.proyecto.erpventas.application.dto.request.TwoFactorVerificationDTO;
+import com.proyecto.erpventas.application.dto.request.auth.TwoFactorVerificationDTO;
 import com.proyecto.erpventas.domain.model.people.Usuario;
 import com.proyecto.erpventas.infrastructure.repository.UserRepository;
 import com.warrenstrange.googleauth.GoogleAuthenticator;

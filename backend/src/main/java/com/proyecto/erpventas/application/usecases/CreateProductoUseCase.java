@@ -1,6 +1,6 @@
 package com.proyecto.erpventas.application.usecases;
 
-import com.proyecto.erpventas.application.dto.request.CreateProductoDTO;
+import com.proyecto.erpventas.application.dto.request.producto.CreateProductoDTO;
 import com.proyecto.erpventas.domain.model.inventory.Producto;
 import com.proyecto.erpventas.infrastructure.repository.ProductoRepository;
 import org.springframework.stereotype.Service;

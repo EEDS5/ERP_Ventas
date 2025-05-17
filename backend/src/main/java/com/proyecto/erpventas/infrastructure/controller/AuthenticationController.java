@@ -1,11 +1,11 @@
 package com.proyecto.erpventas.infrastructure.controller;
 
-import com.proyecto.erpventas.application.dto.request.LoginUserDTO;
-import com.proyecto.erpventas.application.dto.request.RegisterUserDTO;
-import com.proyecto.erpventas.application.dto.request.TwoFactorVerificationDTO;
-import com.proyecto.erpventas.application.dto.response.JwtResponseDTO;
-import com.proyecto.erpventas.application.dto.response.TwoFactorSetupResponseDTO;
-import com.proyecto.erpventas.application.dto.response.UsuarioResponseDTO;
+import com.proyecto.erpventas.application.dto.request.auth.LoginUserDTO;
+import com.proyecto.erpventas.application.dto.request.auth.RegisterUserDTO;
+import com.proyecto.erpventas.application.dto.request.auth.TwoFactorVerificationDTO;
+import com.proyecto.erpventas.application.dto.response.auth.JwtResponseDTO;
+import com.proyecto.erpventas.application.dto.response.auth.TwoFactorSetupResponseDTO;
+import com.proyecto.erpventas.application.dto.response.usuario.UsuarioResponseDTO;
 import com.proyecto.erpventas.application.usecases.LoginUserUseCase;
 import com.proyecto.erpventas.application.usecases.RegisterUserUseCase;
 import com.proyecto.erpventas.application.usecases.VerifyTwoFactorUseCase;

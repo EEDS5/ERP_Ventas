@@ -1,7 +1,7 @@
 package com.proyecto.erpventas.application.usecases.reporteventas;
 
+import com.proyecto.erpventas.application.dto.response.cliente.VentaPorClienteReport;
 import com.proyecto.erpventas.application.dto.response.reporteventas.VentaPorClienteResponse;
-import com.proyecto.erpventas.application.dto.response.VentaPorClienteReport;
 import com.proyecto.erpventas.domain.service.VentaRepository;
 import com.proyecto.erpventas.infrastructure.mapper.VentaPorClienteMapper;
 

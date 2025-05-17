@@ -1,6 +1,6 @@
 package com.proyecto.erpventas.application.usecases;
 
-import com.proyecto.erpventas.application.dto.request.CreateDetalleVentaDTO;
+import com.proyecto.erpventas.application.dto.request.detalleventa.CreateDetalleVentaDTO;
 import com.proyecto.erpventas.domain.model.inventory.Producto;
 import com.proyecto.erpventas.domain.model.sales.DetalleVenta;
 import com.proyecto.erpventas.domain.model.sales.Venta;
