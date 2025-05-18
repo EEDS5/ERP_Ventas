@@ -10,6 +10,7 @@ import { AuthService } from '@core/services/auth.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './verify-two-fa.component.html',
+  styleUrls: ['./verify-two-fa.component.scss']
 })
 export class VerifyTwoFaComponent {
   private fb = inject(FormBuilder);

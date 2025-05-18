@@ -1,82 +1,145 @@
-/* ---------------------------------------------------------------------------
-   VARIABLES (si las tenías globales, omite estas)
---------------------------------------------------------------------------- */
-$verde-cruceno: #1a662a;
-$amarillo-bo:   #ffca08;
-$rojo-bo:       #d52b1e;
+/* ===================  PALETA  =================== */
+$verde-oscuro:  #1b5e20;
+$verde-claro:   #4caf50;
 $blanco:        #ffffff;
+$negro:         #1e1e1e;
 
-/* ---------------------------------------------------------------------------
-   CUSTOM PROPS para parallax
---------------------------------------------------------------------------- */
-:root {
-  --bg-shift-x: 0px;
-  --bg-shift-y: 0px;
+/* ===================  WAVE PARÁMETROS  ========== */
+:root{
+  --waveX: 0px;       /* parallax horizontal */
+  --waveY: 0px;       /* parallax vertical   */
+  --heroShift: 0px;   /* para la sección     */
+  --tiltX: 0deg;      /* QR tilt             */
+  --tiltY: 0deg;
 }
 
-/* ---------------------------------------------------------------------------
-   CONTENEDOR pantalla completa con fondo interactivo
---------------------------------------------------------------------------- */
-#bicentenario-qr {
-  @extend #bicentenario-wrapper;    // hereda fuente y gradiente animado
-  overflow: hidden;                 // oculta confetti que se sale
+/* ===================  CONTENEDOR  ================= */
+.twofa-container{
   position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e8f5e9;
+  font-family: 'Montserrat', sans-serif;
+  perspective: 1200px;
+}
 
-  /* Parallax translada todo el wrapper */
-  transform: translate(var(--bg-shift-x), var(--bg-shift-y));
-  transition: transform 0.1s ease-out; // suaviza en móviles
+/* ===================  OLAS SVG  =================== */
+.wave{
+  position:absolute;
+  width:200%;
+  left:50%;
+  transform:translateX(calc(-50% + var(--waveX)))
+            translateY(var(--waveY));
+  transition:transform .12s ease-out;
+  animation:waveScroll 18s ease-in-out infinite;
 
-  /* ---------------- Confetti patriótico ---------------- */
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    inset: -20vmax;
-    pointer-events: none;
-    background-image:
-      radial-gradient(circle 6px, $rojo-bo 50%, transparent 52%),
-      radial-gradient(circle 6px, $amarillo-bo 50%, transparent 52%),
-      radial-gradient(circle 6px, $verde-cruceno 50%, transparent 52%);
-    background-size: 12vmin 12vmin;
-    background-position:
-      0 0,
-      4vmin 4vmin,
-      8vmin 8vmin;
-    animation: confettiSlide 40s linear infinite;
-    opacity: 0.25;
+  &-top   { top:-60px;  opacity:.95; }   /* un poco más arriba */
+  &-white { top:28vh;   opacity:1;   animation-delay:2s; } /* franja blanca centrada */
+  &-bottom{ bottom:-50px; opacity:.9; animation-delay:4s; }
+}
+
+@keyframes waveScroll{
+  0%  { transform:translateX(-50%) translateY(0); }
+  50% { transform:translateX(-48%) translateY(3px); }
+ 100% { transform:translateX(-50%) translateY(0); }
+}
+
+/* ===================  HERO  ====================== */
+.twofa-hero{
+  position:relative;
+  z-index:20;                 /* por encima de las olas */
+  text-align:center;
+  max-width: 90%;
+  padding:2rem 1rem;
+  transform:translateY(var(--heroShift));
+  transition:transform .12s ease-out;
+  color:$verde-oscuro;        /* contraste sobre la franja blanca */
+}
+
+/* Título & subtítulo con sombra ligera por si el parallax los mueve */
+.title{
+  font-size:clamp(2rem,5vw,2.8rem);
+  font-weight:700;
+  margin-bottom:.5rem;
+  text-shadow:0 2px 4px rgba($negro,.25);
+  i{ margin-right:.45rem; color:$verde-claro; }
+}
+
+.subtitle{
+  font-weight:500;
+  opacity:.95;
+  margin-bottom:1.7rem;
+  text-shadow:0 1px 3px rgba($negro,.25);
+}
+
+/* ===================  QR CARD  =================== */
+.qr-wrapper{
+  width:min(65vw,260px);
+  margin:0 auto 1.3rem;
+  padding:1rem;
+  background:rgba($blanco,.9);
+  border-radius:1rem;
+  box-shadow:0 8px 20px rgba($negro,.35);
+  transform:rotateY(var(--tiltX)) rotateX(var(--tiltY));
+  transition:transform .15s ease-out;
+
+  img{
+    width:100%;
+    border-radius:.6rem;
+    display:block;
+    box-shadow:0 0 6px rgba($negro,.35);
   }
-  &::after {
-    animation-duration: 60s;        // capa más lenta
-    opacity: 0.15;
-  }
 
-  /* ---------------- Título & textos ---------------- */
-  h2      { color: $rojo-bo; }
-  .sub    { color: darken($verde-cruceno, 15%); }
-  .secret { background: rgba($amarillo-bo, .18); }
-
-  /* ---------------- Tarjeta QR pulso ---------------- */
-  .qr-card {
-    animation: pulsoQR 5s ease-in-out infinite;
-    img { filter: drop-shadow(0 0 4px rgba(#000, .4)); }
-  }
-
-  /* ---------------- Botón tricolor ------------------ */
-  button:hover:not(:disabled) {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 8px 16px rgba(#000, .35);
+  &::after{
+    content:'';
+    position:absolute; inset:0;
+    border-radius:inherit;
+    background:linear-gradient(120deg,transparent 45%,rgba($blanco,.4) 50%,transparent 55%);
+    transform:translateX(-100%) rotate(10deg);
+    animation:shimmer 3s infinite;
   }
 }
 
-/* ---------------------------------------------------------------------------
-   ANIMACIONES
---------------------------------------------------------------------------- */
-@keyframes confettiSlide {
-  0%   { transform: translate(0, 0)  rotate(0deg); }
-  100% { transform: translate(50vmax, 50vmax) rotate(360deg); }
+/* Código manual & botón */
+.secret{
+  display:inline-block;
+  padding:.5rem 1rem;
+  margin-bottom:1.4rem;
+  background:$verde-claro;
+  color:$blanco;
+  border-radius:.5rem;
+  font-family:'Courier New', monospace;
+  box-shadow:0 3px 7px rgba($negro,.25);
+  user-select:all;
 }
 
-@keyframes pulsoQR {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.04); }
+.cta{
+  display:inline-flex;
+  align-items:center;
+  gap:.55rem;
+  padding:.85rem 2.6rem;
+  font-weight:700;
+  background:$verde-oscuro;
+  color:$blanco;
+  border:none;
+  border-radius:.8rem;
+  cursor:pointer;
+  text-transform:uppercase;
+  box-shadow:0 6px 14px rgba($negro,.34);
+  transition: background .3s, transform .25s, box-shadow .25s;
+
+  &:hover{
+    background:darken($verde-oscuro,8%);
+    transform:translateY(-4px);
+    box-shadow:0 10px 22px rgba($negro,.45);
+  }
+}
+
+/* ===================  EXTRA ANIMACIONES  ========== */
+@keyframes shimmer{
+  0%  { transform:translateX(-100%) rotate(10deg); }
+  100%{ transform:translateX( 100%) rotate(10deg); }
 }

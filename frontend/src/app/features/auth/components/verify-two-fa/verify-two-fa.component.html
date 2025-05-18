@@ -1,31 +1,48 @@
-<!-- Usa un id distinto para evitar choques con otras pantallas -->
-<div id="bicentenario-verifica" class="text-center">
-  <h2>Verificación del Código 2FA</h2>
+<main class="verify-container">
+  <!-- Olas Santa Cruz -->
+  <svg class="wave wave-top" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200">
+    <path fill="#1b5e20"
+          d="M0 64l48 42.7C96 149 192 235 288 240s192-69 288-85.3C672 139 768 181 864 186.7c96 5.3 192-32 288-58.7S1344 85 1392 69.3L1440 53V0H0z"/>
+  </svg>
 
-  <form
-    class="bicentenario-form"
-    [formGroup]="form"
-    (ngSubmit)="enviar()"
-    autocomplete="off"
-  >
-    <label for="token">Introduce el código de 6 dígitos:</label><br />
+  <svg class="wave wave-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200">
+    <path fill="#ffffff"
+          d="M0 140l48-4c48-4 144-12 240-12s192 8 288-1 192-33 288-33 192 24 288 28 192-12 240-20V0H0z"/>
+  </svg>
 
-    <input
-      type="text"
-      id="token"
-      formControlName="token2FA"
-      maxlength="6"
-      required
-      autocomplete="one-time-code"
-    />
+  <svg class="wave wave-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200">
+    <path fill="#4caf50"
+          d="M0 160l48 5.3C96 171 192 181 288 165.3c96-15.7 192-69.3 288-80 96-10.7 192 21.3 288 37.4 96 16 192 16 288 5.3 96-10.7 192-32 240-42.7V0H0z"/>
+  </svg>
 
-    <div
-      class="error"
-      *ngIf="form.get('token2FA')?.invalid && form.get('token2FA')?.touched"
+  <!-- Formulario -->
+  <section class="verify-hero">
+    <h2 class="title"><i class="fa-solid fa-lock"></i> Verificación del Código 2-FA</h2>
+
+    <form
+      class="verify-form"
+      [formGroup]="form"
+      (ngSubmit)="enviar()"
+      autocomplete="off"
     >
-      El código ingresado no es válido.
-    </div>
+      <label for="token">Introduce el código de 6 dígitos:</label>
 
-    <button type="submit" [disabled]="form.invalid">Verificar</button>
-  </form>
-</div>
+      <input
+        id="token"
+        type="text"
+        formControlName="token2FA"
+        maxlength="6"
+        required
+        autocomplete="one-time-code"
+      />
+
+      <div class="error" *ngIf="form.get('token2FA')?.invalid && form.get('token2FA')?.touched">
+        El código ingresado no es válido.
+      </div>
+
+      <button class="cta" type="submit" [disabled]="form.invalid">
+        Verificar
+      </button>
+    </form>
+  </section>
+</main>

@@ -10,6 +10,7 @@ import { TwoFactorSetupResponseDTO } from '@core/models/twofactor-setup-response
   standalone: true,
   imports: [CommonModule],
   templateUrl: './setup-two-fa.component.html',
+  styleUrls: ['./setup-two-fa.component.scss']
 })
 export class SetupTwoFaComponent implements OnInit {
   private authService = inject(AuthService);
@@ -22,13 +23,20 @@ export class SetupTwoFaComponent implements OnInit {
   /* ---------------- Parallax interactivo ---------------- */
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(e: MouseEvent) {
-    // Normalizamos de –0.5 a 0.5
     const x = e.clientX / window.innerWidth - 0.5;
     const y = e.clientY / window.innerHeight - 0.5;
-    // Actualizamos variables CSS para usar en el SCSS
+
+    // Parallax general
     document.documentElement.style.setProperty('--bg-shift-x', `${x * 30}px`);
     document.documentElement.style.setProperty('--bg-shift-y', `${y * 30}px`);
+
+    // Tilt específico para la QR card
+    const tiltX = x * 10;   // rotación Y
+    const tiltY = -y * 10;  // rotación X
+    document.documentElement.style.setProperty('--tiltX', `${tiltX}deg`);
+    document.documentElement.style.setProperty('--tiltY', `${tiltY}deg`);
   }
+
 
   ngOnInit(): void {
     const user = this.authService.getUser();

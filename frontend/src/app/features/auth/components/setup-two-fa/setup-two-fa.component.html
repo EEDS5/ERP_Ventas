@@ -1,14 +1,41 @@
-<div id="bicentenario-qr" class="text-center">
-  <h2>Configurar Autenticación en Dos Pasos</h2>
+<main class="twofa-container">
+  <!-- Ola 1 – verde oscuro arriba -->
+  <svg class="wave wave-top" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200">
+    <path fill="#1b5e20"
+          d="M0 64l48 42.7C96 149 192 235 288 240s192-69 288-85.3C672 139 768 181 864 186.7c96 5.3 192-32 288-58.7S1344 85 1392 69.3L1440 53V0H0z"/>
+  </svg>
 
-  <p class="sub">Escanea este código QR con Google Authenticator o cualquier app TOTP:</p>
+  <!-- Ola 2 – franja blanca más baja (dará contraste) -->
+  <svg class="wave wave-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200">
+    <path fill="#ffffff"
+          d="M0 140l48-4c48-4 144-12 240-12s192 8 288-1 192-33 288-33 192 24 288 28 192-12 240-20V0H0z"/>
+  </svg>
 
-  <div class="qr-card" *ngIf="qrUrl">
-    <img [src]="qrUrl" alt="Código QR" width="200" height="200" />
-  </div>
+  <!-- Ola 3 – verde claro inferior -->
+  <svg class="wave wave-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200">
+    <path fill="#4caf50"
+          d="M0 160l48 5.3C96 171 192 181 288 165.3c96-15.7 192-69.3 288-80 96-10.7 192 21.3 288 37.4 96 16 192 16 288 5.3 96-10.7 192-32 240-42.7V0H0z"/>
+  </svg>
 
-  <p class="sub">Si no puedes escanear, ingresa este código manualmente:</p>
-  <p class="secret">{{ secret }}</p>
+  <!-- HERO SIEMPRE SOBRE EL BLANCO -->
+  <section class="twofa-hero">
+    <h2 class="title">
+      <i class="fa-solid fa-shield-halved"></i>
+      Configurar Autenticación en Dos Pasos
+    </h2>
+    <p class="subtitle">
+      Escanea este código QR con Google Authenticator o tu app TOTP favorita.
+    </p>
 
-  <button (click)="continuar()">Ya escaneé, continuar</button>
-</div>
+    <figure class="qr-wrapper" *ngIf="qrUrl">
+      <img [src]="qrUrl" alt="Código QR 2FA" />
+    </figure>
+
+    <p class="alt">¿Sin cámara? Copia este código manual:</p>
+    <code class="secret">{{ secret }}</code>
+
+    <button class="cta" (click)="continuar()">
+      Ya escaneé, continuar <i class="fa-solid fa-arrow-right-long"></i>
+    </button>
+  </section>
+</main>
