@@ -1,0 +1,114 @@
+/* ============================================================================
+   PALETA  •  si ya está global, omite
+============================================================================ */
+$verde-cruceno: #1a662a;
+$amarillo-bo:   #ffca08;
+$rojo-bo:       #d52b1e;
+$blanco:        #ffffff;
+
+/* ============================================================================
+   CUSTOM PROPS para parallax
+============================================================================ */
+:root {
+  --bg-shift-x: 0px;
+  --bg-shift-y: 0px;
+}
+
+/* ============================================================================
+   CONTENEDOR pantalla completa con fondo interactivo
+============================================================================ */
+#bicentenario-verifica {
+  @extend #bicentenario-wrapper;          // reutiliza fuente + gradiente
+  overflow: hidden;
+  position: relative;
+  transform: translate(var(--bg-shift-x), var(--bg-shift-y));
+  transition: transform 0.1s ease-out;
+
+  /* -------- Confetti tricolor ---------- */
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -20vmax;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle 6px, $verde-cruceno 50%, transparent 52%),
+      radial-gradient(circle 6px, $amarillo-bo 50%, transparent 52%),
+      radial-gradient(circle 6px, $rojo-bo 50%, transparent 52%);
+    background-size: 12vmin 12vmin;
+    background-position:
+      0 0,
+      4vmin 4vmin,
+      8vmin 8vmin;
+    animation: confettiSlide 50s linear infinite;
+    opacity: 0.22;
+  }
+  &::after { animation-duration: 70s; opacity: 0.14; }
+
+  /* -------- Títulos y textos ------------ */
+  h2   { color: $verde-cruceno; }
+  label { font-weight: 600; color: darken($verde-cruceno, 20%); }
+
+  /* -------- Input ----------------------- */
+  input[type='text'] {
+    width: 130px;
+    font-size: 2rem;
+    text-align: center;
+    letter-spacing: 6px;
+    padding: .6rem;
+    margin-top: .5rem;
+    border: none;
+    border-radius: .6rem;
+    background: rgba($blanco, .9);
+    box-shadow: inset 0 0 6px rgba(#000, .25);
+    transition: transform .2s, box-shadow .2s;
+
+    &:focus {
+      outline: none;
+      transform: scale(1.05);
+      box-shadow: inset 0 0 8px rgba(#000, .35);
+    }
+  }
+
+  /* -------- Mensaje de error ------------ */
+  .error {
+    color: $rojo-bo;
+    font-weight: 600;
+    margin-top: .4rem;
+  }
+
+  /* -------- Botón tricolor -------------- */
+  button {
+    margin-top: 1.2rem;
+    padding: .75rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: $blanco;
+    border: none;
+    border-radius: .6rem;
+    cursor: pointer;
+    background: linear-gradient(90deg, $rojo-bo, $amarillo-bo, $verde-cruceno);
+    background-size: 300% 100%;
+    box-shadow: 0 6px 12px rgba(#000, .3);
+    transition: background-position .5s, transform .2s;
+
+    &:hover:not(:disabled) {
+      background-position: 100% 0;
+      transform: translateY(-3px);
+    }
+
+    &:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+}
+
+/* ============================================================================
+   ANIMACIONES (si ya existen, omite duplicado)
+============================================================================ */
+@keyframes confettiSlide {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(50vmax, 50vmax) rotate(360deg); }
+}

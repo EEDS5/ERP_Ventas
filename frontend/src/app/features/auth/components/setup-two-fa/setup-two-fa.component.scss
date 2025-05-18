@@ -1,0 +1,82 @@
+/* ---------------------------------------------------------------------------
+   VARIABLES (si las tenías globales, omite estas)
+--------------------------------------------------------------------------- */
+$verde-cruceno: #1a662a;
+$amarillo-bo:   #ffca08;
+$rojo-bo:       #d52b1e;
+$blanco:        #ffffff;
+
+/* ---------------------------------------------------------------------------
+   CUSTOM PROPS para parallax
+--------------------------------------------------------------------------- */
+:root {
+  --bg-shift-x: 0px;
+  --bg-shift-y: 0px;
+}
+
+/* ---------------------------------------------------------------------------
+   CONTENEDOR pantalla completa con fondo interactivo
+--------------------------------------------------------------------------- */
+#bicentenario-qr {
+  @extend #bicentenario-wrapper;    // hereda fuente y gradiente animado
+  overflow: hidden;                 // oculta confetti que se sale
+  position: relative;
+
+  /* Parallax translada todo el wrapper */
+  transform: translate(var(--bg-shift-x), var(--bg-shift-y));
+  transition: transform 0.1s ease-out; // suaviza en móviles
+
+  /* ---------------- Confetti patriótico ---------------- */
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -20vmax;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle 6px, $rojo-bo 50%, transparent 52%),
+      radial-gradient(circle 6px, $amarillo-bo 50%, transparent 52%),
+      radial-gradient(circle 6px, $verde-cruceno 50%, transparent 52%);
+    background-size: 12vmin 12vmin;
+    background-position:
+      0 0,
+      4vmin 4vmin,
+      8vmin 8vmin;
+    animation: confettiSlide 40s linear infinite;
+    opacity: 0.25;
+  }
+  &::after {
+    animation-duration: 60s;        // capa más lenta
+    opacity: 0.15;
+  }
+
+  /* ---------------- Título & textos ---------------- */
+  h2      { color: $rojo-bo; }
+  .sub    { color: darken($verde-cruceno, 15%); }
+  .secret { background: rgba($amarillo-bo, .18); }
+
+  /* ---------------- Tarjeta QR pulso ---------------- */
+  .qr-card {
+    animation: pulsoQR 5s ease-in-out infinite;
+    img { filter: drop-shadow(0 0 4px rgba(#000, .4)); }
+  }
+
+  /* ---------------- Botón tricolor ------------------ */
+  button:hover:not(:disabled) {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 8px 16px rgba(#000, .35);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   ANIMACIONES
+--------------------------------------------------------------------------- */
+@keyframes confettiSlide {
+  0%   { transform: translate(0, 0)  rotate(0deg); }
+  100% { transform: translate(50vmax, 50vmax) rotate(360deg); }
+}
+
+@keyframes pulsoQR {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.04); }
+}

@@ -1,15 +1,31 @@
-<div class="text-center">
+<!-- Usa un id distinto para evitar choques con otras pantallas -->
+<div id="bicentenario-verifica" class="text-center">
   <h2>Verificación del Código 2FA</h2>
 
-  <form [formGroup]="form" (ngSubmit)="enviar()">
+  <form
+    class="bicentenario-form"
+    [formGroup]="form"
+    (ngSubmit)="enviar()"
+    autocomplete="off"
+  >
     <label for="token">Introduce el código de 6 dígitos:</label><br />
-    <input type="text" formControlName="token2FA" maxlength="6" required />
 
-    <div *ngIf="form.get('token2FA')?.invalid && form.get('token2FA')?.touched">
+    <input
+      type="text"
+      id="token"
+      formControlName="token2FA"
+      maxlength="6"
+      required
+      autocomplete="one-time-code"
+    />
+
+    <div
+      class="error"
+      *ngIf="form.get('token2FA')?.invalid && form.get('token2FA')?.touched"
+    >
       El código ingresado no es válido.
     </div>
 
-    <br />
     <button type="submit" [disabled]="form.invalid">Verificar</button>
   </form>
 </div>

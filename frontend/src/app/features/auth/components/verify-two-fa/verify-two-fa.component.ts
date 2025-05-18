@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -21,11 +21,11 @@ export class VerifyTwoFaComponent {
     token2FA: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
   });
 
+  /* ---------------------- 2FA ---------------------- */
   enviar(): void {
     const user = this.authService.getUser();
     if (!user) {
       this.snackBar.open('Debes iniciar sesión primero.', 'Cerrar', { duration: 3000 });
-      // Redirigir a la página de inicio de sesión
       this.router.navigate(['/auth/login']);
       return;
     }
@@ -33,14 +33,11 @@ export class VerifyTwoFaComponent {
     const token2FA = this.form.value.token2FA!;
     this.authService.login2FA(user.nombreUsuario, token2FA).subscribe({
       next: (res) => {
-        // Guardar JWT y estado de usuario
         localStorage.setItem('token', res.token);
         this.authService.setUser(user);
-
         this.snackBar.open('¡2FA activado y autenticado correctamente!', 'Cerrar', {
           duration: 5000,
         });
-        // Redirigir al dashboard
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
@@ -50,5 +47,14 @@ export class VerifyTwoFaComponent {
         });
       },
     });
+  }
+
+  /* ------------------- Parallax -------------------- */
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(e: MouseEvent) {
+    const x = e.clientX / window.innerWidth - 0.5;
+    const y = e.clientY / window.innerHeight - 0.5;
+    document.documentElement.style.setProperty('--bg-shift-x', `${x * 30}px`);
+    document.documentElement.style.setProperty('--bg-shift-y', `${y * 30}px`);
   }
 }
