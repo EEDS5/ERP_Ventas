@@ -17,6 +17,8 @@ import { initNgMateroLayoutFactory } from './core/config/init-layout.config';
 import { MenuService } from './core/services/menu.service';
 import { SettingsService } from './core/services/settings.service';
 
+import { NgxPermissionsModule } from 'ngx-permissions';
+
 // fábrica para cargar JSON de assets/i18n/*.json
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -38,6 +40,7 @@ export const appConfig = {
           deps: [HttpClient],
         },
       }),
+      NgxPermissionsModule.forRoot()
     ),
     provideRouter(routes, withHashLocation()),
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

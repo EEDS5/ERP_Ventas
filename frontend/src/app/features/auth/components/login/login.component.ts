@@ -48,8 +48,10 @@ export class LoginComponent {
           this.nombreUsuario = nombreUsuario;
           this.loginForm.get('password')?.disable();
         } else {
-          // 2) Si no, tenemos ya un JWT válido: lo guardamos y navegamos
+          // 2) Si no, tenemos un JWT válido: lo guardamos, guardamos el user
+          // y vamos al dashboard
           localStorage.setItem('token', response.token);
+          this.authService.setUser(response.user);
           this.router.navigate(['/dashboard']);
         }
       },
@@ -64,6 +66,7 @@ export class LoginComponent {
     this.authService.login2FA(this.nombreUsuario, verificationCode).subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token);
+        this.authService.setUser(response.user);
         this.router.navigate(['/dashboard']);
       },
       error: () => {

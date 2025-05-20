@@ -85,8 +85,9 @@ public class AuthenticationController {
                 }
 
                 String jwt = jwtTokenProvider.generateToken(user.getNombreUsuario());
+                UsuarioResponseDTO userDto = UsuarioResponseDTO.fromEntity(user);
                 return ResponseEntity
-                                .ok(new JwtResponseDTO(jwt));
+                                .ok(new JwtResponseDTO(jwt, userDto));
         }
 
         @Operation(summary = "Iniciar sesión con 2FA", description = "Verifica el código 2FA y retorna un token JWT en caso de éxito.")
@@ -103,7 +104,8 @@ public class AuthenticationController {
                 Usuario user = userRepository.findByNombreUsuario(verificationDTO.getNombreUsuario())
                                 .orElseThrow(() -> new RuntimeException("Usuario no existe o está inactivo"));
                 String token = jwtTokenProvider.generateToken(user.getNombreUsuario());
-                return ResponseEntity.ok(new JwtResponseDTO(token));
+                UsuarioResponseDTO userDto = UsuarioResponseDTO.fromEntity(user);
+                return ResponseEntity.ok(new JwtResponseDTO(token, userDto));
         }
 
         @Operation(summary = "Verificar 2FA", description = "Verifica el código 2FA y retorna '2FA_OK' o '2FA_INVALID'.")

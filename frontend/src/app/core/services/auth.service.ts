@@ -8,7 +8,12 @@ export class AuthService {
   private _user = new BehaviorSubject<Usuario | null>(null);
   public user$ = this._user.asObservable();
 
-  constructor(private usuarioApi: UsuarioApiService) {}
+  constructor(private usuarioApi: UsuarioApiService) {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      this._user.next(JSON.parse(storedUser));
+    }
+  }
 
   isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
@@ -29,11 +34,13 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
-    this._user.next(null); // limpiar usuario al hacer logout
+    localStorage.removeItem('user');
+    this._user.next(null);
   }
 
   setUser(usuario: Usuario) {
     this._user.next(usuario);
+    localStorage.setItem('user', JSON.stringify(usuario));
   }
 
   getUser(): Usuario | null {

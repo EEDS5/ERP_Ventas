@@ -5,22 +5,26 @@ import { MatIconModule }     from '@angular/material/icon';
 import screenfull from 'screenfull';
 
 import { BrandingComponent }        from '../widgets/branding.component';
-import { GithubButtonComponent }    from '../widgets/github.component';
+/* import { GithubButtonComponent }    from '../widgets/github.component'; */
 import { NotificationComponent }    from '../widgets/notification.component';
-import { TranslateComponent }       from '../widgets/translate.component';
+/* import { TranslateComponent }       from '../widgets/translate.component'; */
 import { UserComponent }            from '../widgets/user.component';
+
+import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
+    CommonModule,
+    NgIf,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
     BrandingComponent,
-    GithubButtonComponent,
+    /* GithubButtonComponent, */
     NotificationComponent,
-    TranslateComponent,
+    /* TranslateComponent, */
     UserComponent
   ],
   templateUrl: './header.component.html',

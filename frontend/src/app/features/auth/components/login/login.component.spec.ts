@@ -11,11 +11,20 @@ import { Component } from '@angular/core';
 // DummyComponent as standalone for route tests
 @Component({
   standalone: true,
-  template: ''
+  template: '',
 })
 class DummyComponent {}
 
 describe('LoginComponent', () => {
+  // Mock de un usuario para las pruebas
+  const dummyUser = {
+    usuarioID: 1,
+    nombreUsuario: 'user',
+    email: 'test@example.com',
+    twoFAEnabled: false,
+    fechaRegistro: '2025-05-20T00:00:00.000Z',
+    activo: true,
+  };
   let fixture: ComponentFixture<LoginComponent>;
   let component: LoginComponent;
   let authSpy: jasmine.SpyObj<AuthService>;
@@ -26,16 +35,12 @@ describe('LoginComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [
-        LoginComponent,          // componente standalone
+        LoginComponent, // componente standalone
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([
-          { path: 'dashboard', component: DummyComponent }
-        ]),
-        DummyComponent           // import DummyComponent as standalone
+        RouterTestingModule.withRoutes([{ path: 'dashboard', component: DummyComponent }]),
+        DummyComponent, // import DummyComponent as standalone
       ],
-      providers: [
-        { provide: AuthService, useValue: spy }
-      ]
+      providers: [{ provide: AuthService, useValue: spy }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
@@ -51,7 +56,12 @@ describe('LoginComponent', () => {
   });
 
   it('loginInitial: si el servicio devuelve LOGIN_OK navega a /dashboard', fakeAsync(() => {
-    authSpy.login.and.returnValue(of('LOGIN_OK'));
+    authSpy.login.and.returnValue(
+      of({
+        token: 'LOGIN_OK',
+        user: dummyUser, // ← Ahora incluyes el user
+      }),
+    );
     component.loginForm.setValue({ nombreUsuario: 'user', password: 'pass', verificationCode: '' });
 
     component.onSubmit();
@@ -62,7 +72,12 @@ describe('LoginComponent', () => {
   }));
 
   it('loginInitial: si el servicio devuelve 2FA_REQUIRED debe pedir código', fakeAsync(() => {
-    authSpy.login.and.returnValue(of('2FA_REQUIRED'));
+    authSpy.login.and.returnValue(
+      of({
+        token: '2FA_REQUIRED',
+        user: dummyUser,
+      }),
+    );
     component.loginForm.setValue({ nombreUsuario: 'user', password: 'pass', verificationCode: '' });
 
     component.onSubmit();
@@ -87,8 +102,11 @@ describe('LoginComponent', () => {
     component.twoFactorRequired = true;
     component.nombreUsuario = 'user2';
     component.loginForm.get('verificationCode')?.setValue('123456');
-    const fakeToken = { token: 'ABC' };
-    authSpy.login2FA.and.returnValue(of(fakeToken));
+    const fakeResponse = {
+      token: 'ABC',
+      user: dummyUser, 
+    };
+    authSpy.login2FA.and.returnValue(of(fakeResponse));
 
     component.onSubmit();
     tick();

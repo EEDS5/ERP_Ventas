@@ -9,12 +9,12 @@ export function initNgMateroLayoutFactory(
 ) {
   return () => {
     menuService.set([
-      { route: 'dashboard', name: 'Dashboard', icon: 'dashboard', type: 'link', badge: { color: 'warn', value: '5' } },
-      { route: 'sessions', name: 'Sessions', icon: 'event', type: 'sub', children: [
+      { route: 'dashboard', name: 'Panel de Control', icon: 'dashboard', type: 'link', badge: { color: 'warn', value: '5' } },
+      /* { route: 'sessions', name: 'Sessions', icon: 'event', type: 'sub', children: [
           { route: 'login', name: 'Login', type: 'link' },
           { route: 'register', name: 'Register', type: 'link' }
         ]
-      }
+      } */
     ]);
     settingsService.setOptions({
       navPos: 'side',

@@ -1,10 +1,12 @@
 export interface Usuario {
-  usuarioID: number;             // ID único generado
-  nombreUsuario: string;         // Nombre de usuario
-  password: string;              // Contraseña del usuario
-  email: string;                 // Email del usuario
-  twoFAEnabled: boolean;         // 2FA habilitado o no
-  secret2FA: string;             // Secreto de 2FA
-  fechaRegistro: string;         // Fecha de registro (en formato ISO string)
-  activo: boolean;               // Estado de activo (soft-delete)
+  usuarioID: number;            // ID único generado
+  nombreUsuario: string;        // Nombre de usuario
+  email: string;                // Email del usuario
+  twoFAEnabled: boolean;        // 2FA habilitado o no
+  fechaRegistro: string;        // Fecha de registro (ISO string)
+  activo: boolean;              // Estado de activo (soft-delete)
+
+  // Estas dos propiedades ya no serán obligatorias
+  password?: string;
+  secret2FA?: string;
 }

@@ -22,6 +22,14 @@ export interface TwoFactorVerificationDTO {
 
 export interface JwtResponseDTO {
   token: string;
+  user: {
+    usuarioID: number;
+    nombreUsuario: string;
+    email: string;
+    twoFAEnabled: boolean;
+    fechaRegistro: string;
+    activo: boolean;
+  };
 }
 
 @Injectable({ providedIn: 'root' })

@@ -1,19 +1,12 @@
 /* --------------------  GOOGLE FONTS  -------------------- */
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Bungee&display=swap');
 
-/* --------------------  VARIABLES  -------------------- */
+/* --------------------  COLORES  -------------------- */
 $rojo-bolivia:    #d32f2f;
 $amarillo-bolivia:#ffca28;
 $verde-bolivia:   #2e7d32;
 $celeste-laguna:  #00bcd4;
 $verde-cruceno:   #43a047;
-
-/* --------------------  CUSTOM PROPS (parallax)  -------------------- */
-:root {
-  --waveX: 0px;
-  --waveY: 0px;
-  --heroShift: 0px;
-}
 
 /* --------------------  FONDO GENERAL  -------------------- */
 .home-container {
@@ -23,10 +16,8 @@ $verde-cruceno:   #43a047;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(180deg,
-              $celeste-laguna 0%, lighten($celeste-laguna,15%) 100%);
+  background: linear-gradient(180deg, $celeste-laguna 0%, lighten($celeste-laguna,15%) 100%);
   color: #fff;
-  perspective: 1200px;        /* mejora efecto de profundidad */
 }
 
 /* --------------------  ONDAS SVG  -------------------- */
@@ -34,25 +25,16 @@ $verde-cruceno:   #43a047;
   position: absolute;
   width: 200%;
   left: 50%;
-  /* Parallax: usa las vars JS */
-  transform: translateX(calc(-50% + var(--waveX)))
-             translateY(var(--waveY));
-  transition: transform .1s ease-out;   /* suavidad */
-
-  animation: waveScroll 15s ease-in-out infinite;
-
+  transform: translateX(-50%);
+  animation: waveMove 15s linear infinite;
   &-top   { top:   -50px; opacity: .9; }
   &-mid   { top: 40vh;    opacity: .8; animation-delay: 3s; }
   &-bottom{ bottom:-20px; opacity: .85; animation-delay: 6s;}
 }
 
-/* Efecto de “ondulación” adicional */
-@keyframes waveScroll {
-  0%   { transform: translateX(-50%) translateY(0); }
-  25%  { transform: translateX(-47%) translateY( 2px); }
-  50%  { transform: translateX(-50%) translateY( 0); }
-  75%  { transform: translateX(-53%) translateY(-2px); }
-  100% { transform: translateX(-50%) translateY( 0); }
+@keyframes waveMove {
+  from { transform: translateX(-50%) translateY(0); }
+  to   { transform: translateX(-45%) translateY(0); }
 }
 
 /* --------------------  HERO  -------------------- */
@@ -61,15 +43,13 @@ $verde-cruceno:   #43a047;
   z-index: 10;
   text-align: center;
   padding: 1rem 2rem;
-  transform: translateY(var(--heroShift));
-  transition: transform .1s ease-out;
 }
 
 /* Badge bandera */
 .bolivia-badge{
   font-size: 2.5rem;
   filter: drop-shadow(0 0 4px rgba(0,0,0,.5));
-  animation: pop 1s ease-out both, float 4s ease-in-out infinite;
+  animation: pop 1s ease-out both;
 }
 
 /* TITULO */
@@ -78,7 +58,7 @@ $verde-cruceno:   #43a047;
   font-size: clamp(2.2rem, 6vw, 4rem);
   text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
   margin: .5rem 0;
-  animation: fadeDown .8s .2s ease-out both, float 5s ease-in-out infinite;
+  animation: fadeDown .8s .2s ease-out both;
 }
 
 /* SUBTITULO */
@@ -87,7 +67,7 @@ $verde-cruceno:   #43a047;
   font-size: clamp(1.1rem, 2.8vw, 1.5rem);
   margin-bottom: 2.2rem;
   line-height: 1.4;
-  animation: fadeUp .8s .4s ease-out both, float 5.5s ease-in-out infinite;
+  animation: fadeUp .8s .4s ease-out both;
 }
 
 /* BOTONES */
@@ -140,12 +120,7 @@ $verde-cruceno:   #43a047;
   to  {opacity:1; transform:translateY(0);}
 }
 @keyframes pop{
-  0%  {opacity:0; transform:scale(.3);}
-  80% {opacity:1; transform:scale(1.1);}
+  0%{opacity:0; transform:scale(.3);}
+  80%{opacity:1; transform:scale(1.1);}
   100%{transform:scale(1);}
-}
-/* Flotar suave */
-@keyframes float{
-  0%,100%{ transform:translateY(0);}
-  50%    { transform:translateY(-6px);}
 }
