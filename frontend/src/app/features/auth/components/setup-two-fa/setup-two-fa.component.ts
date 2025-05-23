@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '@core/services/auth.service';
-import { TwoFactorSetupResponseDTO } from '@core/models/twofactor-setup-response.dto';
+import { TwoFactorSetupResponseDTO } from '@core/models/auth/twofactor-setup-response.dto';
 
 @Component({
   selector: 'app-setup-two-fa',

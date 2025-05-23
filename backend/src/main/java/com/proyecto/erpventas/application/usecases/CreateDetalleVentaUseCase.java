@@ -4,7 +4,8 @@ import com.proyecto.erpventas.application.dto.request.detalleventa.CreateDetalle
 import com.proyecto.erpventas.domain.model.inventory.Producto;
 import com.proyecto.erpventas.domain.model.sales.DetalleVenta;
 import com.proyecto.erpventas.domain.model.sales.Venta;
-import com.proyecto.erpventas.infrastructure.repository.*;
+import com.proyecto.erpventas.infrastructure.repository.producto.ProductoRepository;
+import com.proyecto.erpventas.infrastructure.repository.venta.DetalleVentaRepository;
 import com.proyecto.erpventas.infrastructure.repository.venta.VentaRepository;
 
 import org.springframework.stereotype.Service;

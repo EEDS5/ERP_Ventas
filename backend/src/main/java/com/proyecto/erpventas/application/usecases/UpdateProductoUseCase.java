@@ -2,7 +2,8 @@ package com.proyecto.erpventas.application.usecases;
 
 import com.proyecto.erpventas.application.dto.request.producto.UpdateProductoDTO;
 import com.proyecto.erpventas.domain.model.inventory.Producto;
-import com.proyecto.erpventas.infrastructure.repository.ProductoRepository;
+import com.proyecto.erpventas.infrastructure.repository.producto.ProductoRepository;
+
 import org.springframework.stereotype.Service;
 
 @Service

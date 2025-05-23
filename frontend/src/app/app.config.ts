@@ -8,6 +8,8 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+/* import * as echarts from 'echarts/core';
+import { NgxEchartsModule } from 'ngx-echarts'; */
 
 import { routes } from './app.routes';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
@@ -31,6 +33,8 @@ export const appConfig = {
       BrowserAnimationsModule,
       HttpClientModule,
       MatSnackBarModule,
+      // Configuración de ngx-echarts
+      /* NgxEchartsModule.forRoot({ echarts }), */
       // Modulo de traducción
       TranslateModule.forRoot({
         defaultLanguage: 'en-US',

@@ -1,1 +1,53 @@
 <app-page-header />
+
+<div class="dashboard-content row">
+  <div class="col-sm-6 col-lg-4">
+    <app-summary-card
+      title="Ventas Hoy"
+      [value]="ventasHoy?.total ?? 0"
+      icon="shopping_cart"
+      color="primary">
+    </app-summary-card>
+  </div>
+  <div class="col-sm-6 col-lg-4">
+    <app-summary-card
+      title="Facturación Mes"
+      [value]="facturacionActual?.total ?? 0"
+      icon="attach_money"
+      color="accent">
+    </app-summary-card>
+  </div>
+  <div class="col-sm-6 col-lg-4">
+    <app-summary-card
+      title="Clientes Deudores"
+      [value]="resumenCuentas?.cantidadClientesDeudores ?? 0"
+      icon="people"
+      color="warn">
+    </app-summary-card>
+  </div>
+  <div class="col-sm-6 col-lg-4">
+    <app-summary-card
+      title="Deuda Total"
+      [value]="resumenCuentas?.totalPendiente ?? 0"
+      icon="account_balance_wallet"
+      color="warn">
+    </app-summary-card>
+  </div>
+  <div class="col-sm-6 col-lg-4">
+    <app-summary-card
+      title="Stock Bajo"
+      [value]="stockBajo?.cantidad ?? 0"
+      icon="warning"
+      color="warn">
+    </app-summary-card>
+  </div>
+</div>
+
+<div class="charts row mt-4">
+  <div class="col-12 col-lg-6 mb-4">
+    <app-chart-ventas-mensuales></app-chart-ventas-mensuales>
+  </div>
+  <div class="col-12 col-lg-6 mb-4">
+    <app-chart-cuentas-por-cobrar></app-chart-cuentas-por-cobrar>
+  </div>
+</div>

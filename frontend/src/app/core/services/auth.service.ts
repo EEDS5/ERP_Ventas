@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UsuarioApiService, JwtResponseDTO } from '../../infrastructure/api/usuario-api.service';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Usuario } from '../../core/models/usuario.model';
+import { Usuario } from '../models/auth/usuario.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

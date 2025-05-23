@@ -2,7 +2,8 @@ package com.proyecto.erpventas.application.usecases;
 
 import com.proyecto.erpventas.application.dto.request.auth.LoginUserDTO;
 import com.proyecto.erpventas.domain.model.people.Usuario;
-import com.proyecto.erpventas.infrastructure.repository.UserRepository;
+import com.proyecto.erpventas.infrastructure.repository.usuario.UserRepository;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class LoginUserUseCase {

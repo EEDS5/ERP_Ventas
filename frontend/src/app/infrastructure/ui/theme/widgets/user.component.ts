@@ -8,7 +8,7 @@ import { debounceTime, tap } from 'rxjs';
 
 import { AuthService } from '@core/services/auth.service';
 import { SettingsService } from '@core/services/settings.service';
-import { Usuario } from '@core/models/usuario.model';
+import { Usuario } from '@core/models/auth/usuario.model';
 
 @Component({
   selector: 'app-user',

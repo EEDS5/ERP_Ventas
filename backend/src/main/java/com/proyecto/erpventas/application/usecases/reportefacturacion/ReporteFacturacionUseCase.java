@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import java.time.YearMonth;
+import java.util.Comparator;
+
 @Service
 public class ReporteFacturacionUseCase {
 
@@ -16,6 +19,9 @@ public class ReporteFacturacionUseCase {
     }
 
     public List<MesFacturadoResponse> obtenerFacturacionMensual() {
-        return facturaRepository.obtenerFacturacionMensual();
+        return facturaRepository.obtenerFacturacionMensual()
+                .stream()
+                .sorted(Comparator.comparing(m -> YearMonth.parse(m.getMes())))
+                .toList();
     }
 }

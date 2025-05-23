@@ -4,6 +4,7 @@ import com.proyecto.erpventas.application.dto.response.reportecuentas.CuentaPorC
 import com.proyecto.erpventas.domain.service.CuentaPorCobrarRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Comparator;
 
 @Service
 public class ReporteCuentasPorCobrarUseCase {
@@ -15,6 +16,9 @@ public class ReporteCuentasPorCobrarUseCase {
     }
 
     public List<CuentaPorCobrarResponse> obtenerReporteCuentasPorCobrar() {
-        return cuentaPorCobrarRepository.obtenerReporteCuentasPorCobrar();
+        return cuentaPorCobrarRepository.obtenerReporteCuentasPorCobrar()
+                .stream()
+                .sorted(Comparator.comparing(CuentaPorCobrarResponse::getFechaVencimiento))
+                .toList();
     }
 }

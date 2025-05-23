@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.proyecto.erpventas.domain.model.inventory.MetodoPago;
 import com.proyecto.erpventas.domain.model.people.Cliente;
 import com.proyecto.erpventas.domain.model.people.Usuario;
 

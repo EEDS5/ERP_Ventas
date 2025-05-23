@@ -11,7 +11,7 @@ import com.proyecto.erpventas.application.usecases.RegisterUserUseCase;
 import com.proyecto.erpventas.application.usecases.VerifyTwoFactorUseCase;
 import com.proyecto.erpventas.domain.model.people.Usuario;
 import com.proyecto.erpventas.domain.service.AuthDomainService;
-import com.proyecto.erpventas.infrastructure.repository.UserRepository;
+import com.proyecto.erpventas.infrastructure.repository.usuario.UserRepository;
 import com.proyecto.erpventas.infrastructure.security.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

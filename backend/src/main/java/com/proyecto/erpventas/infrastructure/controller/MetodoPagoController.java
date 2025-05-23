@@ -4,7 +4,8 @@ import com.proyecto.erpventas.application.dto.request.metodopago.CreateMetodoPag
 import com.proyecto.erpventas.application.dto.request.metodopago.UpdateMetodoPagoDTO;
 import com.proyecto.erpventas.application.dto.response.metodopago.MetodoPagoResponseDTO;
 import com.proyecto.erpventas.application.usecases.*;
-import com.proyecto.erpventas.domain.model.sales.MetodoPago;
+import com.proyecto.erpventas.domain.model.inventory.MetodoPago;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

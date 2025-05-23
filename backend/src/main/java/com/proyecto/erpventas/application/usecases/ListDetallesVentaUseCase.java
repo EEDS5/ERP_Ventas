@@ -1,7 +1,8 @@
 package com.proyecto.erpventas.application.usecases;
 
 import com.proyecto.erpventas.domain.model.sales.DetalleVenta;
-import com.proyecto.erpventas.infrastructure.repository.DetalleVentaRepository;
+import com.proyecto.erpventas.infrastructure.repository.venta.DetalleVentaRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -45,17 +45,15 @@ services:
     ports:
       - "4200:4200"
       # - "4200:80"  # Producción con Nginx
-    command: > # ⬅️ Solo se ejecuta en desarrollo
-      ng serve
-      --host 0.0.0.0
-      --port 4200
-      --disable-host-check
 
     # Uncomment the following lines for production with Nginx
     volumes:
       - ./frontend:/app
-      - /app/node_modules
-      
+
+    command: > # ⬅️ Solo se ejecuta en desarrollo
+      sh -c "npm ci && 
+             ng serve --host 0.0.0.0 --port 4200 --disable-host-check"
+
     depends_on:
       - backend
 

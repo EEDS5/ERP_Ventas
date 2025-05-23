@@ -1,8 +1,9 @@
 package com.proyecto.erpventas.application.usecases;
 
 import com.proyecto.erpventas.application.dto.request.metodopago.UpdateMetodoPagoDTO;
-import com.proyecto.erpventas.domain.model.sales.MetodoPago;
-import com.proyecto.erpventas.infrastructure.repository.MetodoPagoRepository;
+import com.proyecto.erpventas.domain.model.inventory.MetodoPago;
+import com.proyecto.erpventas.infrastructure.repository.metodo.MetodoPagoRepository;
+
 import org.springframework.stereotype.Service;
 
 @Service

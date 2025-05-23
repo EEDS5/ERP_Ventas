@@ -1,0 +1,44 @@
+.summary-card {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .summary-icon {
+    background-color: rgba(0, 0, 0, 0.08);
+    border-radius: 50%;
+
+    /* --- AJUSTES --- */
+    width: 3rem; /* Contenedor más amplio */
+    height: 3rem; /* Altura igual al ancho */
+    padding: 0.5rem; /* Un poco de espacio interno */
+    box-sizing: border-box; /* Para incluir padding en width/height */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 1.5rem; /* Icono más grande */
+      line-height: 1; /* Evita recortes verticales */
+    }
+  }
+  .summary-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+  }
+
+  &.summary-primary {
+    border-left: 5px solid var(--mat-primary);
+  }
+  &.summary-accent {
+    border-left: 5px solid var(--mat-accent);
+  }
+  &.summary-warn {
+    border-left: 5px solid var(--mat-warn);
+  }
+  &.summary-default {
+    border-left: 5px solid #ccc;
+  }
+}

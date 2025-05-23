@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
-import { Usuario } from '@core/models/usuario.model';
+import { Usuario } from '@core/models/auth/usuario.model';
 
 import { TranslateModule } from '@ngx-translate/core';
 

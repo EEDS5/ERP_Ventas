@@ -4,8 +4,8 @@ import com.proyecto.erpventas.application.dto.request.factura.CreateFacturaDTO;
 import com.proyecto.erpventas.domain.model.people.Usuario;
 import com.proyecto.erpventas.domain.model.sales.Factura;
 import com.proyecto.erpventas.domain.model.sales.Venta;
-import com.proyecto.erpventas.infrastructure.repository.*;
 import com.proyecto.erpventas.infrastructure.repository.factura.FacturaRepository;
+import com.proyecto.erpventas.infrastructure.repository.usuario.UserRepository;
 import com.proyecto.erpventas.infrastructure.repository.venta.VentaRepository;
 
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Usuario } from '../../core/models/usuario.model';
-import { TwoFactorSetupResponseDTO } from '../../core/models/twofactor-setup-response.dto';
+import { Usuario } from '../../core/models/auth/usuario.model';
+import { TwoFactorSetupResponseDTO } from '../../core/models/auth/twofactor-setup-response.dto';
 
 export interface RegisterUserDTO {
   nombreUsuario: string;
@@ -64,7 +64,7 @@ export class UsuarioApiService {
 
   // Método adicional que falta: obtenerUsuarios()
   obtenerUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>('/api/usuarios');
+    return this.http.get<Usuario[]>('http://localhost:8080/api/usuarios');
     // Endpoint que debe existir en tu backend.
   }
 }

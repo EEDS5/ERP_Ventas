@@ -2,7 +2,8 @@ package com.proyecto.erpventas.application.usecases;
 
 import com.proyecto.erpventas.application.dto.request.cliente.UpdateClienteDTO;
 import com.proyecto.erpventas.domain.model.people.Cliente;
-import com.proyecto.erpventas.infrastructure.repository.ClienteRepository;
+import com.proyecto.erpventas.infrastructure.repository.cliente.ClienteRepository;
+
 import org.springframework.stereotype.Service;
 
 @Service

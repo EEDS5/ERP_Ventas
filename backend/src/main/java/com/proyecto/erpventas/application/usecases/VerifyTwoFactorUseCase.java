@@ -2,7 +2,7 @@ package com.proyecto.erpventas.application.usecases;
 
 import com.proyecto.erpventas.application.dto.request.auth.TwoFactorVerificationDTO;
 import com.proyecto.erpventas.domain.model.people.Usuario;
-import com.proyecto.erpventas.infrastructure.repository.UserRepository;
+import com.proyecto.erpventas.infrastructure.repository.usuario.UserRepository;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityManager;

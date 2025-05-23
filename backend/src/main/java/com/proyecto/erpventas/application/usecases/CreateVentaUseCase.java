@@ -1,11 +1,13 @@
 package com.proyecto.erpventas.application.usecases;
 
 import com.proyecto.erpventas.application.dto.request.venta.CreateVentaDTO;
+import com.proyecto.erpventas.domain.model.inventory.MetodoPago;
 import com.proyecto.erpventas.domain.model.people.Cliente;
 import com.proyecto.erpventas.domain.model.people.Usuario;
-import com.proyecto.erpventas.domain.model.sales.MetodoPago;
 import com.proyecto.erpventas.domain.model.sales.Venta;
-import com.proyecto.erpventas.infrastructure.repository.*;
+import com.proyecto.erpventas.infrastructure.repository.cliente.ClienteRepository;
+import com.proyecto.erpventas.infrastructure.repository.metodo.MetodoPagoRepository;
+import com.proyecto.erpventas.infrastructure.repository.usuario.UserRepository;
 import com.proyecto.erpventas.infrastructure.repository.venta.VentaRepository;
 
 import org.springframework.stereotype.Service;

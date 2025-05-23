@@ -1,7 +1,7 @@
 package com.proyecto.erpventas.application.security;
 
 import com.proyecto.erpventas.domain.model.people.Usuario;
-import com.proyecto.erpventas.infrastructure.repository.UserRepository;
+import com.proyecto.erpventas.infrastructure.repository.usuario.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
