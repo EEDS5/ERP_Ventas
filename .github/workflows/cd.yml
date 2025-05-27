@@ -1,0 +1,58 @@
+name: CD - ERP Ventas
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    name: Despliegue en Azure VM
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
+
+      - name: Login a Azure con Service Principal
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Login en Azure Container Registry (ACR)
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_NAME }}
+          username: ${{ secrets.AZURE_CLIENT_ID }}
+          password: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+      - name: Construir imagen backend y subir a ACR
+        working-directory: backend
+        run: |
+          docker build -t ${{ secrets.REGISTRY_NAME }}/erp-backend:latest .
+          docker push ${{ secrets.REGISTRY_NAME }}/erp-backend:latest
+
+      - name: Construir imagen frontend y subir a ACR
+        working-directory: frontend
+        run: |
+          docker build -t ${{ secrets.REGISTRY_NAME }}/erp-frontend:latest .
+          docker push ${{ secrets.REGISTRY_NAME }}/erp-frontend:latest
+
+      - name: Conectar a VM y desplegar contenedores
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker login ${{ secrets.REGISTRY_NAME }} \
+              -u ${{ secrets.AZURE_CLIENT_ID }} \
+              -p ${{ secrets.AZURE_CLIENT_SECRET }}
+
+            cd ~/erp-ventas || git clone https://github.com/${{ github.repository }} ~/erp-ventas && cd ~/erp-ventas
+
+            git pull origin main
+
+            docker compose pull
+            docker compose up -d --remove-orphans
