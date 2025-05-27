@@ -6,7 +6,7 @@ import screenfull from 'screenfull';
 
 import { BrandingComponent }        from '../widgets/branding.component';
 /* import { GithubButtonComponent }    from '../widgets/github.component'; */
-import { NotificationComponent }    from '../widgets/notification.component';
+/* import { NotificationComponent }    from '../widgets/notification.component'; */
 /* import { TranslateComponent }       from '../widgets/translate.component'; */
 import { UserComponent }            from '../widgets/user.component';
 
@@ -23,7 +23,7 @@ import { CommonModule, NgIf } from '@angular/common';
     MatIconModule,
     BrandingComponent,
     /* GithubButtonComponent, */
-    NotificationComponent,
+    /* NotificationComponent, */
     /* TranslateComponent, */
     UserComponent
   ],

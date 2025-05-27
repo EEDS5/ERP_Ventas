@@ -36,4 +36,15 @@ public class ReporteVentasController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdfBytes);
     }
+
+    @GetMapping("/ventas-por-cliente/excel")
+    public ResponseEntity<byte[]> generarVentasPorClienteExcel() {
+        byte[] xlsx = reporteVentasUseCase.generarReporteVentasExcelConJasper();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=ReporteVentasPorCliente.xlsx")
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(xlsx);
+    }
 }

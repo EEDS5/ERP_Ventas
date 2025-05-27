@@ -58,9 +58,12 @@ public class AuthenticationController {
                         @ApiResponse(responseCode = "400", description = "Error de validación o datos incorrectos")
         })
         @PostMapping("/register")
-        public ResponseEntity<UsuarioResponseDTO> register(
-                        @Valid @RequestBody RegisterUserDTO nuevoUsuario) {
+        public ResponseEntity<JwtResponseDTO> register(@Valid @RequestBody RegisterUserDTO nuevoUsuario) {
                 Usuario usuario = registerUserUseCase.register(nuevoUsuario);
+
+                // Generar token temporal solo si aún no tiene 2FA activado
+                String jwt = jwtTokenProvider.generateToken(usuario.getNombreUsuario());
+
                 UsuarioResponseDTO responseDTO = new UsuarioResponseDTO(
                                 usuario.getUsuarioID(),
                                 usuario.getNombreUsuario(),
@@ -68,7 +71,8 @@ public class AuthenticationController {
                                 usuario.getTwoFAEnabled(),
                                 usuario.getFechaRegistro(),
                                 usuario.getActivo());
-                return ResponseEntity.ok(responseDTO);
+
+                return ResponseEntity.ok(new JwtResponseDTO(jwt, responseDTO));
         }
 
         @Operation(summary = "Iniciar sesión", description = "Permite iniciar sesión, retornando '2FA_REQUIRED' si 2FA está habilitado o 'LOGIN_OK' si no lo está.")
@@ -124,6 +128,14 @@ public class AuthenticationController {
         })
         @PostMapping("/2fa-secret")
         public ResponseEntity<TwoFactorSetupResponseDTO> generate2FASecret(@RequestParam String username) {
+                Usuario user = userRepository.findByNombreUsuario(username)
+                                .orElseThrow(() -> new RuntimeException("Usuario no existe"));
+
+                // ⚠️ Solo permitir si aún no tiene 2FA activado
+                if (Boolean.TRUE.equals(user.getTwoFAEnabled())) {
+                        return ResponseEntity.badRequest().build(); // o lanzar una excepción
+                }
+
                 TwoFactorSetupResponseDTO setupResponse = authDomainService.generate2FASetup(username);
                 return ResponseEntity.ok(setupResponse);
         }

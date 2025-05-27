@@ -10,7 +10,7 @@ import { AuthService } from '@core/services/auth.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './verify-two-fa.component.html',
-  styleUrls: ['./verify-two-fa.component.scss']
+  styleUrls: ['./verify-two-fa.component.scss'],
 })
 export class VerifyTwoFaComponent {
   private fb = inject(FormBuilder);
@@ -33,7 +33,7 @@ export class VerifyTwoFaComponent {
 
     const token2FA = this.form.value.token2FA!;
     this.authService.login2FA(user.nombreUsuario, token2FA).subscribe({
-      next: (res) => {
+      next: (res: { token: string }) => {
         localStorage.setItem('token', res.token);
         this.authService.setUser(user);
         this.snackBar.open('¡2FA activado y autenticado correctamente!', 'Cerrar', {
@@ -41,12 +41,12 @@ export class VerifyTwoFaComponent {
         });
         this.router.navigate(['/dashboard']);
       },
-      error: (err) => {
-        console.error('Error al verificar 2FA:', err);
+      error: (err: unknown) => {
+        console.error('Error al verificar 2FA:', err instanceof Error ? err.message : err);
         this.snackBar.open('Código incorrecto o error al verificar.', 'Cerrar', {
           duration: 5000,
         });
-      },
+      }
     });
   }
 

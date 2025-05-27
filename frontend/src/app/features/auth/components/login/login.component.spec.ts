@@ -1,14 +1,14 @@
 // frontend/src/app/features/auth/components/login/login.component.spec.ts
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AuthService } from '../../../../core/services/auth.service';
 import { of, throwError } from 'rxjs';
 import { Component } from '@angular/core';
+import { LoginComponent } from './login.component';
 
-// DummyComponent as standalone for route tests
+// DummyComponent para rutas
 @Component({
   standalone: true,
   template: '',
@@ -16,7 +16,6 @@ import { Component } from '@angular/core';
 class DummyComponent {}
 
 describe('LoginComponent', () => {
-  // Mock de un usuario para las pruebas
   const dummyUser = {
     usuarioID: 1,
     nombreUsuario: 'user',
@@ -25,22 +24,28 @@ describe('LoginComponent', () => {
     fechaRegistro: '2025-05-20T00:00:00.000Z',
     activo: true,
   };
+
   let fixture: ComponentFixture<LoginComponent>;
   let component: LoginComponent;
   let authSpy: jasmine.SpyObj<AuthService>;
   let router: Router;
 
   beforeEach(async () => {
-    const spy = jasmine.createSpyObj('AuthService', ['login', 'login2FA']);
+    // Incluimos setUser en el spy
+    const spy = jasmine.createSpyObj('AuthService', ['login', 'login2FA', 'setUser']);
 
     await TestBed.configureTestingModule({
       imports: [
-        LoginComponent, // componente standalone
+        LoginComponent,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([{ path: 'dashboard', component: DummyComponent }]),
-        DummyComponent, // import DummyComponent as standalone
+        RouterTestingModule.withRoutes([
+          { path: 'dashboard', component: DummyComponent }
+        ]),
+        DummyComponent,
       ],
-      providers: [{ provide: AuthService, useValue: spy }],
+      providers: [
+        { provide: AuthService, useValue: spy }
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
@@ -48,6 +53,10 @@ describe('LoginComponent', () => {
     authSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     router = TestBed.inject(Router);
     spyOn(router, 'navigate');
+
+    // Limpiamos cualquier token previo
+    localStorage.clear();
+
     fixture.detectChanges();
   });
 
@@ -56,29 +65,36 @@ describe('LoginComponent', () => {
   });
 
   it('loginInitial: si el servicio devuelve LOGIN_OK navega a /dashboard', fakeAsync(() => {
-    authSpy.login.and.returnValue(
-      of({
-        token: 'LOGIN_OK',
-        user: dummyUser, // ← Ahora incluyes el user
-      }),
-    );
-    component.loginForm.setValue({ nombreUsuario: 'user', password: 'pass', verificationCode: '' });
+    authSpy.login.and.returnValue(of({
+      token: 'LOGIN_OK',
+      user: dummyUser,
+    }));
+
+    component.loginForm.setValue({
+      nombreUsuario: 'user',
+      password: 'pass',
+      verificationCode: ''
+    });
 
     component.onSubmit();
     tick();
 
     expect(authSpy.login).toHaveBeenCalledWith('user', 'pass');
+    expect(authSpy.setUser).toHaveBeenCalledWith(dummyUser);
     expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
   }));
 
   it('loginInitial: si el servicio devuelve 2FA_REQUIRED debe pedir código', fakeAsync(() => {
-    authSpy.login.and.returnValue(
-      of({
-        token: '2FA_REQUIRED',
-        user: dummyUser,
-      }),
-    );
-    component.loginForm.setValue({ nombreUsuario: 'user', password: 'pass', verificationCode: '' });
+    authSpy.login.and.returnValue(of({
+      token: '2FA_REQUIRED',
+      user: dummyUser,
+    }));
+
+    component.loginForm.setValue({
+      nombreUsuario: 'user',
+      password: 'pass',
+      verificationCode: ''
+    });
 
     component.onSubmit();
     tick();
@@ -90,7 +106,12 @@ describe('LoginComponent', () => {
 
   it('loginInitial: si hay error muestra mensaje de credenciales inválidas', fakeAsync(() => {
     authSpy.login.and.returnValue(throwError(() => new Error('401')));
-    component.loginForm.setValue({ nombreUsuario: 'x', password: 'y', verificationCode: '' });
+
+    component.loginForm.setValue({
+      nombreUsuario: 'x',
+      password: 'y',
+      verificationCode: ''
+    });
 
     component.onSubmit();
     tick();
@@ -102,9 +123,10 @@ describe('LoginComponent', () => {
     component.twoFactorRequired = true;
     component.nombreUsuario = 'user2';
     component.loginForm.get('verificationCode')?.setValue('123456');
+
     const fakeResponse = {
       token: 'ABC',
-      user: dummyUser, 
+      user: dummyUser,
     };
     authSpy.login2FA.and.returnValue(of(fakeResponse));
 
@@ -113,6 +135,7 @@ describe('LoginComponent', () => {
 
     expect(authSpy.login2FA).toHaveBeenCalledWith('user2', '123456');
     expect(localStorage.getItem('token')).toBe('ABC');
+    expect(authSpy.setUser).toHaveBeenCalledWith(dummyUser);
     expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
   }));
 

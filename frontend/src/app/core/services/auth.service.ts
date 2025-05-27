@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { UsuarioApiService, JwtResponseDTO } from '../../infrastructure/api/usuario-api.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Usuario } from '../models/auth/usuario.model';
+import { isTokenValid } from '../helpers/jwt.helper';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
-    return !!token;
+    return !!token && isTokenValid(token);
   }
 
   login(nombreUsuario: string, password: string): Observable<JwtResponseDTO> {
@@ -28,7 +29,7 @@ export class AuthService {
     return this.usuarioApi.login2FA({ nombreUsuario, token2FA });
   }
 
-  register(nombreUsuario: string, email: string, password: string): Observable<Usuario> {
+  register(nombreUsuario: string, email: string, password: string): Observable<JwtResponseDTO> {
     return this.usuarioApi.register({ nombreUsuario, email, password });
   }
 

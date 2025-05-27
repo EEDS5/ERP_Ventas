@@ -1,0 +1,210 @@
+<jasperReport 
+    xmlns="http://jasperreports.sourceforge.net/jasperreports"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components"
+    xsi:schemaLocation="
+        http://jasperreports.sourceforge.net/jasperreports 
+        http://jasperreports.sourceforge.net/xsd/jasperreport.xsd 
+        http://jasperreports.sourceforge.net/jasperreports/components 
+        http://jasperreports.sourceforge.net/xsd/components.xsd"
+    name="ReporteFacturacionMensual"
+    language="java"
+    pageWidth="595" pageHeight="842"
+    whenNoDataType="AllSectionsNoDetail"
+    columnWidth="535"
+    leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+    isSummaryWithPageHeaderAndFooter="true">
+
+    <property name="template.engine" value="tabular_template"/>
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="ERP_Ventas"/>
+
+    <!-- ESTILOS (idénticos) -->
+    <style name="Title" fontName="DejaVu Sans" fontSize="50.0"/>
+    <style name="SubTitle" fontName="DejaVu Sans" fontSize="18.0"/>
+    <style name="Column header" fontName="DejaVu Sans" fontSize="14.0"/>
+    <style name="Detail" fontName="DejaVu Sans" pdfFontName="DejaVu Sans"/>
+    <style name="Row" fontName="DejaVu Sans" pdfFontName="DejaVu Sans">
+        <conditionalStyle>
+            <conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+            <style mode="Opaque" backcolor="#F0EFEF"/>
+        </conditionalStyle>
+    </style>
+    <style name="Table">
+        <box>
+            <pen lineWidth="1.0" lineColor="#000000"/>
+            <topPen lineWidth="1.0" lineColor="#000000"/>
+            <leftPen lineWidth="1.0" lineColor="#000000"/>
+            <bottomPen lineWidth="1.0" lineColor="#000000"/>
+            <rightPen lineWidth="1.0" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Table_TH" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Table_CH" backcolor="#1A237E" forecolor="#FFFFFF" mode="Opaque">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Table_TD" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+        <conditionalStyle>
+            <conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+            <style mode="Opaque" backcolor="#D8D8D8"/>
+        </conditionalStyle>
+    </style>
+
+    <!-- Dataset para Facturación Mensual -->
+    <subDataset name="tableDataset">
+        <queryString><![CDATA[
+            SELECT
+              TO_CHAR(f."fechaemision",'YYYY-MM') AS mes,
+              SUM(v."total") AS totalFacturado
+            FROM "facturas" f
+              JOIN "ventas" v ON f."ventaid" = v."ventaid"
+            WHERE f."activo" = TRUE
+            GROUP BY TO_CHAR(f."fechaemision",'YYYY-MM')
+            ORDER BY mes ASC
+        ]]></queryString>
+        <field name="mes" class="java.lang.String"/>
+        <field name="totalFacturado" class="java.math.BigDecimal"/>
+        <variable name="TotalGeneralFacturacion" class="java.math.BigDecimal" calculation="Sum">
+            <variableExpression><![CDATA[$F{totalFacturado}]]></variableExpression>
+        </variable>
+    </subDataset>
+
+    <queryString/>
+
+    <!-- TÍTULO -->
+    <title>
+        <band height="132">
+            <image>
+                <reportElement x="456" y="0" width="99" height="132" backcolor="#000000"/>
+                <imageExpression><![CDATA["reports/Logo_.png"]]></imageExpression>
+            </image>
+            <frame>
+                <reportElement x="0" y="0" width="456" height="95" backcolor="#000000"/>
+                <staticText>
+                    <reportElement x="0" y="0" width="370" height="66" style="Title"/>
+                    <text><![CDATA[Reporte de Facturación Mensual]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="157" y="66" width="249" height="29" style="SubTitle"/>
+                    <text><![CDATA[Facturación Mensual]]></text>
+                </staticText>
+            </frame>
+            <frame>
+                <reportElement x="0" y="95" width="456" height="37" backcolor="#1A237E"/>
+                <textField>
+                    <reportElement x="307" y="12" width="144" height="20" forecolor="#000000" style="Column header"/>
+                    <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+                </textField>
+            </frame>
+        </band>
+    </title>
+
+    <!-- PIE DE PÁGINA -->
+    <pageFooter>
+        <band height="25">
+            <frame>
+                <reportElement x="0" y="1" width="555" height="24" forecolor="#D0B48E" backcolor="#000000"/>
+                <textField>
+                    <reportElement x="0" y="2" width="200" height="20" forecolor="#000000"/>
+                    <textElement textAlignment="Left"/>
+                    <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement x="345" y="2" width="125" height="20" forecolor="#000000"/>
+                    <textElement textAlignment="Right"/>
+                    <textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER} + " de"]]></textFieldExpression>
+                </textField>
+                <textField evaluationTime="Report">
+                    <reportElement x="480" y="2" width="75" height="20" forecolor="#000000"/>
+                    <textElement textAlignment="Left"/>
+                    <textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+                </textField>
+            </frame>
+        </band>
+    </pageFooter>
+
+    <!-- TABLA -->
+    <summary>
+        <band height="210">
+            <frame>
+                <reportElement x="0" y="0" width="555" height="200"/>
+                <componentElement>
+                    <reportElement x="0" y="0" width="555" height="200"/>
+                    <jr:table>
+                        <datasetRun subDataset="tableDataset"/>
+
+                        <!-- Columna: Mes -->
+                        <jr:column width="277">
+                            <jr:columnHeader height="30" style="Table_CH">
+                                <staticText>
+                                    <reportElement forecolor="#FFFFFF" x="0" y="0" width="277" height="30" />
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <text><![CDATA[Mes]]></text>
+                                </staticText>
+                            </jr:columnHeader>
+                            <jr:columnFooter height="30" style="Table_CH">
+                                <textField>
+                                    <reportElement x="0" y="0" width="277" height="30" backcolor="#1A237E" forecolor="#FFFFFF" mode="Opaque"/>
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <textFieldExpression><![CDATA["Total General"]]></textFieldExpression>
+                                </textField>
+                            </jr:columnFooter>
+                            <jr:detailCell height="30" style="Table_TD">
+                                <textField>
+                                    <reportElement x="0" y="0" width="277" height="30"/>
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <textFieldExpression><![CDATA[$F{mes}]]></textFieldExpression>
+                                </textField>
+                            </jr:detailCell>
+                        </jr:column>
+
+                        <!-- Columna: Total Facturado -->
+                        <jr:column width="278">
+                            <jr:columnHeader height="30" style="Table_CH">
+                                <staticText>
+                                    <reportElement forecolor="#FFFFFF" x="0" y="0" width="278" height="30"/>
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <text><![CDATA[Total Facturado]]></text>
+                                </staticText>
+                            </jr:columnHeader>
+                            <jr:columnFooter height="30" style="Table_CH">
+                                <textField pattern="#,##0.00">
+                                    <reportElement x="0" y="0" width="278" height="30" backcolor="#1A237E" forecolor="#FFFFFF" mode="Opaque"/>
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <textFieldExpression><![CDATA[$V{TotalGeneralFacturacion}]]></textFieldExpression>
+                                </textField>
+                            </jr:columnFooter>
+                            <jr:detailCell height="30" style="Table_TD">
+                                <textField pattern="#,##0.00">
+                                    <reportElement x="0" y="0" width="278" height="30"/>
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <textFieldExpression><![CDATA[$F{totalFacturado}]]></textFieldExpression>
+                                </textField>
+                            </jr:detailCell>
+                        </jr:column>
+                    </jr:table>
+                </componentElement>
+            </frame>
+        </band>
+    </summary>
+</jasperReport>

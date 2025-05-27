@@ -8,15 +8,13 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    loadChildren: () =>
-      import('./features/home/home.module').then(m => m.HomeModule),
+    loadChildren: () => import('./features/home/home.module').then((m) => m.HomeModule),
   },
 
   // 2) Auth completo bajo /auth
   {
     path: 'auth',
-    loadChildren: () =>
-      import('./features/auth/auth.module').then(m => m.AuthModule),
+    loadChildren: () => import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
 
   // 3) Resto protegido
@@ -29,14 +27,35 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./features/dashboard/pages/dashboard.component')
-            .then(m => m.DashboardComponent),
+          import('./features/dashboard/pages/dashboard.component').then(
+            (m) => m.DashboardComponent,
+          ),
       },
       {
         path: 'ventas',
-        loadChildren: () =>
-          import('./features/ventas/ventas.module').then(m => m.VentasModule),
+        loadChildren: () => import('./features/ventas/ventas.module').then((m) => m.VentasModule),
       },
+      {
+        path: 'reporte-ventas',
+        loadComponent: () =>
+          import('./features/reportes/pages/reporte-ventas/reporte-ventas.component').then(
+            (m) => m.ReporteVentasComponent,
+          ),
+      },
+      {
+        path: 'facturacion-mensual',
+        loadComponent: () =>
+          import(
+            './features/reportes/pages/reporte-facturacion/reporte-facturacion.component'
+          ).then((m) => m.ReporteFacturacionComponent),
+      },
+      {
+        path: 'cuentas-por-cobrar',
+        loadComponent: () =>
+          import(
+            './features/reportes/pages/reporte-cuentas-por-cobrar/reporte-cuentas-por-cobrar.component'
+          ).then((m) => m.ReporteCuentasPorCobrarComponent),
+      }
     ],
   },
 

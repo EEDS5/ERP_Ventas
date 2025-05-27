@@ -52,7 +52,7 @@ export class SetupTwoFaComponent implements OnInit {
           this.qrUrl = res.qrUrl;
           this.secret = res.secret;
         },
-        error: (err) => {
+        error: (err: unknown) => {
           console.error('Error generando QR 2FA:', err);
           this.snackBar.open('Error al generar el código 2FA.', 'Cerrar', {
             duration: 5000,

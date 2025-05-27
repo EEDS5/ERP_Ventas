@@ -1,99 +1,158 @@
 /* ============  PALETA  ============ */
-$verde-oscuro:  #1b5e20;
-$verde-claro:   #4caf50;
-$blanco:        #ffffff;
-$negro:         #1e1e1e;
+$verde-oscuro: #1b5e20;
+$verde-claro: #4caf50;
+$blanco: #ffffff;
+$negro: #1e1e1e;
 
 /* ============  PARALLAX VARS  ===== */
-:root{
+:root {
   --waveX: 0px;
   --waveY: 0px;
   --heroShift: 0px;
 }
 
 /* ============  CONTENEDOR GENERAL = */
-.verify-container{
-  position:relative;
-  min-height:100vh;
-  overflow:hidden;
-  display:flex;justify-content:center;align-items:center;
-  background:#e8f5e9;
-  font-family:'Montserrat',sans-serif;
-  perspective:1200px;
+.verify-container {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e8f5e9;
+  font-family: 'Montserrat', sans-serif;
+  perspective: 1200px;
 }
 
 /* ============  OLAS  =============== */
-.wave{
-  position:absolute;
-  width:200%; left:50%;
-  transform:translateX(calc(-50% + var(--waveX))) translateY(var(--waveY));
-  transition:transform .12s ease-out;
-  animation:waveScroll 18s ease-in-out infinite;
-
-  &-top   {top:-60px;opacity:.95;}
-  &-white {top:30vh; opacity:1;  animation-delay:2s;}
-  &-bottom{bottom:-50px;opacity:.9;animation-delay:4s;}
+.wave {
+  position: absolute;
+  width: 200%;
+  left: 50%;
+  top: 0;
+  pointer-events: none;
+  z-index: -1;
+  will-change: transform;
+  transform: translateX(-50%) translateY(0); // ← valor fijo, sin dependencia de variables
+  animation: waveScroll 18s ease-in-out infinite;
 }
-@keyframes waveScroll{
-  0%,100%{transform:translateX(-50%) translateY(0);}
-  50%    {transform:translateX(-48%) translateY(3px);}
+
+.wave-top {
+  top: -60px;
+  opacity: 0.95;
+}
+.wave-white {
+  top: 30vh;
+  opacity: 1;
+  animation-delay: 2s;
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.15)); // ← suaviza el borde inferior
+}
+.wave-bottom {
+  bottom: -50px;
+  opacity: 0.9;
+  animation-delay: 4s;
+}
+
+@keyframes waveScroll {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-48%) translateY(3px);
+  }
 }
 
 /* ============  HERO / FORM  ======= */
-.verify-hero{
-  position:relative;z-index:20;
-  text-align:center;max-width:90%;
-  padding:2rem 1rem 2.5rem;
-  transform:translateY(var(--heroShift));
-  transition:transform .12s ease-out;
-  color:$verde-oscuro;
+.verify-hero {
+  position: relative;
+  z-index: 20;
+  text-align: center;
+  max-width: 90%;
+  padding: 2rem 1rem 2.5rem;
+  transform: translateY(var(--heroShift));
+  transition: transform 0.12s ease-out;
+  color: $verde-oscuro;
 }
 
-.title{
-  font-size:clamp(1.9rem,5vw,2.6rem);
-  font-weight:700;margin-bottom:1rem;
-  text-shadow:0 2px 4px rgba($negro,.25);
-  i{margin-right:.45rem;color:$verde-claro;}
+.title {
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: $verde-oscuro;         // el verde más fuerte de tu paleta
+  text-shadow: 0 1px 1px rgba($negro, 0.2); // sombra muy ligera para legibilidad
+  i {
+    margin-right: 0.45rem;
+    color: $verde-claro;
+  }
 }
 
 /* ---- Formulario ---- */
-.verify-form{
-  display:flex;flex-direction:column;gap:1.2rem;
-  align-items:center;
+.verify-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  align-items: center;
 }
 
-label{
-  font-weight:600;color:$verde-oscuro;
+label {
+  font-weight: 600;
+  font-size: 1.15rem;
+  line-height: 1.4;
+  color: #1e1e1e;
+  text-shadow:
+    0 0 1px rgba($blanco, 0.6),
+    0 1px 3px rgba($negro, 0.5),
+    0 0 2px rgba($negro, 0.8);
 }
 
-input{
-  width:230px;text-align:center;
-  font-size:2rem;letter-spacing:6px;
-  padding:.4rem .6rem;border-radius:.6rem;
-  border:none;background:rgba($blanco,.9);
-  box-shadow:0 2px 6px rgba($negro,.25);
-  &:focus{outline:none;box-shadow:0 2px 8px rgba($negro,.35);}
+input {
+  width: 230px;
+  text-align: center;
+  font-size: 2rem;
+  letter-spacing: 6px;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.6rem;
+  border: none;
+  background: rgba($blanco, 0.9);
+  box-shadow: 0 2px 6px rgba($negro, 0.25);
+  &:focus {
+    outline: none;
+    box-shadow: 0 2px 8px rgba($negro, 0.35);
+  }
 }
 
-.error{
-  color:#d32f2f;font-weight:600;
+.error {
+  color: #d32f2f;
+  font-weight: 600;
 }
 
 /* ---- Botón ---- */
-.cta{
-  padding:.75rem 2.5rem;
-  font-weight:700;text-transform:uppercase;
-  background:$verde-oscuro;color:$blanco;border:none;
-  border-radius:.8rem;cursor:pointer;
-  box-shadow:0 6px 14px rgba($negro,.34);
-  transition:background .3s, transform .25s, box-shadow .25s;
+.cta {
+  padding: 0.75rem 2.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: $verde-oscuro;
+  color: $blanco;
+  border: none;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba($negro, 0.34);
+  transition:
+    background 0.3s,
+    transform 0.25s,
+    box-shadow 0.25s;
 
-  &:hover:not(:disabled){
-    background:darken($verde-oscuro,8%);
-    transform:translateY(-4px);
-    box-shadow:0 10px 22px rgba($negro,.45);
+  &:hover:not(:disabled) {
+    background: darken($verde-oscuro, 8%);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba($negro, 0.45);
   }
-  &:disabled{opacity:.55;cursor:not-allowed;box-shadow:none;}
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
 }
 
 /* Extra shimmer si quieres para el input (opcional) */

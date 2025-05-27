@@ -55,7 +55,6 @@ export class MenuService {
   /** Initialize the menu data. */
   set(menu: Menu[]) {
     this.menu$.next(menu);
-    return this.menu$.asObservable();
   }
 
   /** Add one item to the menu data. */
@@ -73,7 +72,7 @@ export class MenuService {
   /** Delete empty values and rebuild route. */
   buildRoute(routeArr: string[]): string {
     let route = '';
-    routeArr.forEach(item => {
+    routeArr.forEach((item) => {
       if (item && item.trim()) {
         route += '/' + item.replace(/^\/+|\/+$/g, '');
       }
@@ -106,7 +105,7 @@ export class MenuService {
 
   /** Whether routeArr equals realRouteArr (after removing empty elements) */
   private isRouteEqual(routeArr: string[], realRouteArr: string[]): boolean {
-    realRouteArr = this.deepClone(realRouteArr).filter(r => r !== '');
+    realRouteArr = this.deepClone(realRouteArr).filter((r) => r !== '');
     return this.isJsonObjEqual(routeArr, realRouteArr);
   }
 
@@ -114,9 +113,9 @@ export class MenuService {
   getLevel(routeArr: string[]): string[] {
     let tmpArr: string[] = [];
 
-    this.menu$.value.forEach(item => {
+    this.menu$.value.forEach((item) => {
       let unhandledLayer: MenuTraversalNode[] = [
-        { item, parentNamePathList: [], realRouteArr: [] }
+        { item, parentNamePathList: [], realRouteArr: [] },
       ];
 
       while (unhandledLayer.length > 0) {
@@ -133,7 +132,7 @@ export class MenuService {
           }
 
           if (!this.isLeafItem(eachItem as MenuChildrenItem)) {
-            const wrappedChildren = (eachItem.children ?? []).map(child => ({
+            const wrappedChildren = (eachItem.children ?? []).map((child) => ({
               item: child,
               parentNamePathList: currentNamePathList,
               realRouteArr: currentRealRouteArr,
@@ -151,7 +150,7 @@ export class MenuService {
 
   /** Add namespace prefix to each menu item name for translation */
   addNamespace(menu: (Menu | MenuChildrenItem)[], namespace: string): void {
-    menu.forEach(menuItem => {
+    menu.forEach((menuItem) => {
       menuItem.name = `${namespace}.${menuItem.name}`;
       if (menuItem.children && menuItem.children.length > 0) {
         this.addNamespace(menuItem.children, menuItem.name);

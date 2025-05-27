@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
-import java.util.Map; 
+import java.util.Map;
 import java.math.BigDecimal;
 
 @Configuration
@@ -44,5 +44,10 @@ public class DashboardUseCaseConfig {
     @Bean
     public ObtenerStockBajoUseCase obtenerStockBajoUseCase(DashboardRepository repo) {
         return () -> new StockBajoResponse(repo.obtenerCantidadStockBajo());
+    }
+
+    @Bean
+    public ObtenerUsuarios2FAUseCase obtenerUsuarios2FAUseCase(DashboardRepository repo) {
+        return () -> new Usuarios2FAResponse(repo.obtenerCantidadUsuarios2FA());
     }
 }

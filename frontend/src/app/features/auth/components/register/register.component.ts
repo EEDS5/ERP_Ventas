@@ -32,15 +32,21 @@ export class RegisterComponent {
     if (this.registerForm.invalid) return;
 
     const { nombreUsuario, email, password } = this.registerForm.value;
+
     this.authService.register(nombreUsuario, email, password).subscribe({
-      next: (usuario) => {
-        // 1) Guarda el usuario para el siguiente paso
-        this.authService.setUser(usuario);
+      next: (res) => {
+        // 1) Guardar el token temporal en localStorage
+        if (res.token) {
+          localStorage.setItem('token', res.token);
+        }
 
-        // 2) Mensaje de éxito
+        // 2) Guardar el usuario para futuras referencias
+        if (res.user) {
+          this.authService.setUser(res.user);
+        }
+
+        // 3) Mostrar mensaje de éxito y redirigir al setup de 2FA
         this.successMessage = '¡Registro exitoso! Redirigiendo a la configuración de 2FA…';
-
-        // 3) Redirige a /login/setup-2fa (dentro del módulo lazy-loaded)
         setTimeout(() => this.router.navigate(['/auth', 'setup-2fa']), 1500);
       },
       error: (err) => {

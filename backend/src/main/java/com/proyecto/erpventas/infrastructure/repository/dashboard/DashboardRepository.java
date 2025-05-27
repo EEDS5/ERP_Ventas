@@ -8,4 +8,5 @@ public interface DashboardRepository {
     BigDecimal obtenerFacturacionMesActual();
     Map<String, Object> obtenerResumenCuentas();
     Integer obtenerCantidadStockBajo();
+    Integer obtenerCantidadUsuarios2FA();
 }

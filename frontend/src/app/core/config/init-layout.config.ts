@@ -14,13 +14,13 @@ export function initNgMateroLayoutFactory(
         name: 'Panel de Control',
         icon: 'dashboard',
         type: 'link',
-        badge: { color: 'warn', value: '5' },
+        /* badge: { color: 'warn', value: '5' }, */
       },
-      /* { route: 'sessions', name: 'Sessions', icon: 'event', type: 'sub', children: [
+      /* { route: 'auth', name: 'Sessions', icon: 'event', type: 'sub', children: [
           { route: 'login', name: 'Login', type: 'link' },
           { route: 'register', name: 'Register', type: 'link' }
         ]
-      } */
+      }, */
       {
         route: '',
         name: 'Gestión de Ventas',
@@ -70,12 +70,8 @@ export function initNgMateroLayoutFactory(
         type: 'sub',
         children: [
           { route: 'reporte-ventas', name: 'Historial de Ventas', type: 'link' },
-          { route: 'reporte-facturacion', name: 'Facturación Mensual', type: 'link' },
-          {
-            route: 'reporte-facturacion-categoria',
-            name: 'Facturación por Categoría',
-            type: 'link',
-          },
+          { route: 'facturacion-mensual', name: 'Facturación Mensual', type: 'link' },
+          { route: 'cuentas-por-cobrar', name: 'Cuentas por Cobrar y Pagos', type: 'link' },
         ],
       },
       {
@@ -86,7 +82,7 @@ export function initNgMateroLayoutFactory(
         children: [
           { route: 'usuarios', name: 'Usuarios', type: 'link' },
           { route: 'metodos-pago', name: 'Métodos de Pago', type: 'link' },
-          { route: 'pasarelas', name: 'Pasarelas de Pago', type: 'link' },
+          /* { route: 'pasarelas', name: 'Pasarelas de Pago', type: 'link' }, */
         ],
       },
     ]);

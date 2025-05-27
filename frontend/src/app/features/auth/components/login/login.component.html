@@ -1,24 +1,19 @@
 <div class="login-wrapper">
-
   <!-- ICONOS DECORATIVOS -->
   <i aria-hidden="true" class="fa-solid fa-tree-palms giant-icon left"></i>
   <i aria-hidden="true" class="fa-solid fa-church giant-icon right"></i>
 
   <!-- TARJETA -->
   <section class="login-card animate-drop">
-
     <h2>Iniciar&nbsp;Sesión</h2>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-
       <!-- USUARIO -->
       <div class="form-group">
         <label for="nombreUsuario">Usuario</label>
         <div class="input-icon">
           <i class="fa-solid fa-user"></i>
-          <input id="nombreUsuario"
-                 formControlName="nombreUsuario"
-                 placeholder="Tu usuario"/>
+          <input id="nombreUsuario" formControlName="nombreUsuario" placeholder="Tu usuario" />
         </div>
       </div>
 
@@ -27,10 +22,7 @@
         <label for="password">Contraseña</label>
         <div class="input-icon">
           <i class="fa-solid fa-lock"></i>
-          <input id="password"
-                 type="password"
-                 formControlName="password"
-                 placeholder="••••••••"/>
+          <input id="password" type="password" formControlName="password" placeholder="••••••••" />
         </div>
       </div>
 
@@ -39,9 +31,7 @@
         <label for="verificationCode">Código&nbsp;2FA</label>
         <div class="input-icon">
           <i class="fa-solid fa-shield-halved"></i>
-          <input id="verificationCode"
-                 formControlName="verificationCode"
-                 placeholder="123456"/>
+          <input id="verificationCode" formControlName="verificationCode" placeholder="123456" />
         </div>
       </div>
 
@@ -50,5 +40,10 @@
 
       <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
     </form>
+
+    <div class="auth-switch">
+      <span>¿No tienes una cuenta?</span>
+      <a routerLink="/auth/register"> <i class="fa-solid fa-user-plus"></i>&nbsp;Regístrate </a>
+    </div>
   </section>
 </div>

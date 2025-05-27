@@ -134,3 +134,39 @@ button{
   .register-card{padding:2rem 1.5rem;}
   h2{font-size:1.7rem;}
 }
+
+/* ───────── CAMBIO A LOGIN ───────── */
+.auth-switch {
+  margin-top: 1.9rem;
+  text-align: center;
+  font-size: 0.96rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+
+  span {
+    margin-right: 0.3rem;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 1rem;
+    border-radius: 0.55rem;
+    color: var(--blanco);
+    font-weight: 700;
+    text-decoration: none;
+    background: rgba(0, 0, 0, 0.18);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, transform 0.2s;
+
+    i {
+      color: #2e7d32;
+    }
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.32);
+      transform: translateY(-1px);
+    }
+  }
+}

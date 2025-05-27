@@ -14,6 +14,9 @@ RUN mvn -B clean package -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
+# Instalar fuentes necesarias para JasperReports
+RUN apk add --no-cache fontconfig ttf-dejavu
+
 # Crear usuario no-root
 RUN addgroup -S spring && adduser -S spring -G spring
 
@@ -38,4 +41,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=30s \
 CMD ["sh", "-c", "java $JAVA_OPTS -jar backend.jar --spring.profiles.active=dev --logging.level.root=DEBUG"]
 
 # Ejecutar la aplicación
-# CMD ["sh", "-c", "java $JAVA_OPTS -jar backend.jar"]
+#CMD ["sh", "-c", "java $JAVA_OPTS -jar backend.jar"]

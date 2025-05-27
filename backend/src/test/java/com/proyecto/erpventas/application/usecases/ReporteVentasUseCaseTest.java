@@ -6,14 +6,16 @@ import com.proyecto.erpventas.domain.model.people.Cliente;
 import com.proyecto.erpventas.domain.model.sales.Venta;
 import com.proyecto.erpventas.domain.service.VentaRepository;
 import com.proyecto.erpventas.infrastructure.mapper.VentaPorClienteMapper;
+
 import org.junit.jupiter.api.Test;
+
+import javax.sql.DataSource;           
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 public class ReporteVentasUseCaseTest {
 
@@ -22,7 +24,11 @@ public class ReporteVentasUseCaseTest {
         // Arrange
         VentaRepository mockRepository = mock(VentaRepository.class);
         VentaPorClienteMapper mapper = new VentaPorClienteMapper();
-        ReporteVentasUseCase useCase = new ReporteVentasUseCase(mockRepository, mapper);
+        DataSource mockDataSource = mock(DataSource.class);  // <— Mockea DataSource
+
+        // Ahora pasamos los tres parámetros
+        ReporteVentasUseCase useCase =
+                new ReporteVentasUseCase(mockRepository, mapper, mockDataSource);
 
         Cliente cliente = new Cliente();
         cliente.setClienteId(1);

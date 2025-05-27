@@ -6,6 +6,7 @@ import { MesFacturadoResponse } from '@core/models/reportes/facturacion.model';
 import { FacturacionActualResponse } from '@core/models/dashboard/facturacion-actual.model';
 import { ResumenCuentasResponse } from '@core/models/dashboard/cuentas.model';
 import { StockBajoResponse } from '@core/models/dashboard/stock-bajo.model';
+import { Usuarios2FAResponse } from '@core/models/dashboard/usuarios-2fa.model';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
@@ -27,6 +28,10 @@ export class DashboardService {
 
   getStockBajo(): Observable<StockBajoResponse> {
     return this.http.get<StockBajoResponse>(`${this.base}/stock-bajo`);
+  }
+
+  getUsuarios2FA(): Observable<Usuarios2FAResponse> {
+    return this.http.get<Usuarios2FAResponse>(`${this.base}/usuarios-2fa`);
   }
 
   getFacturacionMensual(): Observable<MesFacturadoResponse[]> {

@@ -4,41 +4,55 @@
   <div class="col-sm-6 col-lg-4">
     <app-summary-card
       title="Ventas Hoy"
-      [value]="ventasHoy?.total ?? 0"
+      [value]="'Bs ' + (ventasHoy?.total | number: '1.2-2')"
       icon="shopping_cart"
-      color="primary">
+      color="primary"
+    >
     </app-summary-card>
   </div>
   <div class="col-sm-6 col-lg-4">
     <app-summary-card
       title="Facturación Mes"
-      [value]="facturacionActual?.total ?? 0"
+      [value]="'Bs ' + (facturacionActual?.total | number: '1.2-2')"
       icon="attach_money"
-      color="accent">
+      color="accent"
+    >
     </app-summary-card>
   </div>
   <div class="col-sm-6 col-lg-4">
     <app-summary-card
       title="Clientes Deudores"
-      [value]="resumenCuentas?.cantidadClientesDeudores ?? 0"
+      [value]="(resumenCuentas?.cantidadClientesDeudores ?? 0) + ' clientes'"
       icon="people"
-      color="warn">
+      color="warn"
+    >
     </app-summary-card>
   </div>
   <div class="col-sm-6 col-lg-4">
     <app-summary-card
       title="Deuda Total"
-      [value]="resumenCuentas?.totalPendiente ?? 0"
+      [value]="'Bs ' + (resumenCuentas?.totalPendiente | number: '1.2-2')"
       icon="account_balance_wallet"
-      color="warn">
+      color="warn"
+    >
     </app-summary-card>
   </div>
   <div class="col-sm-6 col-lg-4">
     <app-summary-card
       title="Stock Bajo"
-      [value]="stockBajo?.cantidad ?? 0"
+      [value]="(stockBajo?.cantidad ?? 0) + ' productos'"
       icon="warning"
-      color="warn">
+      color="warn"
+    >
+    </app-summary-card>
+  </div>
+  <div class="col-sm-6 col-lg-4">
+    <app-summary-card
+      title="Usuarios con 2FA"
+      [value]="(usuarios2FA?.cantidad ?? 0) + ' usuarios'"
+      icon="security"
+      color="primary"
+    >
     </app-summary-card>
   </div>
 </div>

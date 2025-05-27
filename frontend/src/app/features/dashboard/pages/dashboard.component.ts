@@ -9,6 +9,7 @@ import { VentasHoyResponse } from '@core/models/dashboard/ventas-hoy.model';
 import { FacturacionActualResponse } from '@core/models/dashboard/facturacion-actual.model';
 import { ResumenCuentasResponse } from '@core/models/dashboard/cuentas.model';
 import { StockBajoResponse } from '@core/models/dashboard/stock-bajo.model';
+import { Usuarios2FAResponse } from '@core/models/dashboard/usuarios-2fa.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit {
   facturacionActual?: FacturacionActualResponse;
   resumenCuentas?: ResumenCuentasResponse;
   stockBajo?: StockBajoResponse;
+  usuarios2FA?: Usuarios2FAResponse;
 
   constructor(private svc: DashboardService) {}
 
@@ -36,5 +38,6 @@ export class DashboardComponent implements OnInit {
     this.svc.getFacturacionActual().subscribe(f => this.facturacionActual = f);
     this.svc.getResumenCuentas().subscribe(r => this.resumenCuentas = r);
     this.svc.getStockBajo().subscribe(s => this.stockBajo = s);
+    this.svc.getUsuarios2FA().subscribe(u => this.usuarios2FA = u);
   }
 }

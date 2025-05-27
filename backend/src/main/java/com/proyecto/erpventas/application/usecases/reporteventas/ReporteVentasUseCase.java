@@ -1,37 +1,42 @@
 package com.proyecto.erpventas.application.usecases.reporteventas;
 
-import com.proyecto.erpventas.application.dto.response.cliente.VentaPorClienteReport;
 import com.proyecto.erpventas.application.dto.response.reporteventas.VentaPorClienteResponse;
 import com.proyecto.erpventas.domain.service.VentaRepository;
 import com.proyecto.erpventas.infrastructure.mapper.VentaPorClienteMapper;
 
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
+import net.sf.jasperreports.engine.*;
 import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
 import java.io.InputStream;
-import java.time.ZoneId;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.ByteArrayOutputStream;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Date;
-import java.util.stream.Collectors;
 import java.util.Comparator;
+import java.util.stream.Collectors;
+
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 
 @Service
 public class ReporteVentasUseCase {
 
     private final VentaRepository ventaRepository;
     private final VentaPorClienteMapper ventaPorClienteMapper;
+    private final DataSource dataSource;
 
-    public ReporteVentasUseCase(VentaRepository ventaRepository, VentaPorClienteMapper ventaPorClienteMapper) {
+    public ReporteVentasUseCase(VentaRepository ventaRepository,
+            VentaPorClienteMapper ventaPorClienteMapper,
+            DataSource dataSource) {
         this.ventaRepository = ventaRepository;
         this.ventaPorClienteMapper = ventaPorClienteMapper;
+        this.dataSource = dataSource;
     }
 
     public List<VentaPorClienteResponse> obtenerHistorialVentasPorCliente() {
@@ -47,39 +52,78 @@ public class ReporteVentasUseCase {
             // 1) Cargo y compilo el JRXML
             InputStream jrxml = getClass().getClassLoader()
                     .getResourceAsStream("reports/ReporteVentasPorCliente.jrxml");
-            if (jrxml == null)
-                throw new RuntimeException("Plantilla JRXML no encontrada");
+            if (jrxml == null) {
+                throw new RuntimeException(
+                        "Plantilla JRXML no encontrada en classpath: reports/ReporteVentasPorCliente.jrxml");
+            }
             JasperReport jasperReport = JasperCompileManager.compileReport(jrxml);
 
-            // 2) Traigo tu lista original de DTOs
-            List<VentaPorClienteResponse> raw = obtenerHistorialVentasPorCliente();
-
-            // 3) La transformo a la lista de beans con java.util.Date
-            List<VentaPorClienteReport> records = raw.stream()
-                    .map(r -> new VentaPorClienteReport(
-                            r.getClienteId(),
-                            r.getClienteNombre(),
-                            r.getVentaId(),
-                            Date.from(r.getFechaVenta()
-                                    .atZone(ZoneId.systemDefault()).toInstant()),
-                            r.getTotalVenta()))
-                    .collect(Collectors.toList());
-
-            // 4) JRBeanCollectionDataSource SÓLO sobre beans
-            JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(records);
-
-            // 5) Parámetros
+            // 2) Parámetros (por ejemplo el título)
             Map<String, Object> params = new HashMap<>();
             params.put("ReportTitle", "Historial de Ventas por Cliente");
 
-            // 6) Lleno y exporto
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    jasperReport, params, ds);
-            return JasperExportManager.exportReportToPdf(jasperPrint);
+            // 3) Llena el reporte usando conexión JDBC
+            try (Connection conn = dataSource.getConnection()) {
+                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, conn);
+
+                // 4) Exporta a PDF
+                byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
+                return pdf;
+            }
 
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error generando reporte PDF", e);
+            // Log completo de la excepción
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            System.err.println("Error generando reporte PDF:\n" + sw);
+            throw new RuntimeException("Error generando reporte PDF: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Genera un reporte de ventas por cliente en .xlsx usando la misma plantilla
+     * JRXML.
+     */
+    public byte[] generarReporteVentasExcelConJasper() {
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            // 1) Cargo y compilo el JRXML
+            InputStream jrxml = getClass().getClassLoader()
+                    .getResourceAsStream("reports/ReporteVentasPorCliente.jrxml");
+            if (jrxml == null) {
+                throw new RuntimeException("Plantilla JRXML no encontrada");
+            }
+            JasperReport jasperReport = JasperCompileManager.compileReport(jrxml);
+
+            // 2) Parámetros
+            Map<String, Object> params = new HashMap<>();
+            params.put("ReportTitle", "Historial de Ventas por Cliente");
+
+            // 3) Lleno el reporte
+            JasperPrint jasperPrint;
+            try (Connection conn = dataSource.getConnection()) {
+                jasperPrint = JasperFillManager.fillReport(jasperReport, params, conn);
+            }
+
+            // 4) Configuro exportador XLSX
+            JRXlsxExporter exporter = new JRXlsxExporter();
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
+
+            SimpleXlsxReportConfiguration config = new SimpleXlsxReportConfiguration();
+            config.setOnePagePerSheet(false);
+            config.setDetectCellType(true);
+            config.setCollapseRowSpan(false);
+            config.setIgnoreGraphics(false);
+            exporter.setConfiguration(config);
+
+            // 5) Exporto y retorno bytes
+            exporter.exportReport();
+            return out.toByteArray();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error generando reporte Excel con Jasper: " + e.getMessage(), e);
         }
     }
 }
+// Este código es parte de un sistema ERP de ventas y maneja la generación de
+// reportes de ventas por cliente.

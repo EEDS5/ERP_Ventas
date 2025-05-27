@@ -1,20 +1,20 @@
 /* ===================  PALETA  =================== */
-$verde-oscuro:  #1b5e20;
-$verde-claro:   #4caf50;
-$blanco:        #ffffff;
-$negro:         #1e1e1e;
+$verde-oscuro: #1b5e20;
+$verde-claro: #4caf50;
+$blanco: #ffffff;
+$negro: #1e1e1e;
 
 /* ===================  WAVE PARÁMETROS  ========== */
-:root{
-  --waveX: 0px;       /* parallax horizontal */
-  --waveY: 0px;       /* parallax vertical   */
-  --heroShift: 0px;   /* para la sección     */
-  --tiltX: 0deg;      /* QR tilt             */
+:root {
+  --waveX: 0px; /* parallax horizontal */
+  --waveY: 0px; /* parallax vertical   */
+  --heroShift: 0px; /* para la sección     */
+  --tiltX: 0deg; /* QR tilt             */
   --tiltY: 0deg;
 }
 
 /* ===================  CONTENEDOR  ================= */
-.twofa-container{
+.twofa-container {
   position: relative;
   min-height: 100vh;
   overflow: hidden;
@@ -27,119 +27,246 @@ $negro:         #1e1e1e;
 }
 
 /* ===================  OLAS SVG  =================== */
-.wave{
-  position:absolute;
-  width:200%;
-  left:50%;
-  transform:translateX(calc(-50% + var(--waveX)))
-            translateY(var(--waveY));
-  transition:transform .12s ease-out;
-  animation:waveScroll 18s ease-in-out infinite;
+.wave {
+  position: absolute;
+  width: 200%;
+  left: 50%;
+  top: 0;
+  pointer-events: none;
+  z-index: -1;
+  will-change: transform;
 
-  &-top   { top:-60px;  opacity:.95; }   /* un poco más arriba */
-  &-white { top:28vh;   opacity:1;   animation-delay:2s; } /* franja blanca centrada */
-  &-bottom{ bottom:-50px; opacity:.9; animation-delay:4s; }
+  /* reemplazamos el transform inicial por uno fijo */
+  transform: translateX(-50%) translateY(0);
+  animation: waveScroll 18s ease-in-out infinite;
+
+  &-top {
+    top: -60px;
+    opacity: 0.95;
+  }
+  &-white {
+    top: 28vh;
+    opacity: 1;
+    animation-delay: 2s;
+  }
+  &-bottom {
+    bottom: -50px;
+    opacity: 0.9;
+    animation-delay: 4s;
+  }
 }
 
-@keyframes waveScroll{
-  0%  { transform:translateX(-50%) translateY(0); }
-  50% { transform:translateX(-48%) translateY(3px); }
- 100% { transform:translateX(-50%) translateY(0); }
+@keyframes waveScroll {
+  0% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(3px);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 /* ===================  HERO  ====================== */
-.twofa-hero{
-  position:relative;
-  z-index:20;                 /* por encima de las olas */
-  text-align:center;
+.twofa-hero {
+  position: relative;
+  z-index: 20;
+  text-align: center;
   max-width: 90%;
-  padding:2rem 1rem;
-  transform:translateY(var(--heroShift));
-  transition:transform .12s ease-out;
-  color:$verde-oscuro;        /* contraste sobre la franja blanca */
+  padding: 2rem 1rem;
+  transform: translateY(var(--heroShift));
+  transition: transform 0.12s ease-out;
+  color: white; // 🔁 CAMBIO PRINCIPAL para mejor contraste
 }
 
-/* Título & subtítulo con sombra ligera por si el parallax los mueve */
-.title{
-  font-size:clamp(2rem,5vw,2.8rem);
-  font-weight:700;
-  margin-bottom:.5rem;
-  text-shadow:0 2px 4px rgba($negro,.25);
-  i{ margin-right:.45rem; color:$verde-claro; }
+.title {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 5px rgba($negro, 0.55);
+
+  i {
+    margin-right: 0.45rem;
+    color: #2e2e2e;
+    text-shadow: 0 0 3px rgba($negro, 0.45); 
+  }
 }
 
-.subtitle{
-  font-weight:500;
-  opacity:.95;
-  margin-bottom:1.7rem;
-  text-shadow:0 1px 3px rgba($negro,.25);
+.subtitle {
+  font-weight: 600; // más cuerpo visual
+  font-size: 1.1rem; // ligeramente mayor para mejor escaneo
+  margin-bottom: 1.7rem;
+  color: #1e1e1e; // negro puro
+
+  text-shadow:
+    0 0 1px rgba($blanco, 0.6),
+    // contorno claro sobre verde
+    0 1px 3px rgba($negro, 0.5),
+    // sombra para levantar el texto
+    0 0 2px rgba($negro, 0.8); // borde definido sobre blanco
 }
 
 /* ===================  QR CARD  =================== */
-.qr-wrapper{
-  width:min(65vw,260px);
-  margin:0 auto 1.3rem;
-  padding:1rem;
-  background:rgba($blanco,.9);
-  border-radius:1rem;
-  box-shadow:0 8px 20px rgba($negro,.35);
-  transform:rotateY(var(--tiltX)) rotateX(var(--tiltY));
-  transition:transform .15s ease-out;
+.qr-wrapper {
+  width: min(65vw, 260px);
+  height: 260px;
+  margin: 0 auto 1.3rem;
+  padding: 1rem;
+  background: rgba($blanco, 0.9);
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba($negro, 0.35);
+  transform: rotateY(var(--tiltX)) rotateX(var(--tiltY));
+  transition:
+    transform 0.15s ease-out,
+    background 0.3s ease;
+  display: flex; // centrar placeholder y QR
+  align-items: center;
+  justify-content: center;
+  position: relative;
 
-  img{
-    width:100%;
-    border-radius:.6rem;
-    display:block;
-    box-shadow:0 0 6px rgba($negro,.35);
+  &::before {
+    /* placeholder animado mientras carga */
+    content: '';
+    width: 80%;
+    height: 80%;
+    border-radius: 0.6rem;
+    background: repeating-linear-gradient(45deg, #ccc, #ccc 10px, #ddd 10px, #ddd 20px);
+    animation: pulse 1.5s infinite;
+    position: absolute;
+    z-index: 0;
+    opacity: 0.4;
   }
 
-  &::after{
-    content:'';
-    position:absolute; inset:0;
-    border-radius:inherit;
-    background:linear-gradient(120deg,transparent 45%,rgba($blanco,.4) 50%,transparent 55%);
-    transform:translateX(-100%) rotate(10deg);
-    animation:shimmer 3s infinite;
+  img {
+    /* QR real */
+    width: 100%;
+    border-radius: 0.6rem;
+    display: block;
+    box-shadow: 0 0 6px rgba($negro, 0.35);
+    z-index: 1;
+    position: relative;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 15%; /* ancho de la franja */
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(255, 255, 255, 0.15) 50%,
+      transparent 100%
+    );
+    /* aquí ya no ponemos transform inicial, lo controla la animación */
+    animation: shimmer 1s infinite ease-in-out;
+    z-index: 2;
+  }
+
+  &.loaded {
+    /* al llegar qrUrl, Angular añade .loaded y quitamos placeholder */
+    &::before {
+      display: none;
+    }
   }
 }
 
-/* Código manual & botón */
-.secret{
-  display:inline-block;
-  padding:.5rem 1rem;
-  margin-bottom:1.4rem;
-  background:$verde-claro;
-  color:$blanco;
-  border-radius:.5rem;
-  font-family:'Courier New', monospace;
-  box-shadow:0 3px 7px rgba($negro,.25);
-  user-select:all;
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
-.cta{
-  display:inline-flex;
-  align-items:center;
-  gap:.55rem;
-  padding:.85rem 2.6rem;
-  font-weight:700;
-  background:$verde-oscuro;
-  color:$blanco;
-  border:none;
-  border-radius:.8rem;
-  cursor:pointer;
-  text-transform:uppercase;
-  box-shadow:0 6px 14px rgba($negro,.34);
-  transition: background .3s, transform .25s, box-shadow .25s;
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
 
-  &:hover{
-    background:darken($verde-oscuro,8%);
-    transform:translateY(-4px);
-    box-shadow:0 10px 22px rgba($negro,.45);
+/* Agrupador de acciones: secret + cta */
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+
+  /* Reestablecemos sólo el margen de .cta dentro de este contexto */
+  .cta {
+    margin: 0;
+  }
+}
+
+/* Código manual como “botón” */
+.secret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.5rem; // misma altura visual que .cta
+  background: $verde-claro;
+  color: $blanco;
+  border: none;
+  border-radius: 0.8rem; // igual que .cta
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  word-break: break-all;
+  box-shadow: 0 6px 14px rgba($negro, 0.34);
+  transition:
+    background 0.3s,
+    transform 0.25s,
+    box-shadow 0.25s;
+  user-select: all;
+
+  &:hover {
+    background: darken($verde-claro, 8%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba($negro, 0.45);
+  }
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.85rem 2.6rem;
+  font-weight: 700;
+  background: $verde-oscuro;
+  color: $blanco;
+  border: none;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow: 0 6px 14px rgba($negro, 0.34);
+  transition:
+    background 0.3s,
+    transform 0.25s,
+    box-shadow 0.25s;
+
+  &:hover {
+    background: darken($verde-oscuro, 8%);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba($negro, 0.45);
   }
 }
 
 /* ===================  EXTRA ANIMACIONES  ========== */
-@keyframes shimmer{
-  0%  { transform:translateX(-100%) rotate(10deg); }
-  100%{ transform:translateX( 100%) rotate(10deg); }
+@keyframes shimmer {
+  0% {
+    transform: translateX(-20%);
+  } /* comienza justo fuera a la izquierda */
+  100% {
+    transform: translateX(560%);
+  } /* termina justo al borde derecho */
 }

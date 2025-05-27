@@ -1,0 +1,62 @@
+<section class="reporte-container">
+  <div class="header">
+    <h2>Reporte de Facturación Mensual</h2>
+    <div class="btn-group">
+      <button mat-raised-button color="primary"
+              (click)="descargarPdf()" [disabled]="pdfLoading">
+        {{ pdfLoading ? 'Generando PDF...' : 'Descargar PDF' }}
+      </button>
+      <button mat-raised-button color="accent"
+              (click)="descargarExcel()" [disabled]="excelLoading">
+        {{ excelLoading ? 'Generando Excel...' : 'Descargar Excel' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <app-summary-card
+      title="Total Facturado"
+      [value]="'Bs ' + (summary.totalFacturado | number: '1.2-2')"
+      icon="show_chart"
+      color="accent"
+    ></app-summary-card>
+
+    <app-summary-card
+      title="Total Meses"
+      [value]="summary.totalMeses + ''"
+      icon="date_range"
+      color="primary"
+    ></app-summary-card>
+
+    <app-summary-card
+      title="Registros"
+      [value]="facturacionData.length + ''"
+      icon="description"
+      color="warn"
+    ></app-summary-card>
+  </div>
+
+  <div class="table-container" *ngIf="!dataLoading; else loading">
+    <table mat-table [dataSource]="facturacionData" class="mat-elevation-z1">
+      <ng-container matColumnDef="mes">
+        <th mat-header-cell *matHeaderCellDef class="wide-column">Mes</th>
+        <td mat-cell *matCellDef="let row" class="wide-column">{{ row.mes }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="totalFacturado">
+        <th mat-header-cell *matHeaderCellDef class="narrow-column">Total Facturado</th>
+        <td mat-cell *matCellDef="let row" class="narrow-column">{{ row.totalFacturado | currency: 'USD' : 'symbol' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+
+  <ng-template #loading>
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Cargando datos...</p>
+    </div>
+  </ng-template>
+</section>

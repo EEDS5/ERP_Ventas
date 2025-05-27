@@ -5,9 +5,9 @@ import { Component, Input } from '@angular/core';
   standalone: true,
   template: `
     <a class="branding" href="/">
-      <img src="assets/images/matero.png" class="branding-logo" alt="logo" />
+      <img src="assets/Logo_sinR.png" class="branding-logo" alt="logo" />
       @if (showName) {
-        <span class="branding-name">MATERO</span>
+        <span class="branding-name">ERP</span>
       }
     </a>
   `,

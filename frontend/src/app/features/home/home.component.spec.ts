@@ -5,7 +5,7 @@ import { HomeComponent } from './home.component';
 describe('HomeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HomeComponent, RouterTestingModule]
+      imports: [HomeComponent, RouterTestingModule],
     }).compileComponents();
   });
 
@@ -15,17 +15,10 @@ describe('HomeComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'frontend-app' title`, () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('frontend-app');
-  });
-
   it('should render title', () => {
     const fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent)
-      .toContain('Bienvenido a MiApp Prueba 1');
+    const h1 = fixture.nativeElement.querySelector('h1')!;
+    expect(h1.textContent).toContain('Bienvenido al Módulo de Ventas');
   });
 });

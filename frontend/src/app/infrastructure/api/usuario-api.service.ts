@@ -38,8 +38,8 @@ export class UsuarioApiService {
 
   constructor(private http: HttpClient) {}
 
-  register(user: RegisterUserDTO): Observable<Usuario> {
-    return this.http.post<Usuario>(`${this.apiUrl}/register`, user);
+  register(user: RegisterUserDTO): Observable<JwtResponseDTO> {
+    return this.http.post<JwtResponseDTO>(`${this.apiUrl}/register`, user);
   }
 
   // Devuelve el DTO { token: string } con el campo `token`

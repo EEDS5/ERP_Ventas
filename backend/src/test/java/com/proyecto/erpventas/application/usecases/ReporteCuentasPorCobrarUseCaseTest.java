@@ -5,6 +5,7 @@ import com.proyecto.erpventas.application.usecases.reportecuentas.ReporteCuentas
 import com.proyecto.erpventas.domain.service.CuentaPorCobrarRepository;
 import org.junit.jupiter.api.Test;
 
+import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +19,9 @@ public class ReporteCuentasPorCobrarUseCaseTest {
     void deberiaRetornarListaDeCuentasPorCobrar() {
         // Arrange
         CuentaPorCobrarRepository mockRepository = mock(CuentaPorCobrarRepository.class);
-        ReporteCuentasPorCobrarUseCase useCase = new ReporteCuentasPorCobrarUseCase(mockRepository);
+        DataSource mockDataSource = mock(DataSource.class);
+        ReporteCuentasPorCobrarUseCase useCase =
+            new ReporteCuentasPorCobrarUseCase(mockRepository, mockDataSource);
 
         CuentaPorCobrarResponse mockResponse = new CuentaPorCobrarResponse(
             "Cliente Demo",
@@ -39,5 +42,7 @@ public class ReporteCuentasPorCobrarUseCaseTest {
         assertThat(resultado).isNotNull();
         assertThat(resultado).hasSize(1);
         assertThat(resultado.get(0).getVentaId()).isEqualTo(101);
+
+        verify(mockRepository, times(1)).obtenerReporteCuentasPorCobrar();
     }
 }

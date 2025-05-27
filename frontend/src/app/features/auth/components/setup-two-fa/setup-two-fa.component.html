@@ -27,15 +27,17 @@
       Escanea este código QR con Google Authenticator o tu app TOTP favorita.
     </p>
 
-    <figure class="qr-wrapper" *ngIf="qrUrl">
-      <img [src]="qrUrl" alt="Código QR 2FA" />
-    </figure>
+    <figure class="qr-wrapper" [class.loaded]="qrUrl">
+   <!-- Reservamos espacio siempre con height en CSS -->
+   <img *ngIf="qrUrl" [src]="qrUrl" alt="Código QR 2FA" />
+ </figure>
 
     <p class="alt">¿Sin cámara? Copia este código manual:</p>
-    <code class="secret">{{ secret }}</code>
-
-    <button class="cta" (click)="continuar()">
-      Ya escaneé, continuar <i class="fa-solid fa-arrow-right-long"></i>
-    </button>
+<div class="actions">
+  <code class="secret">{{ secret }}</code>
+  <button class="cta" (click)="continuar()">
+    Ya escaneé, continuar <i class="fa-solid fa-arrow-right-long"></i>
+  </button>
+</div>
   </section>
 </main>

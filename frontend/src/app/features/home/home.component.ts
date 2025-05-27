@@ -11,5 +11,4 @@ import { RouterModule } from '@angular/router';   // ← importa el router
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  title = 'frontend-app';
 }

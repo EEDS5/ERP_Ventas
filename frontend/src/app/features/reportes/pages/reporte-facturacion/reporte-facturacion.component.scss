@@ -1,0 +1,58 @@
+.reporte-container {
+  padding: 1rem;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+  }
+}
+
+/* Ajustes para la tabla Material */
+table {
+  width: 100%;
+  th.mat-header-cell {
+    font-weight: bold;
+  }
+}
+
+.header .btn-group button + button {
+  margin-left: 0.5rem;
+}
+
+.wide-column {
+  width: 60%;
+}
+
+.narrow-column {
+  width: 40%;
+}
+
+td.mat-cell:last-child {
+  text-align: right;
+}
