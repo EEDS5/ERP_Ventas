@@ -1,18 +1,18 @@
 # 🧾 ERP Ventas – Sistema de Gestión de Ventas y Facturación
 
-Este sistema ERP está diseñado para facilitar la administración de clientes, ventas, facturación electrónica, cuentas por cobrar y generación de reportes empresariales. Utiliza una arquitectura moderna basada en principios de diseño limpio y escalabilidad, con enfoque modular tanto en el frontend como en el backend.
+Este sistema ERP está diseñado para facilitar la administración de clientes, ventas, facturación electrónica, cuentas por cobrar y generación de reportes empresariales. Se ha desarrollado bajo una arquitectura robusta y profesional, aplicando principios de diseño limpio (Clean Architecture), SOLID y separación de responsabilidades. El sistema está dividido en dos grandes módulos: backend y frontend, los cuales se comunican a través de una API RESTful.
 
 ---
 
 ## 📚 Descripción General
 
-- **Backend**: Spring Boot 3.4.4, PostgreSQL, JasperReports, JWT, TOTP
-- **Frontend**: Angular 19, Angular Material, Ng Matero
+- **Backend**: Spring Boot 3.4.4, PostgreSQL, JasperReports, JWT, TOTP (autenticación de doble factor)
+- **Frontend**: Angular 19, Angular Material, Ng Matero, Bootstrap, RxJS
 - **Arquitectura**:
-  - Backend con **Arquitectura Hexagonal**
-  - Frontend con **Arquitectura Hexagonal Invertida**
-- **Contenerización**: Docker y Docker Compose
-- **Documentación API**: Swagger/OpenAPI (habilitado en `/swagger-ui/index.html`)
+  - Backend: Arquitectura Hexagonal (Domain-Driven, Ports & Adapters)
+  - Frontend: Arquitectura Hexagonal Invertida (Modularización por feature, inversión de dependencias)
+- **Contenerización**: Docker y Docker Compose para entornos replicables
+- **Documentación API**: Generada automáticamente con Swagger/OpenAPI 3.0 (`/swagger-ui/index.html`)
 
 ---
 
@@ -20,9 +20,10 @@ Este sistema ERP está diseñado para facilitar la administración de clientes, 
 
 ### Requisitos previos
 
-- Docker y Docker Compose instalados
-- Node.js 20+ y Angular CLI (solo si se ejecuta el frontend fuera de contenedor)
-- Java 17
+- Docker y Docker Compose instalados correctamente
+- Node.js v20 o superior y Angular CLI (para desarrollo local del frontend)
+- JDK 17 instalado para ejecución fuera de contenedores
+- Acceso a internet para descarga de dependencias
 
 ### 1. Clonar el repositorio
 
@@ -37,27 +38,35 @@ cd erp-ventas
 docker compose up --build
 ```
 
-Esto levantará:
+Este comando inicia automáticamente los siguientes servicios:
+- PostgreSQL (servidor de base de datos)
+- Backend (Spring Boot REST API)
+- Frontend (SPA en Angular 19)
 
-- PostgreSQL en `localhost:5432`
-- Backend (API REST Spring Boot) en `http://localhost:8080`
-- Frontend (Angular) en `http://localhost:4200`
+Los puertos por defecto son:
+- `localhost:5432` para PostgreSQL
+- `localhost:8080` para el backend
+- `localhost:4200` para el frontend
 
 ---
 
 ## 🔐 Variables de Entorno
 
-Definidas directamente en `docker-compose.yml`:
+Las variables están definidas en `docker-compose.yml`, y pueden adaptarse a entornos específicos según el proveedor de nube o servidor local utilizado.
 
 ### Base de datos
+
 - `POSTGRES_USER=erp_user`
 - `POSTGRES_PASSWORD=erp_pass`
 - `POSTGRES_DB=ERP_Ventas`
 
-### Backend (spring-boot)
+### Backend (Spring Boot)
+
 - `SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ERP_Ventas`
 - `SPRING_DATASOURCE_USERNAME=erp_user`
 - `SPRING_DATASOURCE_PASSWORD=erp_pass`
+
+Para producción, se recomienda el uso de perfiles (`--spring.profiles.active=prod`) y almacenes de secretos.
 
 ---
 
@@ -67,22 +76,27 @@ Definidas directamente en `docker-compose.yml`:
 erp-ventas/
 │
 ├── backend/                  # Backend Java con Spring Boot
-│   ├── src/                 # Código fuente
+│   ├── application/          # Casos de uso (lógica de aplicación)
+│   ├── domain/               # Entidades y puertos
+│   ├── infrastructure/       # Adaptadores REST, Repos, Seguridad
+│   ├── resources/            # yml, reportes Jasper, etc.
 │   ├── Dockerfile
 │   └── pom.xml
 │
-├── frontend/                # Frontend Angular
-│   ├── src/
+├── frontend/                 # Frontend Angular
+│   ├── app/                  # Features, componentes, core, shared
+│   ├── assets/               # Recursos gráficos y estáticos
+│   ├── environments/         # Configuración por entorno
 │   ├── Dockerfile
 │   ├── angular.json
 │   └── package.json
 │
-├── db/
-│   ├── sql/                 # Scripts iniciales para Flyway
+├── db/                       # SQL de migración, configuración Flyway
+│   ├── sql/
 │   └── flyway.conf
 │
-├── docker-compose.yml       # Orquestación de servicios
-└── README.md
+├── docker-compose.yml        # Orquestación de todos los servicios
+└── README.md                 # Documentación general del proyecto
 ```
 
 ---
@@ -90,16 +104,19 @@ erp-ventas/
 ## ▶️ Comandos Útiles
 
 ### Backend
+
 ```bash
-./mvnw spring-boot:run        # Ejecutar backend localmente
-./mvnw test                   # Ejecutar pruebas unitarias
+./mvnw spring-boot:run         # Ejecutar en modo desarrollo
+./mvnw clean package           # Compilar JAR
+./mvnw test                    # Ejecutar pruebas
 ```
 
 ### Frontend
+
 ```bash
-npm run start                 # Ejecutar en desarrollo (puerto 4200)
-npm run build                 # Compilar para producción
-npm run lint                  # Validar estilo de código
+npm run start                  # Servidor de desarrollo (4200)
+npm run build                  # Compilar para producción
+npm run lint                   # Lint y validación de estilo
 ```
 
 ---
@@ -118,16 +135,16 @@ npm run lint                  # Validar estilo de código
 
 - Usuario: `admin@test.com`
 - Contraseña: `admin123`
-- (2FA habilitado – usar Google Authenticator si aplica)
+- 2FA habilitado – escanear QR con Google Authenticator en `/2fa-secret`
 
 ---
 
 ## 🏛️ Información Institucional
 
-Proyecto desarrollado en el contexto académico de la carrera de Ingeniería de Sistemas, como parte de la asignatura “Desarrollo de Aplicaciones Empresariales”.
+Este sistema fue desarrollado como parte de la asignatura "Desarrollo de Aplicaciones Empresariales" dentro del plan de estudios de la carrera de Ingeniería de Sistemas. Forma parte de un trabajo práctico supervisado y documentado bajo lineamientos de buenas prácticas de desarrollo moderno.
 
 ---
 
 ## 📄 Licencia
 
-Este sistema es parte de un proyecto académico y no debe ser utilizado con fines comerciales sin autorización.
+Este sistema ERP se entrega exclusivamente para fines académicos y no puede ser utilizado comercialmente sin autorización formal de la institución responsable.
