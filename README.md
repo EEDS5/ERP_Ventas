@@ -1,3 +1,5 @@
+![CI Status](https://github.com/EEDS5/erp-ventas/actions/workflows/ci.yml/badge.svg)
+
 # 🧾 ERP Ventas – Sistema de Gestión de Ventas y Facturación
 
 Este sistema ERP está diseñado para facilitar la administración de clientes, ventas, facturación electrónica, cuentas por cobrar y generación de reportes empresariales. Se ha desarrollado bajo una arquitectura robusta y profesional, aplicando principios de diseño limpio (Clean Architecture), SOLID y separación de responsabilidades. El sistema está dividido en dos grandes módulos: backend y frontend, los cuales se comunican a través de una API RESTful.
