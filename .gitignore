@@ -1,14 +1,57 @@
-# Carpeta del backend
-/backend/target/
-/backend/.idea/
-/backend/*.iml
-
-# Carpeta del frontend
-/frontend/node_modules/
-/frontend/dist/
-
-# Archivos temporales de Docker
-db/data/
-
-# Otros archivos del sistema
+# === General ===
 .DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# === Node (Frontend Angular) ===
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/cache/
+frontend/.npm/
+frontend/.vscode/
+frontend/.env
+
+# === Java / Maven ===
+*.class
+*.jar
+*.war
+*.ear
+target/
+backend/target/
+backend/.idea/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/*.iml
+
+# Maven wrapper cache (permitido subir el wrapper en sí)
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ / VSCode
+*.iml
+.idea/
+.vscode/
+
+# === Sistema ===
+*.swp
+*.bak
+*.orig
+*.tmp
+
+# === Linux / macOS ===
+*~
+.cache/
+*.sw?
+
+# === Windows ===
+ehthumbs.db
+Desktop.ini
+
+# === Logs y Reportes ===
+*.log
+*.out
+*.report
+
+# === GitHub Actions cache ===
+**/.github/workflows/tmp/
