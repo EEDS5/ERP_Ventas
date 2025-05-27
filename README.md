@@ -1,4 +1,4 @@
-![CI Status](https://github.com/EEDS5/erp-ventas/actions/workflows/ci.yml/badge.svg)
+![CI Status](https://github.com/EEDS5/ERP_Ventas/actions/workflows/ci.yml/badge.svg)
 
 # 🧾 ERP Ventas – Sistema de Gestión de Ventas y Facturación
 
