@@ -29,6 +29,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven
 
+      - name: Dar permisos de ejecución a mvnw
+        working-directory: backend
+        run: chmod +x mvnw
+
       - name: Instalar dependencias y compilar backend
         working-directory: backend
         run: ./mvnw clean install -DskipTests=false
