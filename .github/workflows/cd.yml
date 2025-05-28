@@ -1,59 +1,63 @@
-name: CD - ERP Ventas
+name: CD - Despliegue a Azure VM
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 permissions:
   contents: read
 
 jobs:
   deploy:
-    name: Despliegue en Azure VM
     runs-on: ubuntu-latest
 
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v3
 
-      - name: Login a Azure con Service Principal
+      - name: Iniciar sesión en Azure con Service Principal
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Login en Azure Container Registry (ACR)
-        uses: azure/docker-login@v1
+      - name: Iniciar sesión en ACR
+        run: |
+          az acr login --name erpventasacr
+
+      - name: Compilar imagen Backend
+        run: |
+          docker build -t erpventasacr.azurecr.io/erp-backend:latest ./backend
+
+      - name: Compilar imagen Frontend
+        run: |
+          docker build -t erpventasacr.azurecr.io/erp-frontend:latest ./frontend
+
+      - name: Subir imagen Backend a ACR
+        run: |
+          docker push erpventasacr.azurecr.io/erp-backend:latest
+
+      - name: Subir imagen Frontend a ACR
+        run: |
+          docker push erpventasacr.azurecr.io/erp-frontend:latest
+
+      - name: Desplegar a la VM vía SCP
+        uses: appleboy/scp-action@v0.1.7
         with:
-          login-server: ${{ secrets.REGISTRY_NAME }}
-          username: ${{ secrets.AZURE_CLIENT_ID }}
-          password: ${{ secrets.AZURE_CLIENT_SECRET }}
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "docker-compose.yml"
+          target: "/home/azureuser/erp-ventas"
 
-      - name: Construir imagen backend y subir a ACR
-        working-directory: backend
-        run: |
-          docker build -t ${{ secrets.REGISTRY_NAME }}/erp-backend:latest .
-          docker push ${{ secrets.REGISTRY_NAME }}/erp-backend:latest
-
-      - name: Construir imagen frontend y subir a ACR
-        working-directory: frontend
-        run: |
-          docker build -t ${{ secrets.REGISTRY_NAME }}/erp-frontend:latest .
-          docker push ${{ secrets.REGISTRY_NAME }}/erp-frontend:latest
-
-      - name: Conectar a VM y desplegar contenedores
+      - name: Ejecutar docker-compose pull + up vía SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker login ${{ secrets.REGISTRY_NAME }} \
-              -u ${{ secrets.AZURE_CLIENT_ID }} \
-              -p ${{ secrets.AZURE_CLIENT_SECRET }}
-
-            cd ~/erp-ventas || git clone https://github.com/${{ github.repository }} ~/erp-ventas && cd ~/erp-ventas
-
-            git pull origin main
-
+            cd ~/erp-ventas
             docker compose pull
-            docker compose up -d --remove-orphans
+            docker compose down
+            docker compose up -d
