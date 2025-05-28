@@ -8,7 +8,6 @@ services:
       POSTGRES_DB: ERP_Ventas
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
 
@@ -17,15 +16,10 @@ services:
     container_name: flyway_migrator
     depends_on:
       - db
-    volumes:
-      - ./db/sql:/flyway/sql
-      - ./db/flyway.conf:/flyway/conf/flyway.conf
     command: migrate
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: erpventasacr.azurecr.io/erp-backend:latest
     container_name: spring_boot_backend
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ERP_Ventas
@@ -38,22 +32,10 @@ services:
       - flyway
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: erpventasacr.azurecr.io/erp-frontend:latest
     container_name: angular_frontend
     ports:
-      - "4200:4200"
-      # - "4200:80"  # Producción con Nginx
-
-    # Uncomment the following lines for production with Nginx
-    volumes:
-      - ./frontend:/app
-
-    command: > # ⬅️ Solo se ejecuta en desarrollo
-      sh -c "npm ci && 
-             ng serve --host 0.0.0.0 --port 4200 --disable-host-check"
-
+      - "80:80"
     depends_on:
       - backend
 
