@@ -12,8 +12,8 @@ CREATE TABLE CategoriasProducto (
 -- Actualizar tabla Productos: Relación con CategoriasProducto (sin NOT NULL inicial)
 -- Se agrega la columna para clasificación futura sin romper registros existentes
 --------------------------------------------------
-ALTER TABLE Productos 
-ADD COLUMN CategoriaID;
+ALTER TABLE Productos
+    ADD COLUMN CategoriaID INTEGER;
 
 --------------------------------------------------
 -- Trigger: Prevención de borrado físico (soft-delete) para CategoriasProducto
