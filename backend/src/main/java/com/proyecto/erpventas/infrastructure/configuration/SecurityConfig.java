@@ -38,7 +38,9 @@ public class SecurityConfig {
                                 "/api/auth/verify-2fa",
                                 "/docs/**",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/actuator/health",
+                                "/actuator/info"
 
                         ).permitAll()
                         .anyRequest().authenticated())
