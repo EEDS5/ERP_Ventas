@@ -32,20 +32,20 @@ COPY . .
 # 🔁 PARA VOLVER A PRODUCCIÓN:
 # Simplemente elimina el bloque entre "⬇️" y "⬆️", y descomenta las líneas siguientes:
 #
- # Compilar el proyecto Angular en modo producción
- RUN npm run build -- --configuration production
+# Compilar el proyecto Angular en modo producción
+RUN npm run build -- --configuration production
 #
- # Etapa 2: Imagen ligera con Nginx para servir la app
- FROM nginx:alpine
+# Etapa 2: Imagen ligera con Nginx para servir la app
+FROM nginx:alpine
 #
- # Crear directorios necesarios y dar permisos a nginx (para evitar problemas de permisos)
- RUN mkdir -p /var/cache/nginx/client_temp \
-  && chown -R nginx:nginx /var/cache/nginx \
-  && mkdir -p /run \
-  && chown -R nginx:nginx /run
+# Crear directorios necesarios y dar permisos a nginx (para evitar problemas de permisos)
+RUN mkdir -p /var/cache/nginx/client_temp \
+&& chown -R nginx:nginx /var/cache/nginx \
+&& mkdir -p /run \
+&& chown -R nginx:nginx /run
 
- # Elimina archivos de configuración innecesarios de nginx si quieres ultra-optimizar
- RUN rm /etc/nginx/conf.d/default.conf
+# Elimina archivos de configuración innecesarios de nginx si quieres ultra-optimizar
+RUN rm /etc/nginx/conf.d/default.conf
 #
 # Copiar el build de Angular a Nginx
 COPY --from=build /app/dist/frontend-app/browser/ /usr/share/nginx/html
@@ -57,7 +57,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 #
 # # Mejorar seguridad: correr Nginx como usuario no root
- USER nginx
+USER nginx
 #
 # Comando para correr Nginx
 CMD ["nginx", "-g", "daemon off;"]

@@ -38,7 +38,7 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=30s \
   CMD wget --quiet --tries=1 --spider http://localhost:8080/actuator/health || exit 1
 
 # Ejecutar la aplicación en modo desarrollo con logs DEBUG
-CMD ["sh", "-c", "java $JAVA_OPTS -jar backend.jar --spring.profiles.active=dev --logging.level.root=DEBUG"]
+# CMD ["sh", "-c", "java $JAVA_OPTS -jar backend.jar --spring.profiles.active=dev --logging.level.root=DEBUG"]
 
 # Ejecutar la aplicación
-#CMD ["sh", "-c", "java $JAVA_OPTS -jar backend.jar"]
+CMD ["sh", "-c", "java $JAVA_OPTS -jar backend.jar"]
