@@ -12,6 +12,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      TAG: ${{ github.sha }}
+      ACR: erpventasacr.azurecr.io
+
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v3
@@ -27,19 +31,23 @@ jobs:
 
       - name: Compilar imagen Backend
         run: |
-          docker build -t erpventasacr.azurecr.io/erp-backend:latest ./backend
+          docker build -t $ACR/erp-backend:${TAG} ./backend
+          docker tag $ACR/erp-backend:${TAG} $ACR/erp-backend:latest
 
       - name: Compilar imagen Frontend
         run: |
-          docker build -t erpventasacr.azurecr.io/erp-frontend:latest ./frontend
+          docker build -t $ACR/erp-frontend:${TAG} ./frontend
+          docker tag $ACR/erp-frontend:${TAG} $ACR/erp-frontend:latest
 
       - name: Subir imagen Backend a ACR
         run: |
-          docker push erpventasacr.azurecr.io/erp-backend:latest
+          docker push $ACR/erp-backend:${TAG}
+          docker push $ACR/erp-backend:latest
 
       - name: Subir imagen Frontend a ACR
         run: |
-          docker push erpventasacr.azurecr.io/erp-frontend:latest
+          docker push $ACR/erp-frontend:${TAG}
+          docker push $ACR/erp-frontend:latest
 
       - name: Desplegar a la VM vía SCP
         uses: appleboy/scp-action@v0.1.7
@@ -59,5 +67,5 @@ jobs:
           script: |
             cd ~/erp-ventas
             docker-compose pull
-            docker-compose down
+            docker-compose down --remove-orphans
             docker-compose up -d
