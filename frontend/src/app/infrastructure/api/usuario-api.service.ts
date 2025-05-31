@@ -34,7 +34,7 @@ export interface JwtResponseDTO {
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioApiService {
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = '/api/auth';
 
   constructor(private http: HttpClient) {}
 
@@ -64,7 +64,7 @@ export class UsuarioApiService {
 
   // Método adicional que falta: obtenerUsuarios()
   obtenerUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>('http://localhost:8080/api/usuarios');
+    return this.http.get<Usuario[]>('/api/usuarios');
     // Endpoint que debe existir en tu backend.
   }
 }

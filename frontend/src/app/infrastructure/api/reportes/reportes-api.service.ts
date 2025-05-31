@@ -8,7 +8,7 @@ import { CuentaPorCobrar } from '../../../core/models/reportes/cuenta-por-cobrar
 
 @Injectable({ providedIn: 'root' })
 export class ReportesApiService {
-  private baseUrl = 'http://localhost:8080/api/reportes';
+  private baseUrl = '/api/reportes';
 
   constructor(private http: HttpClient) {}
 

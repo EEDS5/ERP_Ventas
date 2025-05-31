@@ -10,7 +10,7 @@ import { Usuarios2FAResponse } from '@core/models/dashboard/usuarios-2fa.model';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
-  private base = 'http://localhost:8080/api/dashboard';
+  private base = '/api/dashboard';
 
   constructor(private http: HttpClient) {}
 
@@ -36,7 +36,7 @@ export class DashboardService {
 
   getFacturacionMensual(): Observable<MesFacturadoResponse[]> {
     return this.http.get<MesFacturadoResponse[]>(
-      'http://localhost:8080/api/reportes/facturacion-mensual',
+      '/api/reportes/facturacion-mensual',
     );
   }
 }
