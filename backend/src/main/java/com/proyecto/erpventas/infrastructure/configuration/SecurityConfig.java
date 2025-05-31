@@ -13,7 +13,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
-import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
 @Configuration
 @Profile("!test")
@@ -30,11 +29,6 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-
-                // ── ELIMINAR POR COMPLETO "Permissions-Policy" ──
-                .headers(headers -> headers
-                        .addHeaderWriter(new StaticHeadersWriter("Permissions-Policy", "")))
-
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/register",
