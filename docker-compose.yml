@@ -1,4 +1,5 @@
 services:
+  # ─────── PostgreSQL – Base de Datos ──────────────────────────────────────
   db:
     image: postgres:17
     container_name: postgres_db
@@ -12,6 +13,7 @@ services:
     ports:
       - "5432:5432"
 
+  # ─────── Flyway – Migraciones de la Base de Datos ────────────────────────
   flyway:
     image: flyway/flyway:latest
     container_name: flyway_migrator
@@ -22,10 +24,9 @@ services:
       - ./db/flyway.conf:/flyway/conf/flyway.conf
     command: migrate
 
+  # ─────── Backend – Spring Boot ────────────────────────────────────────────
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: erpventasacr.azurecr.io/erp-backend:latest
     container_name: spring_boot_backend
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ERP_Ventas
@@ -37,23 +38,12 @@ services:
       - db
       - flyway
 
+  # ─────── Frontend – Angular con Nginx (Producción) ───────────────────────
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: erpventasacr.azurecr.io/erp-frontend:latest
     container_name: angular_frontend
     ports:
-      - "4200:4200"
-      # - "4200:80"  # Producción con Nginx
-
-    # Uncomment the following lines for production with Nginx
-    volumes:
-      - ./frontend:/app
-
-    command: > # ⬅️ Solo se ejecuta en desarrollo
-      sh -c "npm ci && 
-             ng serve --host 0.0.0.0 --port 4200 --disable-host-check"
-
+      - "4200:80"  # Puerto externo 4200 mapea al 80 del contenedor (Nginx)
     depends_on:
       - backend
 
