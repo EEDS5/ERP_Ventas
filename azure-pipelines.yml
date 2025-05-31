@@ -1,0 +1,46 @@
+trigger:
+  - main
+
+variables:
+  dockerRegistryServiceConnection: '5557a8cc-437a-4fa5-acb7-ae93b1b07a94'
+  containerRegistry: 'erpventasacr.azurecr.io'
+  backendImageName: 'erp-backend'
+  frontendImageName: 'erp-frontend'
+  tag: '$(Build.SourceVersion)'
+  vmImageName: 'ubuntu-latest'
+
+stages:
+  - stage: BuildAndPush
+    displayName: Build and Push Images to ACR
+    jobs:
+      - job: BuildBackend
+        displayName: Build & Push Backend
+        pool:
+          vmImage: $(vmImageName)
+        steps:
+          - task: Docker@2
+            displayName: Build & Push Backend Image
+            inputs:
+              command: buildAndPush
+              repository: $(backendImageName)
+              dockerfile: $(Build.SourcesDirectory)/backend/Dockerfile
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                latest
+                $(tag)
+
+      - job: BuildFrontend
+        displayName: Build & Push Frontend
+        pool:
+          vmImage: $(vmImageName)
+        steps:
+          - task: Docker@2
+            displayName: Build & Push Frontend Image
+            inputs:
+              command: buildAndPush
+              repository: $(frontendImageName)
+              dockerfile: $(Build.SourcesDirectory)/frontend/Dockerfile
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                latest
+                $(tag)
