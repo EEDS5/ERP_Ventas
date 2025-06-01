@@ -49,8 +49,8 @@ jobs:
           docker push $ACR/erp-frontend:${TAG}
           docker push $ACR/erp-frontend:latest
 
-      - name: Renombrar archivo de producción antes de enviarlo
-        run: cp docker-compose.prod.yml docker-compose.deploy.yml
+      - name: Preparar docker-compose para producción
+        run: cp docker-compose.prod.yml docker-compose.yml
 
       - name: Desplegar a la VM vía SCP
         uses: appleboy/scp-action@v0.1.7
@@ -58,8 +58,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "docker-compose.deploy.yml"
-          target: "/home/azureuser/erp-ventas/docker-compose.yml"
+          source: "docker-compose.yml"
+          target: "/home/azureuser/erp-ventas"
 
       - name: Ejecutar docker-compose pull + up vía SSH
         uses: appleboy/ssh-action@v1.0.0
