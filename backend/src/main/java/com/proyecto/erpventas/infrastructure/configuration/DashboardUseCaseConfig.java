@@ -29,16 +29,17 @@ public class DashboardUseCaseConfig {
 
     @Bean
     public ObtenerResumenCuentasUseCase obtenerResumenCuentasUseCase(DashboardRepository repo) {
-        return () -> {
-            Map<String, Object> resumen = repo.obtenerResumenCuentas();
-            BigDecimal totalPendiente = (BigDecimal) resumen.get("totalPendiente");
-            Integer cantidadClientes = ((Long) resumen.get("cantidadClientesDeudores")).intValue();
+        return () -> mapearResumen(repo.obtenerResumenCuentas());
+    }
 
-            @SuppressWarnings("unchecked")
-            Map<String, Integer> estadoCuentas = (Map<String, Integer>) resumen.get("estadoCuentas");
+    private ResumenCuentasResponse mapearResumen(Map<String, Object> resumen) {
+        BigDecimal totalPendiente = (BigDecimal) resumen.get("totalPendiente");
+        Integer cantidadClientes = ((Long) resumen.get("cantidadClientesDeudores")).intValue();
 
-            return new ResumenCuentasResponse(totalPendiente, cantidadClientes, estadoCuentas);
-        };
+        @SuppressWarnings("unchecked")
+        Map<String, Integer> estadoCuentas = (Map<String, Integer>) resumen.get("estadoCuentas");
+
+        return new ResumenCuentasResponse(totalPendiente, cantidadClientes, estadoCuentas);
     }
 
     @Bean

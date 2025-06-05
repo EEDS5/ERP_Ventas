@@ -22,61 +22,58 @@ import java.util.Map;
 @Service
 public class ReporteCuentasPorCobrarUseCase {
 
-    private final CuentaPorCobrarRepository cuentaPorCobrarRepository;
-    private final DataSource dataSource;
+        private final CuentaPorCobrarRepository cuentaPorCobrarRepository;
+        private final DataSource dataSource;
 
-    public ReporteCuentasPorCobrarUseCase(CuentaPorCobrarRepository cuentaPorCobrarRepository,
-                                          DataSource dataSource) {
-        this.cuentaPorCobrarRepository = cuentaPorCobrarRepository;
-        this.dataSource = dataSource;
-    }
-
-    public List<CuentaPorCobrarResponse> obtenerReporteCuentasPorCobrar() {
-        return cuentaPorCobrarRepository.obtenerReporteCuentasPorCobrar()
-                .stream()
-                .sorted(Comparator.comparing(CuentaPorCobrarResponse::getFechaVencimiento))
-                .toList();
-    }
-
-    public byte[] generarPdfCuentasPorCobrar()
-            throws JRException, SQLException, IOException {
-        JasperReport jasperReport = JasperCompileManager.compileReport(
-                getClass().getResourceAsStream("/reports/ReporteCuentasPorCobrar.jrxml"));
-
-        Map<String, Object> params = new HashMap<>();
-        try (Connection conn = dataSource.getConnection();
-             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    jasperReport, params, conn);
-            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-            return outputStream.toByteArray();
+        public ReporteCuentasPorCobrarUseCase(CuentaPorCobrarRepository cuentaPorCobrarRepository,
+                        DataSource dataSource) {
+                this.cuentaPorCobrarRepository = cuentaPorCobrarRepository;
+                this.dataSource = dataSource;
         }
-    }
 
-    public byte[] generarExcelCuentasPorCobrar()
-            throws JRException, SQLException, IOException {
-        JasperReport jasperReport = JasperCompileManager.compileReport(
-                getClass().getResourceAsStream("/reports/ReporteCuentasPorCobrar.jrxml"));
-
-        Map<String, Object> params = new HashMap<>();
-        try (Connection conn = dataSource.getConnection();
-             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    jasperReport, params, conn);
-
-            JRXlsxExporter exporter = new JRXlsxExporter();
-            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
-
-            SimpleXlsxReportConfiguration config = new SimpleXlsxReportConfiguration();
-            config.setDetectCellType(true);
-            config.setCollapseRowSpan(false);
-            exporter.setConfiguration(config);
-
-            exporter.exportReport();
-            return outputStream.toByteArray();
+        public List<CuentaPorCobrarResponse> obtenerReporteCuentasPorCobrar() {
+                return cuentaPorCobrarRepository.obtenerReporteCuentasPorCobrar()
+                                .stream()
+                                .sorted(Comparator.comparing(CuentaPorCobrarResponse::getFechaVencimiento))
+                                .toList();
         }
-    }
+
+        private JasperPrint prepararReporte() throws JRException, SQLException {
+                JasperReport jasperReport = JasperCompileManager.compileReport(
+                                getClass().getResourceAsStream("/reports/ReporteCuentasPorCobrar.jrxml"));
+                Map<String, Object> params = new HashMap<>();
+                Connection conn = dataSource.getConnection();
+
+                return JasperFillManager.fillReport(jasperReport, params, conn);
+        }
+
+        public byte[] generarPdfCuentasPorCobrar() throws JRException, SQLException, IOException {
+                try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                Connection conn = dataSource.getConnection()) {
+
+                        JasperPrint jasperPrint = prepararReporte();
+                        JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+                        return outputStream.toByteArray();
+                }
+        }
+
+        public byte[] generarExcelCuentasPorCobrar() throws JRException, SQLException, IOException {
+                try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                Connection conn = dataSource.getConnection()) {
+
+                        JasperPrint jasperPrint = prepararReporte();
+
+                        JRXlsxExporter exporter = new JRXlsxExporter();
+                        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+                        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
+
+                        SimpleXlsxReportConfiguration config = new SimpleXlsxReportConfiguration();
+                        config.setDetectCellType(true);
+                        config.setCollapseRowSpan(false);
+                        exporter.setConfiguration(config);
+
+                        exporter.exportReport();
+                        return outputStream.toByteArray();
+                }
+        }
 }

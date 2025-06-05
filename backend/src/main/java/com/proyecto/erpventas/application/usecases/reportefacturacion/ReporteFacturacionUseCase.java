@@ -24,62 +24,57 @@ import java.util.Map;
 @Service
 public class ReporteFacturacionUseCase {
 
-    private final FacturaRepository facturaRepository;
-    private final DataSource dataSource;
+        private final FacturaRepository facturaRepository;
+        private final DataSource dataSource;
 
-    public ReporteFacturacionUseCase(FacturaRepository facturaRepository,
-                                     DataSource dataSource) {
-        this.facturaRepository = facturaRepository;
-        this.dataSource = dataSource;
-    }
-
-    public List<MesFacturadoResponse> obtenerFacturacionMensual() {
-        return facturaRepository.obtenerFacturacionMensual()
-                .stream()
-                .sorted(Comparator.comparing(m -> YearMonth.parse(m.getMes())))
-                .toList();
-    }
-
-    public byte[] generarPdfFacturacionMensual()
-            throws JRException, SQLException, IOException {
-        JasperReport jasperReport = JasperCompileManager.compileReport(
-                getClass().getResourceAsStream("/reports/ReporteFacturacionMensual.jrxml"));
-
-        Map<String, Object> params = new HashMap<>();
-        try (Connection conn = dataSource.getConnection();
-             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    jasperReport, params, conn);
-
-            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-            return outputStream.toByteArray();
+        public ReporteFacturacionUseCase(FacturaRepository facturaRepository,
+                        DataSource dataSource) {
+                this.facturaRepository = facturaRepository;
+                this.dataSource = dataSource;
         }
-    }
 
-    public byte[] generarExcelFacturacionMensual()
-            throws JRException, SQLException, IOException {
-        JasperReport jasperReport = JasperCompileManager.compileReport(
-                getClass().getResourceAsStream("/reports/ReporteFacturacionMensual.jrxml"));
-
-        Map<String, Object> params = new HashMap<>();
-        try (Connection conn = dataSource.getConnection();
-             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    jasperReport, params, conn);
-
-            JRXlsxExporter exporter = new JRXlsxExporter();
-            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
-
-            SimpleXlsxReportConfiguration config = new SimpleXlsxReportConfiguration();
-            config.setDetectCellType(true);
-            config.setCollapseRowSpan(false);
-            exporter.setConfiguration(config);
-
-            exporter.exportReport();
-            return outputStream.toByteArray();
+        public List<MesFacturadoResponse> obtenerFacturacionMensual() {
+                return facturaRepository.obtenerFacturacionMensual()
+                                .stream()
+                                .sorted(Comparator.comparing(m -> YearMonth.parse(m.getMes())))
+                                .toList();
         }
-    }
+
+        private JasperPrint prepararReporteFacturacion() throws JRException, SQLException {
+                JasperReport jasperReport = JasperCompileManager.compileReport(
+                                getClass().getResourceAsStream("/reports/ReporteFacturacionMensual.jrxml"));
+                Map<String, Object> params = new HashMap<>();
+                Connection conn = dataSource.getConnection();
+                return JasperFillManager.fillReport(jasperReport, params, conn);
+        }
+
+        public byte[] generarPdfFacturacionMensual() throws JRException, SQLException, IOException {
+                try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                Connection conn = dataSource.getConnection()) {
+
+                        JasperPrint jasperPrint = prepararReporteFacturacion();
+                        JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+                        return outputStream.toByteArray();
+                }
+        }
+
+        public byte[] generarExcelFacturacionMensual() throws JRException, SQLException, IOException {
+                try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                Connection conn = dataSource.getConnection()) {
+
+                        JasperPrint jasperPrint = prepararReporteFacturacion();
+
+                        JRXlsxExporter exporter = new JRXlsxExporter();
+                        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+                        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
+
+                        SimpleXlsxReportConfiguration config = new SimpleXlsxReportConfiguration();
+                        config.setDetectCellType(true);
+                        config.setCollapseRowSpan(false);
+                        exporter.setConfiguration(config);
+
+                        exporter.exportReport();
+                        return outputStream.toByteArray();
+                }
+        }
 }

@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,29 +48,33 @@ public class ReporteVentasUseCase {
                 .collect(Collectors.toList());
     }
 
+    private JasperPrint prepararReporteVentas(Map<String, Object> params) throws JRException, SQLException {
+        // 1) Cargo y compilo el JRXML
+        InputStream jrxml = getClass().getClassLoader()
+                .getResourceAsStream("reports/ReporteVentasPorCliente.jrxml");
+        if (jrxml == null) {
+            throw new RuntimeException(
+                    "Plantilla JRXML no encontrada en classpath: reports/ReporteVentasPorCliente.jrxml");
+        }
+        JasperReport jasperReport = JasperCompileManager.compileReport(jrxml);
+
+        // 2) Llena el reporte usando conexión JDBC
+        try (Connection conn = dataSource.getConnection()) {
+            return JasperFillManager.fillReport(jasperReport, params, conn);
+        }
+    }
+
     public byte[] generarReporteVentasPdf() {
         try {
-            // 1) Cargo y compilo el JRXML
-            InputStream jrxml = getClass().getClassLoader()
-                    .getResourceAsStream("reports/ReporteVentasPorCliente.jrxml");
-            if (jrxml == null) {
-                throw new RuntimeException(
-                        "Plantilla JRXML no encontrada en classpath: reports/ReporteVentasPorCliente.jrxml");
-            }
-            JasperReport jasperReport = JasperCompileManager.compileReport(jrxml);
-
-            // 2) Parámetros (por ejemplo el título)
+            // 1) Parámetros (por ejemplo el título)
             Map<String, Object> params = new HashMap<>();
             params.put("ReportTitle", "Historial de Ventas por Cliente");
 
-            // 3) Llena el reporte usando conexión JDBC
-            try (Connection conn = dataSource.getConnection()) {
-                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, conn);
+            // 2) Preparo el reporte
+            JasperPrint jasperPrint = prepararReporteVentas(params);
 
-                // 4) Exporta a PDF
-                byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
-                return pdf;
-            }
+            // 3) Exporta a PDF
+            return JasperExportManager.exportReportToPdf(jasperPrint);
 
         } catch (Exception e) {
             // Log completo de la excepción
@@ -86,25 +91,14 @@ public class ReporteVentasUseCase {
      */
     public byte[] generarReporteVentasExcelConJasper() {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            // 1) Cargo y compilo el JRXML
-            InputStream jrxml = getClass().getClassLoader()
-                    .getResourceAsStream("reports/ReporteVentasPorCliente.jrxml");
-            if (jrxml == null) {
-                throw new RuntimeException("Plantilla JRXML no encontrada");
-            }
-            JasperReport jasperReport = JasperCompileManager.compileReport(jrxml);
-
-            // 2) Parámetros
+            // 1) Parámetros
             Map<String, Object> params = new HashMap<>();
             params.put("ReportTitle", "Historial de Ventas por Cliente");
 
-            // 3) Lleno el reporte
-            JasperPrint jasperPrint;
-            try (Connection conn = dataSource.getConnection()) {
-                jasperPrint = JasperFillManager.fillReport(jasperReport, params, conn);
-            }
+            // 2) Preparo el reporte
+            JasperPrint jasperPrint = prepararReporteVentas(params);
 
-            // 4) Configuro exportador XLSX
+            // 3) Configuro exportador XLSX
             JRXlsxExporter exporter = new JRXlsxExporter();
             exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
             exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
@@ -116,7 +110,7 @@ public class ReporteVentasUseCase {
             config.setIgnoreGraphics(false);
             exporter.setConfiguration(config);
 
-            // 5) Exporto y retorno bytes
+            // 4) Exporto y retorno bytes
             exporter.exportReport();
             return out.toByteArray();
 

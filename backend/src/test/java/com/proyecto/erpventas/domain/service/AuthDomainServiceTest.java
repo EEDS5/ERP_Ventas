@@ -29,7 +29,7 @@ public class AuthDomainServiceTest {
         gAuth = mock(GoogleAuthenticator.class);
         userRepository = mock(UserRepository.class);
         emailService = mock(EmailService.class);
-        QRCodeGeneratorService qrCodeGeneratorService = new QRCodeGeneratorService(); // O también puedes mockearlo
+        QRCodeGeneratorService qrCodeGeneratorService = new QRCodeGeneratorService();
 
         authDomainService = new AuthDomainService(
                 gAuth, userRepository, emailService, qrCodeGeneratorService);
