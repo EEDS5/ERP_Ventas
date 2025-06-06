@@ -1,0 +1,112 @@
+/* frontend/src/app/features/profile/pages/profile-overview/profile-overview.component.scss */
+
+/* Container principal para centrar el card horizontalmente y dar padding */
+.profile-container {
+  padding: 2rem 1rem; /* 2rem arriba/abajo, 1rem laterales */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* El card en sí mismo */
+.profile-card {
+  width: 100%;
+  max-width: 600px;  /* Ancho máximo para que no crezca demasiado */
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+/* 1. Encabezado (avatar + título) */
+.profile-header {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  gap: 1rem;
+  background-color: var(--mat-sys-surface-container-lowest);
+}
+
+/* Avatar: círculo con fondo y el ícono centrado */
+.avatar-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--mat-sys-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-icon {
+  font-size: 40px;
+  color: var(--mat-sys-on-primary-container);
+}
+
+/* Contenedor de texto del header: título y subtítulo */
+.title-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-title {
+  margin: 0;
+  font-size: 1.25rem; /* tamaño mayor para un ERP */
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+.profile-subtitle {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* 2. Contenido: margin interno más generoso */
+.profile-content {
+  padding: 1.5rem 1.5rem 0 1.5rem;
+}
+
+/* Cada fila de campo se alinea con space-between */
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+/* Etiqueta de campo (izquierda) */
+.field-label {
+  font-weight: 500;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* Valor de campo (derecha) */
+.field-value {
+  font-weight: 400;
+  color: var(--mat-sys-on-surface);
+}
+
+/* 3. Botones: separarlos y alinearlos a la derecha */
+.profile-actions {
+  padding: 1rem 1.5rem 1.5rem 1.5rem; /* separacion interna */
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  background-color: var(--mat-sys-surface-container-lowest);
+}
+
+/* Botón “Edit Profile” con estilo sólido */
+.btn-edit {
+  min-width: 120px;
+}
+
+/* Botón “Back to Dashboard” más delgado */
+.btn-cancel {
+  text-transform: none;
+  font-weight: 500;
+}
+
+/* Spinner de carga centrado */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px; /* espacio suficiente mientras carga */
+}

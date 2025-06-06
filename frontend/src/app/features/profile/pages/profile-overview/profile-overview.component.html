@@ -1,0 +1,71 @@
+<!-- frontend/src/app/features/profile/pages/profile-overview/profile-overview.component.html -->
+
+<ng-container *ngIf="user$ | async as user; else loading">
+  <div class="profile-container">
+    <mat-card class="profile-card mat-elevation-z4">
+      <div class="profile-header">
+        <div class="avatar-wrapper">
+          <mat-icon aria-hidden="true" class="profile-icon">account_circle</mat-icon>
+        </div>
+        <div class="title-wrapper">
+          <!-- Usa "profile.overview" en lugar de "profile_overview_title" -->
+          <h2 class="profile-title">{{ 'profile.overview' | translate }}</h2>
+          <span class="profile-subtitle">{{ user.nombreUsuario }}</span>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <mat-card-content class="profile-content">
+        <div class="field-row">
+          <!-- Si ya existe "email" en las traducciones, úsala -->
+          <span class="field-label">{{ 'email' | translate }}</span>
+          <span class="field-value">{{ user.email }}</span>
+        </div>
+        <div class="field-row">
+          <!-- Podrías crear una clave "profile.two_fa" o usar algo genérico: -->
+          <span class="field-label">{{ 'two_fa_enabled' | translate }}</span>
+          <span class="field-value">
+            {{ user.twoFAEnabled ? ('yes' | translate) : ('no' | translate) }}
+          </span>
+        </div>
+        <div class="field-row">
+          <span class="field-label">{{ 'profile.registration_date' | translate }}</span>
+          <span class="field-value">
+            {{ user.fechaRegistro | date: 'shortDate' }}
+          </span>
+        </div>
+        <div class="field-row">
+          <span class="field-label">{{ 'profile.status' | translate }}</span>
+          <span class="field-value">
+            {{ user.activo ? ('active' | translate) : ('inactive' | translate) }}
+          </span>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="profile-actions">
+        <button
+          mat-flat-button
+          color="primary"
+          [routerLink]="['/profile/settings']"
+          class="btn-edit"
+        >
+          <!-- Aquí ya tienes "edit_profile" en tu JSON -->
+          {{ 'edit_profile' | translate }}
+        </button>
+        <button mat-button [routerLink]="['/dashboard']" class="btn-cancel">
+          <!-- Si quieres un “Back to Dashboard” y no existe, podrías crear “back_to_dashboard” -->
+          {{ 'back_to_dashboard' | translate }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <div class="loading-spinner">
+    <mat-progress-spinner diameter="50" mode="indeterminate" color="primary"></mat-progress-spinner>
+    <!-- Si no tienes "loading" en i18n, lo agregas; si no, puedes escribir “Loading…” directo -->
+    {{ 'loading' | translate }}...
+  </div>
+</ng-template>

@@ -1,0 +1,11 @@
+<label for="language-select">🌐</label>
+<select
+  id="language-select"
+  #langSelect
+  [value]="currentLang"
+  (change)="onLanguageChange(langSelect.value)"
+>
+  <option *ngFor="let lang of supportedLanguages" [value]="lang.code">
+    {{ lang.labelKey | translate }}
+  </option>
+</select>

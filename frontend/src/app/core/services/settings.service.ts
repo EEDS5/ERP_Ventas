@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
   // Idiomas soportados para evitar peticiones 404
-  private readonly languages = ['en-US'];
+  private readonly languages = ['en-US', 'es-ES', 'zh-CN', 'zh-TW'];
   private optionsSubject = new BehaviorSubject<AppSettings>({ ...defaults });
   public readonly notify$ = this.optionsSubject.asObservable();
 
@@ -34,10 +34,39 @@ export class SettingsService {
 
   private getTranslateLang(): string {
     if (this.options.language === 'auto') {
-      const browserLang = navigator.language;
-      return this.languages.includes(browserLang) ? browserLang : 'en-US';
+      const browserLang = navigator.language; // p.ej. "es-BO" o "zh-Hans"
+      // Extraemos solamente el prefijo de los primeros dos caracteres (minúsculas)
+      const prefix = browserLang.slice(0, 2).toLowerCase(); // "es", "zh", etc.
+
+      // Construimos un pequeño mapa de prefijo → idioma completo
+      const prefixMap: Record<string, string> = {
+        en: 'en-US',
+        es: 'es-ES',
+        zh: this.matchChineseVariant(browserLang),
+        // si quieres mapear más prefijos (p. ej. 'pt' → 'pt-BR'), agrégalos aquí
+      };
+
+      // Si existe el prefijo en nuestro mapa, devolvemos ese idioma; si no, fallback a 'en-US'
+      return prefixMap[prefix] || 'en-US';
     }
     return this.options.language;
+  }
+
+  /** (Método auxiliar para distinguir chino simplificado vs tradicional) */
+  private matchChineseVariant(browserLang: string): string {
+    // Si el navegador dice "zh-TW" o "zh-Hant", devolvemos "zh-TW"
+    // Si dice "zh-CN" o "zh-Hans", devolvemos "zh-CN"
+    const lower = browserLang.toLowerCase();
+    if (
+      lower.includes('zh-tw') ||
+      lower.includes('zh-hant') ||
+      lower.includes('zh-hk') ||
+      lower.includes('zh-mo')
+    ) {
+      return 'zh-TW';
+    }
+    // En cualquier otro caso (p.ej. "zh", "zh-cn", "zh-hans"), asumimos simplificado
+    return 'zh-CN';
   }
 
   setLanguage(lang: string): void {
