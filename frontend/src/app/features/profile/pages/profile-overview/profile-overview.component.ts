@@ -15,6 +15,10 @@ import { ProfileService } from '@core/services/profile.service';
 import { Usuario } from '@core/models/auth/usuario.model';
 import { Observable } from 'rxjs';
 
+import { SettingsService } from '@core/services/settings.service';
+
+import { LocalizedDatePipe } from '@shared/pipes/localized-date.pipe';
+
 @Component({
   selector: 'app-profile-overview',
   standalone: true,
@@ -27,6 +31,7 @@ import { Observable } from 'rxjs';
     MatDividerModule,
     MatProgressSpinnerModule,
     TranslateModule,
+    LocalizedDatePipe,
   ],
   templateUrl: './profile-overview.component.html',
   styleUrls: ['./profile-overview.component.scss'],
@@ -34,7 +39,17 @@ import { Observable } from 'rxjs';
 })
 export class ProfileOverviewComponent {
   private readonly profileService = inject(ProfileService);
+  private readonly settings = inject(SettingsService);
 
   /** Observable que expone los datos del usuario autenticado */
   user$: Observable<Usuario> = this.profileService.getMyProfile();
+
+  /** Devuelve el locale para DatePipe según la configuración actual */
+  get dateLocale(): string {
+    const lang = this.settings.options.language; // 'es-ES', 'en-US', etc.
+    if (lang.startsWith('es')) return 'es';
+    if (lang.startsWith('zh-CN')) return 'zh-Hans';
+    if (lang.startsWith('zh-TW')) return 'zh-Hant';
+    return 'en-US';
+  }
 }

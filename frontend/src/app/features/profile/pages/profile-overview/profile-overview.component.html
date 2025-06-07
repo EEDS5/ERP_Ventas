@@ -5,7 +5,7 @@
     <mat-card class="profile-card mat-elevation-z4">
       <div class="profile-header">
         <div class="avatar-wrapper">
-          <mat-icon aria-hidden="true" class="profile-icon">account_circle</mat-icon>
+          <mat-icon class="profile-icon" aria-hidden="true"> person </mat-icon>
         </div>
         <div class="title-wrapper">
           <!-- Usa "profile.overview" en lugar de "profile_overview_title" -->
@@ -32,20 +32,20 @@
         <div class="field-row">
           <span class="field-label">{{ 'profile.registration_date' | translate }}</span>
           <span class="field-value">
-            {{ user.fechaRegistro | date: 'shortDate' }}
+            {{ user.fechaRegistro | localizedDate: 'longDate' }}
           </span>
         </div>
-        <div class="field-row">
+        <!-- <div class="field-row">
           <span class="field-label">{{ 'profile.status' | translate }}</span>
           <span class="field-value">
             {{ user.activo ? ('active' | translate) : ('inactive' | translate) }}
           </span>
-        </div>
+        </div> -->
       </mat-card-content>
 
       <mat-card-actions class="profile-actions">
         <button
-          mat-flat-button
+          mat-raised-button
           color="primary"
           [routerLink]="['/profile/settings']"
           class="btn-edit"

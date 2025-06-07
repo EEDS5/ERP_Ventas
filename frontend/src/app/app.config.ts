@@ -1,5 +1,5 @@
 // src/app/app.config.ts
-import { importProvidersFrom, APP_INITIALIZER } from '@angular/core';
+import { importProvidersFrom, APP_INITIALIZER, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
@@ -44,11 +44,31 @@ export const appConfig = {
           deps: [HttpClient],
         },
       }),
-      NgxPermissionsModule.forRoot()
+      NgxPermissionsModule.forRoot(),
     ),
     provideRouter(routes, withHashLocation()),
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+
+    {
+      provide: LOCALE_ID,
+      useFactory: (settingsService: SettingsService) => {
+        const lang = settingsService.options.language; // e.g. 'es-ES', 'zh-CN', etc.
+
+        if (lang.startsWith('es')) {
+          return 'es'; // coincide con registerLocaleData(localeEs)
+        }
+        if (lang.startsWith('zh-CN')) {
+          return 'zh-Hans'; // coincide con registerLocaleData(localeZhHans)
+        }
+        if (lang.startsWith('zh-TW')) {
+          return 'zh-Hant'; // coincide con registerLocaleData(localeZhHant)
+        }
+        return 'en-US'; // por defecto
+      },
+      deps: [SettingsService],
+    },
+
     {
       provide: APP_INITIALIZER,
       useFactory: initNgMateroLayoutFactory,

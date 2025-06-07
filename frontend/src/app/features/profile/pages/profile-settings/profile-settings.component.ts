@@ -14,9 +14,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import { ProfileService } from '@core/services/profile.service';
 import { Usuario } from '@core/models/auth/usuario.model';
 import { finalize } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-profile-settings',
@@ -28,6 +34,9 @@ import { finalize } from 'rxjs';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
+    MatDividerModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
     RouterLink,
     TranslateModule,
   ],
@@ -39,6 +48,9 @@ export class ProfileSettingsComponent implements OnInit {
   private readonly profileService = inject(ProfileService);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+
+  // Observable para el usuario, usado en la plantilla con async
+  public user$: Observable<Usuario> = this.profileService.getMyProfile();
 
   /** Formulario reutilizable para editar perfil */
   profileForm!: FormGroup;
@@ -54,7 +66,7 @@ export class ProfileSettingsComponent implements OnInit {
   /** Construye el FormGroup con validaciones */
   private buildForm() {
     this.profileForm = this.fb.group({
-      nombreUsuario: ['', [Validators.required, Validators.minLength(3)]],
+      nombreUsuario: ['', [Validators.required, Validators.minLength(4)]],
       email: ['', [Validators.required, Validators.email]],
       // Si en el futuro quisieras agregar campos adicionales (e.g. avatarUrl),
       // los incluirías aquí.
@@ -63,23 +75,21 @@ export class ProfileSettingsComponent implements OnInit {
 
   /** Carga datos actuales desde el servicio y rellena el formulario */
   private loadUserData() {
-    this.isLoading = true;
-    this.profileService
-      .getMyProfile()
-      .pipe(finalize(() => (this.isLoading = false)))
-      .subscribe({
-        next: (user: Usuario) => {
-          this.profileForm.patchValue({
-            nombreUsuario: user.nombreUsuario,
-            email: user.email,
-          });
-        },
-        error: (err) => {
-          console.error('Error al cargar perfil:', err);
-          // Aquí podrías notificar con MatSnackBar o Toastr
-        },
-      });
-  }
+  this.isLoading = true;
+  this.user$
+    .pipe(finalize(() => (this.isLoading = false)))
+    .subscribe({
+      next: (user: Usuario) => {
+        this.profileForm.patchValue({
+          nombreUsuario: user.nombreUsuario,
+          email: user.email,
+        });
+      },
+      error: (err) => {
+        console.error('Error al cargar perfil:', err);
+      },
+    });
+}
 
   /** Se lanza al hacer submit del formulario */
   onSubmit(): void {

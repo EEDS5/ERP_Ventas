@@ -107,6 +107,7 @@
     "range_page_label_1": "no record",
     "range_page_label_2": "{{startIndex}} - {{endIndex}} of {{length}}"
   },
+
   "en_us": "English",
   "zh_cn": "Simplified Chinese",
   "zh_tw": "Traditional Chinese",
@@ -123,6 +124,7 @@
   "address": "Address",
   "website": "Website",
   "company": "Company",
+
   "email": "Email",
   "profile.overview": "Overview",
   "profile.registration_date": "Registered On",
@@ -134,14 +136,28 @@
   "inactive": "Inactive",
   "back_to_dashboard": "Back to Dashboard",
   "loading": "Loading",
+
+  "profile_settings_title": "Profile Settings",
+  "edit_your_profile": "Edit Your Profile",
+  "enter_username": "Enter your username",
+  "username_required": "Username is required",
+  "username_min_length": "Username must be at least {{number}} characters",
+  "enter_email": "Enter your email",
+  "email_required": "Email is required",
+  "email_invalid": "Invalid email address",
+  "save_changes": "Save Changes",
+  "cancel": "Cancel",
+
   "operation": "Operation",
   "edit": "Edit",
   "delete": "Delete",
   "confirm_delete": "Confirm delete?",
   "ok": "Ok",
   "close": "Close",
+
   "profile": "Profile",
   "edit_profile": "Edit profile",
+
   "logout": "logout",
   "login": "Login",
   "login_title": "Welcome Back",
@@ -158,6 +174,7 @@
   "read_and_agree": "I have read and agree to the terms of service",
   "have_an_account": "Already have an account",
   "restore_defaults": "Restore defaults",
+
   "language": {
     "english": "English",
     "spanish": "Español",

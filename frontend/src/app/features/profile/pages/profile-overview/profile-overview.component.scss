@@ -11,7 +11,7 @@
 /* El card en sí mismo */
 .profile-card {
   width: 100%;
-  max-width: 600px;  /* Ancho máximo para que no crezca demasiado */
+  max-width: 600px; /* Ancho máximo para que no crezca demasiado */
   border-radius: 0.5rem;
   overflow: hidden;
 }
@@ -27,18 +27,22 @@
 
 /* Avatar: círculo con fondo y el ícono centrado */
 .avatar-wrapper {
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   background-color: var(--mat-sys-primary-container);
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 0.5rem;
 }
 
 .profile-icon {
-  font-size: 40px;
+  font-size: 36px;
   color: var(--mat-sys-on-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Contenedor de texto del header: título y subtítulo */
@@ -61,7 +65,7 @@
 
 /* 2. Contenido: margin interno más generoso */
 .profile-content {
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 1.5rem;
 }
 
 /* Cada fila de campo se alinea con space-between */

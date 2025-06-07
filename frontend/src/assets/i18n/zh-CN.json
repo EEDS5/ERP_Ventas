@@ -107,6 +107,7 @@
     "range_page_label_1": "无数据",
     "range_page_label_2": "第 {{startIndex}} - {{endIndex}} 行，共 {{length}} 行"
   },
+
   "en_us": "英语",
   "zh_cn": "简体中文",
   "zh_tw": "繁体中文",
@@ -123,6 +124,7 @@
   "address": "家庭地址",
   "website": "网址",
   "company": "公司",
+
   "email": "邮箱",
   "profile.overview": "概览",
   "profile.registration_date": "注册日期",
@@ -134,14 +136,28 @@
   "inactive": "非活跃",
   "back_to_dashboard": "返回仪表板",
   "loading": "加载中",
+
+  "profile_settings_title": "个人资料设置",
+  "edit_your_profile": "编辑个人资料",
+  "enter_username": "请输入用户名",
+  "username_required": "用户名为必填项",
+  "username_min_length": "用户名至少需有 {{number}} 个字符",
+  "enter_email": "请输入电子邮箱",
+  "email_required": "电子邮箱为必填项",
+  "email_invalid": "电子邮箱地址无效",
+  "save_changes": "保存更改",
+  "cancel": "取消",
+
   "operation": "操作",
   "edit": "编辑",
   "delete": "删除",
   "confirm_delete": "确认删除？",
   "ok": "确定",
   "close": "关闭",
+
   "profile": "个人信息",
   "edit_profile": "修改资料",
+
   "logout": "退出",
   "login": "登入",
   "login_title": "欢迎回来",
@@ -158,6 +174,7 @@
   "read_and_agree": "我已阅读并同意服务条款",
   "have_an_account": "已经有帐号了",
   "restore_defaults": "还原配置",
+
   "language": {
     "english": "英语",
     "spanish": "西班牙语",

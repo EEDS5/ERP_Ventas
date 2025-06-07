@@ -1,68 +1,96 @@
-<!-- frontend/src/app/features/profile/pages/profile-settings/profile-settings.component.html -->
+<ng-container *ngIf="user$ | async as user; else loading">
+  <div class="profile-container">
+    <mat-card class="profile-card mat-elevation-z4">
+      <!-- Encabezado idéntico al Overview -->
+      <div class="profile-header">
+        <div class="avatar-wrapper">
+          <mat-icon class="profile-icon" aria-hidden="true">person</mat-icon>
+        </div>
+        <div class="title-wrapper">
+          <h2 class="profile-title">{{ 'profile_settings_title' | translate }}</h2>
+          <span class="profile-subtitle">{{ 'edit_your_profile' | translate }}</span>
+        </div>
+      </div>
 
-<div class="row">
-  <div class="col-12">
-    <mat-card class="settings-card">
-      <mat-card-header>
-        <mat-card-title>{{ 'profile_settings_title' | translate }}</mat-card-title>
-        <mat-card-subtitle>{{ 'edit_your_profile' | translate }}</mat-card-subtitle>
-      </mat-card-header>
+      <mat-divider></mat-divider>
 
-      <mat-card-content>
+      <!-- Contenido con el mismo padding y gap que Overview -->
+      <mat-card-content class="profile-content">
         <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-          <!-- Nombre de usuario -->
-          <mat-form-field appearance="outline" class="form-field-full">
-            <mat-label>{{ 'username' | translate }}</mat-label>
-            <input
-              matInput
-              formControlName="nombreUsuario"
-              placeholder="{{ 'enter_username' | translate }}"
-            />
-            <mat-error *ngIf="nombreUsuarioControl?.hasError('required')">
-              {{ 'username_required' | translate }}
-            </mat-error>
-            <mat-error *ngIf="nombreUsuarioControl?.hasError('minlength')">
-              {{ 'username_min_length' | translate:{length: 3} }}
-            </mat-error>
-          </mat-form-field>
+          <div class="field-row">
+            <mat-form-field appearance="outline" class="form-field-full">
+              <mat-label>{{ 'username' | translate }}</mat-label>
+              <input
+                matInput
+                formControlName="nombreUsuario"
+                placeholder="{{ 'enter_username' | translate }}"
+                (input)="nombreUsuarioControl?.markAsTouched()"
+              />
+              <mat-error *ngIf="nombreUsuarioControl?.hasError('required')">
+                {{ 'username_required' | translate }}
+              </mat-error>
+              <mat-error *ngIf="nombreUsuarioControl?.hasError('minlength')">
+                {{
+                  'username_min_length'
+                    | translate
+                      : {
+                          number:
+                            nombreUsuarioControl?.getError('minlength')
+                              ?.requiredLength,
+                        }
+                }}
+              </mat-error>
+            </mat-form-field>
+          </div>
 
-          <!-- Email -->
-          <mat-form-field appearance="outline" class="form-field-full">
-            <mat-label>{{ 'email' | translate }}</mat-label>
-            <input
-              matInput
-              formControlName="email"
-              placeholder="{{ 'enter_email' | translate }}"
-            />
-            <mat-error *ngIf="emailControl?.hasError('required')">
-              {{ 'email_required' | translate }}
-            </mat-error>
-            <mat-error *ngIf="emailControl?.hasError('email')">
-              {{ 'email_invalid' | translate }}
-            </mat-error>
-          </mat-form-field>
-
-          <!-- Botones de acción -->
-          <div class="actions-container">
-            <button
-              mat-raised-button
-              color="primary"
-              type="submit"
-              [disabled]="profileForm.invalid || isLoading"
-            >
-              {{ 'save_changes' | translate }}
-            </button>
-            <button
-              mat-button
-              type="button"
-              [routerLink]="['/profile/overview']"
-              [disabled]="isLoading"
-            >
-              {{ 'cancel' | translate }}
-            </button>
+          <div class="field-row">
+            <mat-form-field appearance="outline" class="form-field-full">
+              <mat-label>{{ 'email' | translate }}</mat-label>
+              <input
+                matInput
+                formControlName="email"
+                placeholder="{{ 'enter_email' | translate }}"
+                (input)="emailControl?.markAsTouched()"
+              />
+              <mat-error *ngIf="emailControl?.hasError('required')">
+                {{ 'email_required' | translate }}
+              </mat-error>
+              <mat-error *ngIf="emailControl?.hasError('email')">
+                {{ 'email_invalid' | translate }}
+              </mat-error>
+            </mat-form-field>
           </div>
         </form>
       </mat-card-content>
+
+      <!-- Botones EXACTAMENTE iguales al Overview -->
+      <mat-card-actions class="profile-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="profileForm.invalid || isLoading"
+          class="btn-edit"
+        >
+          {{ 'save_changes' | translate }}
+        </button>
+        <button
+          mat-button
+          type="button"
+          [routerLink]="['/profile/overview']"
+          [disabled]="isLoading"
+          class="btn-cancel"
+        >
+          {{ 'cancel' | translate }}
+        </button>
+      </mat-card-actions>
     </mat-card>
   </div>
-</div>
+</ng-container>
+
+<ng-template #loading>
+  <div class="loading-spinner">
+    <mat-progress-spinner diameter="50" mode="indeterminate" color="primary"></mat-progress-spinner>
+    {{ 'loading' | translate }}...
+  </div>
+</ng-template>

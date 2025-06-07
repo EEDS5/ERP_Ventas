@@ -107,6 +107,7 @@
     "range_page_label_1": "無數據",
     "range_page_label_2": "第 {{startIndex}} - {{endIndex}} 行，共 {{length}} 行"
   },
+  
   "en_us": "英語",
   "zh_cn": "簡體中文",
   "zh_tw": "繁體中文",
@@ -123,6 +124,7 @@
   "address": "家庭地址",
   "website": "網址",
   "company": "公司",
+
   "email": "郵箱",
   "profile.overview": "總覽",
   "profile.registration_date": "註冊日期",
@@ -134,14 +136,28 @@
   "inactive": "未啟用",
   "back_to_dashboard": "返回儀表板",
   "loading": "載入中",
+
+  "profile_settings_title": "個人資料設定",
+  "edit_your_profile": "編輯個人資料",
+  "enter_username": "請輸入使用者名稱",
+  "username_required": "使用者名稱為必填項目",
+  "username_min_length": "使用者名稱至少需有 {{number}} 個字元",
+  "enter_email": "請輸入電子郵件",
+  "email_required": "電子郵件為必填項目",
+  "email_invalid": "電子郵件地址無效",
+  "save_changes": "儲存變更",
+  "cancel": "取消",
+
   "operation": "操作",
   "edit": "編輯",
   "delete": "删除",
   "confirm_delete": "確認刪除？",
   "ok": "確定",
   "close": "關閉",
+
   "profile": "個人信息",
   "edit_profile": "修改資料",
+
   "logout": "退出",
   "login": "登入",
   "login_title": "歡迎回來",
@@ -158,6 +174,7 @@
   "read_and_agree": "我已閱讀並同意服務條款",
   "have_an_account": "已經有帳號了",
   "restore_defaults": "還原配置",
+
   "language": {
     "english": "英語",
     "spanish": "西班牙語",

@@ -1,20 +1,112 @@
-/* frontend/src/app/features/profile/pages/profile-settings/profile-settings.component.scss */
+/* ------------------------------
+   Recreamos LOS MISMOS estilos
+   que usa el Overview
+------------------------------ */
 
-/* Ajustes generales de la tarjeta */
-.settings-card {
-  max-width: 600px;
-  margin: 2rem auto;
+/* Container principal */
+.profile-container {
+  padding: 2rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-/* Cada campo ocupa 100% del ancho */
+/* Card idéntica */
+.profile-card {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+/* Header: avatar + título */
+.profile-header {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  gap: 1rem;
+  background-color: var(--mat-sys-surface-container-lowest);
+}
+
+/* Avatar: círculo con fondo y el ícono centrado */
+.avatar-wrapper {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: var(--mat-sys-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.profile-icon {
+  font-size: 36px;
+  color: var(--mat-sys-on-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Texto de header */
+.title-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+.profile-subtitle {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* Contenido (relleno idéntico) */
+.profile-content {
+  padding: 1.5rem;
+  padding-bottom: 0;
+}
+
+/* Field-row para separar filas */
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+/* Clases auxiliares para form-fields (igual que él) */
 .form-field-full {
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-/* Contenedor de botones: alineación a la derecha y separación */
-.actions-container {
+/* Botones idénticos en footer */
+.profile-actions {
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+  background-color: var(--mat-sys-surface-container-lowest);
+}
+
+.btn-edit {
+  min-width: 120px;
+}
+
+.btn-cancel {
+  text-transform: none;
+  font-weight: 500;
+}
+
+/* Spinner idéntico */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
 }
