@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -41,22 +41,22 @@ class AuthenticationControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockitoBean
+    @MockBean
     private RegisterUserUseCase registerUserUseCase;
 
-    @MockitoBean
+    @MockBean
     private LoginUserUseCase loginUserUseCase;
 
-    @MockitoBean
+    @MockBean
     private VerifyTwoFactorUseCase verifyTwoFactorUseCase;
 
-    @MockitoBean
+    @MockBean
     private UserRepository userRepository;
 
-    @MockitoBean
+    @MockBean
     private JwtTokenProvider jwtTokenProvider;
 
-    @MockitoBean
+    @MockBean
     private AuthDomainService authDomainService;
 
     private Usuario usuario;
