@@ -26,7 +26,7 @@ import { DisableControlDirective } from '@shared/directives/disable-control.dire
   selector: 'app-customizer',
   standalone: true,
   templateUrl: './customizer.component.html',
-  styleUrl: './customizer.component.scss',
+  styleUrls: ['./customizer.component.scss'],
   encapsulation: ViewEncapsulation.None,
   imports: [
     FormsModule,

@@ -28,7 +28,7 @@ export interface TopmenuState {
   selector: 'app-topmenu',
   standalone: true,
   templateUrl: './topmenu.component.html',
-  styleUrl: './topmenu.component.scss',
+  styleUrls: ['./topmenu.component.scss'],
   host: {
     class: 'matero-topmenu',
   },

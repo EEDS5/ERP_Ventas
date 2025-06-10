@@ -12,7 +12,7 @@ import { UserPanelComponent } from './user-panel.component';
   selector: 'app-sidebar',
   standalone: true,
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss',
+  styleUrls: ['./sidebar.component.scss'],
   encapsulation: ViewEncapsulation.None,
   imports: [
     MatSlideToggleModule,

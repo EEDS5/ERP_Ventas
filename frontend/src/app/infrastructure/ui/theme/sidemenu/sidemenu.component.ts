@@ -22,7 +22,7 @@ import { NavAccordionDirective } from './nav-accordion.directive';
   selector: 'app-sidemenu',
   standalone: true,
   templateUrl: './sidemenu.component.html',
-  styleUrl: './sidemenu.component.scss',
+  styleUrls: ['./sidemenu.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [

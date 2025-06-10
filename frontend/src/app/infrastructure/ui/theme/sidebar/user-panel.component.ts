@@ -24,7 +24,7 @@ import { TranslateModule } from '@ngx-translate/core';
       </div>
     </div>
   `,
-  styleUrl: './user-panel.component.scss',
+  styleUrls: ['./user-panel.component.scss'],
   encapsulation: ViewEncapsulation.None,
   imports: [RouterLink, MatButtonModule, MatIconModule, MatTooltipModule, TranslateModule],
 })
