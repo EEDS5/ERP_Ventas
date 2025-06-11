@@ -1,1 +1,30 @@
-@use 'material'
+@use 'material';
+
+// ----------------------------------------------
+// Estilos para el diálogo de cambio de contraseña
+// ----------------------------------------------
+
+.change-password-dialog-panel {
+  /* Aplica al tag y al div con mat-dialog-content, y al host MDC */
+  mat-dialog-content,
+  div[mat-dialog-content],
+  .mat-mdc-dialog-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0;       /* aún más espacio sobre “Contraseña actual” */
+  }
+
+  /* Limita ancho de tus mat-form-field de cambio de password */
+  .form-field-full {
+    max-width: 80%;
+    width: 100%;
+  }
+
+  /* Solo afecta al primer campo dentro del diálogo */
+  mat-dialog-content .form-field-full:first-of-type,
+  div[mat-dialog-content] .form-field-full:first-of-type,
+  .mat-mdc-dialog-content .form-field-full:first-of-type {
+    margin-top: 1.5rem; /* aplica SOLO al campo “Contraseña actual” */
+  }
+}

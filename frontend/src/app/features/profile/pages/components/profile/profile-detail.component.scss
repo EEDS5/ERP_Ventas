@@ -1,0 +1,47 @@
+.detail-item {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 1rem;
+  position: relative; /* Necesario para posicionar el icono */
+  padding: 0.22rem 0;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.detail-value {
+  font-weight: 400;
+  color: var(--mat-sys-on-surface);
+  margin-left: auto;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
+.value-with-copy {
+  height: 1rem;
+  position: relative; /* contenedor relativo para el botón */
+  padding-right: 2rem; /* deja espacio para el botón sin empujar el texto */
+}
+
+.value-with-copy button {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-35%);
+  padding: 0;
+  height: 1.5rem;
+  width: 1.5rem;
+  min-width: auto;
+}
+
+.fa-indicator {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color: var(--mat-sys-error);
+}
+.fa-indicator.enabled {
+  background-color: var(--mat-sys-success);
+}

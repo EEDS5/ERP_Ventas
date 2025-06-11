@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { ProfileService } from '@core/services/profile.service';
 import { Usuario } from '@core/models/auth/usuario.model';
+import { ProfileDetailComponent } from '../components/profile/profile-detail.component';
 import { Observable } from 'rxjs';
 
 import { SettingsService } from '@core/services/settings.service';
@@ -32,6 +33,7 @@ import { LocalizedDatePipe } from '@shared/pipes/localized-date.pipe';
     MatProgressSpinnerModule,
     TranslateModule,
     LocalizedDatePipe,
+    ProfileDetailComponent,
   ],
   templateUrl: './profile-overview.component.html',
   styleUrls: ['./profile-overview.component.scss'],
@@ -43,6 +45,10 @@ export class ProfileOverviewComponent {
 
   /** Observable que expone los datos del usuario autenticado */
   user$: Observable<Usuario> = this.profileService.getMyProfile();
+
+  copyToClipboard(text: string): void {
+    navigator.clipboard.writeText(text);
+  }
 
   /** Devuelve el locale para DatePipe según la configuración actual */
   get dateLocale(): string {

@@ -17,24 +17,29 @@
       <mat-divider></mat-divider>
 
       <mat-card-content class="profile-content">
-        <div class="field-row">
-          <!-- Si ya existe "email" en las traducciones, úsala -->
-          <span class="field-label">{{ 'email' | translate }}</span>
-          <span class="field-value">{{ user.email }}</span>
-        </div>
-        <div class="field-row">
-          <!-- Podrías crear una clave "profile.two_fa" o usar algo genérico: -->
-          <span class="field-label">{{ 'two_fa_enabled' | translate }}</span>
-          <span class="field-value">
+        <app-profile-detail [label]="'email' | translate">
+          <span class="value-with-copy">
+            {{ user.email }}
+            <button
+              mat-icon-button
+              (click)="copyToClipboard(user.email)"
+              [attr.aria-label]="'profile.copy_email' | translate"
+            >
+              <mat-icon>content_copy</mat-icon>
+            </button>
+          </span>
+        </app-profile-detail>
+
+        <app-profile-detail [label]="'two_fa_enabled' | translate">
+          <span class="field-fa">
+            <span class="fa-indicator" [class.enabled]="user.twoFAEnabled"></span>
             {{ user.twoFAEnabled ? ('yes' | translate) : ('no' | translate) }}
           </span>
-        </div>
-        <div class="field-row">
-          <span class="field-label">{{ 'profile.registration_date' | translate }}</span>
-          <span class="field-value">
-            {{ user.fechaRegistro | localizedDate: 'longDate' }}
-          </span>
-        </div>
+        </app-profile-detail>
+
+        <app-profile-detail [label]="'profile.registration_date' | translate">
+          {{ user.fechaRegistro | localizedDate: 'longDate' }}
+        </app-profile-detail>
         <!-- <div class="field-row">
           <span class="field-label">{{ 'profile.status' | translate }}</span>
           <span class="field-value">

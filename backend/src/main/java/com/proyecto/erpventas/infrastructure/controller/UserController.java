@@ -81,11 +81,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}/password")
-    public ResponseEntity<String> updateUserPassword(
+    public ResponseEntity<Void> updateUserPassword(
             @PathVariable Integer id,
             @Valid @RequestBody UpdateUserPasswordDTO dto) {
         updateUserPasswordUseCase.updatePassword(id, dto);
-        return ResponseEntity.ok("Contraseña actualizada correctamente");
+        // No devolvemos body: HTTP 204 No Content
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

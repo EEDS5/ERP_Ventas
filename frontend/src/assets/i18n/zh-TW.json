@@ -67,6 +67,7 @@
     "active": "啟用",
     "inactive": "未啟用",
     "back_to_dashboard": "返回儀表板",
+    "profile.copy_email": "複製電子郵件地址",
     "loading": "載入中",
     "extensions": "擴展組件庫",
     "sessions": "會話",
@@ -107,7 +108,7 @@
     "range_page_label_1": "無數據",
     "range_page_label_2": "第 {{startIndex}} - {{endIndex}} 行，共 {{length}} 行"
   },
-  
+
   "en_us": "英語",
   "zh_cn": "簡體中文",
   "zh_tw": "繁體中文",
@@ -147,6 +148,20 @@
   "email_invalid": "電子郵件地址無效",
   "save_changes": "儲存變更",
   "cancel": "取消",
+  "change_password": "修改密碼",
+  "current_password": "當前密碼",
+  "new_password": "新密碼",
+  "update_password": "更新密碼",
+
+  "current_password_required": "請輸入當前密碼",
+  "new_password_required": "請輸入新密碼",
+  "new_password_min_length": "新密碼至少需要 {{number}} 個字符",
+  "confirm_password_required": "請確認新密碼",
+  "passwords_mismatch": "兩次輸入的密碼不一致",
+  "password_update_success": "密碼更新成功",
+  "password_update_error": "更新密碼時出錯",
+  "current_password_incorrect": "當前密碼不正確",
+  "form_errors": "請修復表單中的錯誤",
 
   "operation": "操作",
   "edit": "編輯",

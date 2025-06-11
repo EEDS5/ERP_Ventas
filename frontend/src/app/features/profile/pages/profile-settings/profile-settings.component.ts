@@ -4,6 +4,7 @@ import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,6 +20,8 @@ import { Usuario } from '@core/models/auth/usuario.model';
 
 import { Observable } from 'rxjs';
 import { shareReplay, take } from 'rxjs/operators';
+
+import { ChangePasswordDialogComponent } from '../components/profile/change-password-dialog.component';
 
 @Component({
   selector: 'app-profile-settings',
@@ -44,6 +47,7 @@ export class ProfileSettingsComponent implements OnInit {
   private readonly profileService = inject(ProfileService);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   //** Observable que expone los datos del usuario autenticado */
   public user$: Observable<Usuario> = this.profileService
@@ -74,6 +78,14 @@ export class ProfileSettingsComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       // Si en el futuro quisieras agregar campos adicionales (e.g. avatarUrl),
       // los incluirías aquí.
+    });
+  }
+
+  /** Método para abrir el diálogo */
+  openChangePasswordDialog(): void {
+    this.dialog.open(ChangePasswordDialogComponent, {
+      width: '400px',
+      panelClass: 'change-password-dialog-panel', // ← nuevo
     });
   }
 

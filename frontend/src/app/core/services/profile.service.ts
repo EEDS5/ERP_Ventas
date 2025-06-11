@@ -13,7 +13,7 @@ import { AuthService } from '@core/services/auth.service';
 export class ProfileService {
   constructor(
     private readonly http: HttpClient,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {}
 
   /**
@@ -34,7 +34,7 @@ export class ProfileService {
           // devolvemos un Observable que emita error:
           return throwError(() => new Error('No hay usuario autenticado'));
         }
-      })
+      }),
     );
   }
 
@@ -52,7 +52,21 @@ export class ProfileService {
         } else {
           return throwError(() => new Error('No hay usuario autenticado'));
         }
-      })
+      }),
+    );
+  }
+
+  updateMyPassword(payload: { currentPassword: string; newPassword: string }): Observable<void> {
+    return this.authService.user$.pipe(
+      take(1),
+      switchMap((user) => {
+        if (user && user.usuarioID) {
+          const url = PROFILE_API.UPDATE_PASSWORD(user.usuarioID);
+          return this.http.put<void>(url, payload);
+        } else {
+          return throwError(() => new Error('No hay usuario autenticado'));
+        }
+      }),
     );
   }
 }
