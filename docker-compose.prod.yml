@@ -51,7 +51,9 @@ services:
     image: erpventasacr.azurecr.io/erp-frontend:latest
     container_name: angular_frontend
     ports:
-      - "4200:80"  # Puerto externo 4200 mapea al 80 del contenedor (Nginx)
+      - "4200:4200"
+      # Descomentar la siguiente línea para producción con Nginx
+      # - "4200:80"  # Puerto externo 4200 mapea al 80 del contenedor (Nginx)
     depends_on:
       - backend
 
