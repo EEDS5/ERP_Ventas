@@ -1,0 +1,30 @@
+.ventas-container {
+  padding: 1rem;
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+  }
+}
+
+table {
+  width: 100%;
+
+  th.mat-header-cell {
+    font-weight: bold;
+  }
+}
