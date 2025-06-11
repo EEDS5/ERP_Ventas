@@ -10,10 +10,17 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final long validityInMilliseconds = 3600000; // 1 hora
-
+    private final long validityInMilliseconds;
     // Corregido a SecretKey para compatibilidad correcta con verifyWith()
     private final SecretKey secretKey = Jwts.SIG.HS256.key().build();
+
+    public JwtTokenProvider() {
+        this.validityInMilliseconds = 3600000; // 1 hora
+    }
+
+    public JwtTokenProvider(long validityInMilliseconds) {
+        this.validityInMilliseconds = validityInMilliseconds;
+    }
 
     public String generateToken(String nombreUsuario) {
         Date now = new Date();

@@ -23,4 +23,16 @@ public class JwtTokenProviderTest {
             .isInstanceOf(RuntimeException.class)
             .hasMessageContaining("Token inválido o caducado");
     }
+
+    @Test
+    void deberiaLanzarExcepcionSiTokenEstaExpirado() throws InterruptedException {
+        JwtTokenProvider provider = new JwtTokenProvider(10); // 10 ms de validez
+        String token = provider.generateToken("usuarioDemo");
+
+        Thread.sleep(20); // esperar a que expire
+
+        assertThatThrownBy(() -> provider.validateToken(token))
+            .isInstanceOf(RuntimeException.class)
+            .hasMessageContaining("Token inválido o caducado");
+    }
 }
