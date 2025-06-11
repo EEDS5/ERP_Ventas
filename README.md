@@ -67,6 +67,9 @@ Las variables están definidas en `docker-compose.yml`, y pueden adaptarse a ent
 - `SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ERP_Ventas`
 - `SPRING_DATASOURCE_USERNAME=erp_user`
 - `SPRING_DATASOURCE_PASSWORD=erp_pass`
+- `MAIL_USERNAME=example@gmail.com`
+- `MAIL_PASSWORD=secret`
+- `SERVER_PORT=8080` # opcional
 
 Para producción, se recomienda el uso de perfiles (`--spring.profiles.active=prod`) y almacenes de secretos.
 
