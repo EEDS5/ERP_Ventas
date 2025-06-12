@@ -1,7 +1,10 @@
 package com.proyecto.erpventas.infrastructure.controller;
 
 import com.proyecto.erpventas.application.dto.request.venta.CreateVentaDTO;
+import com.proyecto.erpventas.application.dto.request.venta.CreateVentaCompletaDTO;
 import com.proyecto.erpventas.application.dto.request.venta.UpdateVentaDTO;
+import com.proyecto.erpventas.application.dto.request.venta.UpdateVentaCompletaDTO;
+import com.proyecto.erpventas.application.dto.response.venta.VentaCompletaDTO;
 import com.proyecto.erpventas.application.dto.response.venta.VentaResponseDTO;
 import com.proyecto.erpventas.application.usecases.venta.*;
 import com.proyecto.erpventas.domain.model.sales.Venta;
@@ -16,20 +19,26 @@ import java.util.List;
 public class VentaController {
 
     private final CreateVentaUseCase createUC;
+    private final CreateVentaCompletaUseCase createCompletaUC;
     private final ListVentasUseCase listUC;
     private final GetVentaByIdUseCase getByIdUC;
     private final UpdateVentaUseCase updateUC;
+    private final UpdateVentaCompletaUseCase updateCompletaUC;
     private final DeleteVentaUseCase deleteUC;
 
     public VentaController(CreateVentaUseCase createUC,
+                           CreateVentaCompletaUseCase createCompletaUC,
                            ListVentasUseCase listUC,
                            GetVentaByIdUseCase getByIdUC,
                            UpdateVentaUseCase updateUC,
+                           UpdateVentaCompletaUseCase updateCompletaUC,
                            DeleteVentaUseCase deleteUC) {
         this.createUC = createUC;
+        this.createCompletaUC = createCompletaUC;
         this.listUC = listUC;
         this.getByIdUC = getByIdUC;
         this.updateUC = updateUC;
+        this.updateCompletaUC = updateCompletaUC;
         this.deleteUC = deleteUC;
     }
 
@@ -53,11 +62,24 @@ public class VentaController {
         return ResponseEntity.ok(toDto(created));
     }
 
+    @PostMapping("/completa")
+    public ResponseEntity<VentaCompletaDTO> createCompleta(@Valid @RequestBody CreateVentaCompletaDTO dto) {
+        VentaCompletaDTO created = createCompletaUC.create(dto);
+        return ResponseEntity.ok(created);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<VentaResponseDTO> update(@PathVariable Integer id,
                                                    @Valid @RequestBody UpdateVentaDTO dto) {
         Venta updated = updateUC.update(id, dto);
         return ResponseEntity.ok(toDto(updated));
+    }
+
+    @PutMapping("/completa/{id}")
+    public ResponseEntity<VentaCompletaDTO> updateCompleta(@PathVariable Integer id,
+                                                           @Valid @RequestBody UpdateVentaCompletaDTO dto) {
+        VentaCompletaDTO updated = updateCompletaUC.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")

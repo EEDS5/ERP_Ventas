@@ -7,6 +7,13 @@
   margin-bottom: var(--gutter);
 }
 
+.detalle-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gutter);
+  margin-bottom: var(--gutter);
+}
+
 .btn-submit {
   @include mat.elevation(2); // le da sombra ligera si quieres estilo más pro
 

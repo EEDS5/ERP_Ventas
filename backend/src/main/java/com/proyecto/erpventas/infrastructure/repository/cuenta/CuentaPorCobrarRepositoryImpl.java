@@ -41,4 +41,9 @@ public class CuentaPorCobrarRepositoryImpl implements CuentaPorCobrarRepository 
             throw new RuntimeException("Cuenta por cobrar no encontrada");
         }
     }
+
+    @Override
+    public Optional<CuentaPorCobrar> findByVentaId(Integer ventaId) {
+        return jpaRepository.findByVenta_VentaId(ventaId);
+    }
 }

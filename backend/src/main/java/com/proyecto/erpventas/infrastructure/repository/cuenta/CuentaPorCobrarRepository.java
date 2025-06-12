@@ -14,4 +14,6 @@ public interface CuentaPorCobrarRepository {
     CuentaPorCobrar save(CuentaPorCobrar cuenta);
 
     void softDeleteById(Integer id);
+
+    Optional<CuentaPorCobrar> findByVentaId(Integer ventaId);
 }
