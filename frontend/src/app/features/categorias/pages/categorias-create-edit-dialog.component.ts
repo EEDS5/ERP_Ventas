@@ -54,7 +54,7 @@ export class CategoriasCreateEditDialogComponent implements OnInit {
 
     if (this.isEdit && this.data.categoria) {
       const dto: UpdateCategoriaDTO = this.form.value;
-      this.api.actualizarCategoria(this.data.categoria.categoriaProductoId, dto).subscribe({
+      this.api.actualizarCategoria(this.data.categoria.categoriaId, dto).subscribe({
         next: () => {
           this.snackBar.open('Categoría actualizada correctamente', '', { duration: 3000 });
           this.dialogRef.close(true);

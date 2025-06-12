@@ -1,4 +1,4 @@
-<div class="row mb-3">
+<div class="row mb-3 justify-content-between align-items-center">
   <mat-form-field class="col-12 col-md-6 form-field-full" appearance="outline">
     <mat-label>Buscar cliente</mat-label>
     <input #searchInput matInput (keyup)="filtrarCliente($event)" placeholder="Nombre" />
@@ -12,14 +12,16 @@
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
+  <div class="col-auto">
+    <button mat-fab color="primary" (click)="nuevaVenta()" aria-label="Nueva Venta">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 </div>
 
 <mat-card>
   <mat-card-header>
     <mat-card-title>Listado de Ventas</mat-card-title>
-    <button mat-fab color="primary" class="fab-add" (click)="nuevaVenta()" aria-label="Nueva Venta">
-      <mat-icon>add</mat-icon>
-    </button>
   </mat-card-header>
 
   <mat-card-content class="table-container">

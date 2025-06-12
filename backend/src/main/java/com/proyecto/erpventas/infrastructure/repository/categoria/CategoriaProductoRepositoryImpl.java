@@ -20,8 +20,15 @@ public class CategoriaProductoRepositoryImpl implements CategoriaProductoReposit
         return jpaRepository.existsByNombre(nombre);
     }
 
+    /** Devuelve cualquiera, activo o no */
     @Override
     public Optional<CategoriaProducto> findByNombre(String nombre) {
+        return jpaRepository.findByNombre(nombre);
+    }
+
+    /** Devuelve sólo si está activo */
+    @Override
+    public Optional<CategoriaProducto> findActiveByNombre(String nombre) {
         return jpaRepository.findByNombre(nombre).filter(CategoriaProducto::getActivo);
     }
 

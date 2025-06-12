@@ -1,5 +1,6 @@
 export interface CategoriaProducto {
-  categoriaProductoId: number;
+  // Antes: categoriaProductoId
+  categoriaId: number;
   nombre: string;
   descripcion?: string;
   activo: boolean;

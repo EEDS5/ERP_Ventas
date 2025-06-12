@@ -1,6 +1,44 @@
+@use '@angular/material' as mat;
+
 .w-100 {
   width: 100%;
 }
 .mb-3 {
   margin-bottom: var(--gutter);
+}
+
+.btn-submit {
+  @include mat.elevation(2); // le da sombra ligera si quieres estilo más pro
+
+  // Estilo general para modo claro
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container) !important;
+
+  &:hover {
+    background-color: rgba(0, 123, 255, 0.85);
+    color: white !important;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    color: var(--mat-sys-on-primary-container) !important;
+  }
+}
+
+// Estilo específico para modo oscuro
+@media (prefers-color-scheme: dark) {
+  .btn-submit {
+    background-color: #3f51b5 !important;
+    color: #ffffff !important;
+
+    &:hover {
+      background-color: #5c6bc0 !important;
+      color: #ffffff !important;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      color: #ffffff !important;
+    }
+  }
 }

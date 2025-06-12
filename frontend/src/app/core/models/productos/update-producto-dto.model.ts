@@ -3,4 +3,5 @@ export interface UpdateProductoDTO {
   descripcion?: string;
   precio: number;
   stock: number;
+  categoriaId: number;
 }

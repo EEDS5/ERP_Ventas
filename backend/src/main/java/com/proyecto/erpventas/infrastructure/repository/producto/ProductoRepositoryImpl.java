@@ -22,6 +22,12 @@ public class ProductoRepositoryImpl implements ProductoRepository {
 
     @Override
     public Optional<Producto> findByNombre(String nombre) {
+        // Ahora trae el producto aunque esté inactivo
+        return jpaRepository.findByNombre(nombre);
+    }
+
+    @Override
+    public Optional<Producto> findActiveByNombre(String nombre) {
         return jpaRepository.findByNombre(nombre).filter(Producto::getActivo);
     }
 

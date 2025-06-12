@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>
   {{
-    isEdit ? 'Editar Categoría #' + (data.categoria?.categoriaProductoId ?? '') : 'Nueva Categoría'
+    isEdit ? 'Editar Categoría #' + (data.categoria?.categoriaId ?? '') : 'Nueva Categoría'
   }}
 </h2>
 
@@ -18,7 +18,7 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="cancelar()">Cancelar</button>
-  <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="submit()">
+  <button mat-flat-button class="btn-submit" [disabled]="form.invalid" (click)="submit()">
     {{ isEdit ? 'Actualizar' : 'Crear' }}
   </button>
 </mat-dialog-actions>

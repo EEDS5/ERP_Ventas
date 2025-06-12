@@ -60,7 +60,10 @@ export class VentasCreateEditDialogComponent implements OnInit {
     this.metodosPago$ = this.metodosApi.obtenerMetodosPago();
 
     this.form = this.fb.group({
-      clienteId: [this.data.venta?.clienteId ?? '', Validators.required],
+      clienteId: [
+        { value: this.data.venta?.clienteId ?? '', disabled: this.isEdit },
+        Validators.required,
+      ],
       metodoPagoId: [this.data.venta?.metodoPagoId ?? '', Validators.required],
       total: [this.data.venta?.total ?? '', [Validators.required, Validators.min(0.01)]],
     });

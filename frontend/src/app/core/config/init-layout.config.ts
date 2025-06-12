@@ -28,21 +28,21 @@ export function initNgMateroLayoutFactory(
         type: 'sub',
         children: [
           { route: 'ventas', name: 'Ventas', type: 'link' },
-          { route: 'facturas', name: 'Facturas', type: 'link' },
-          { route: 'detalle-ventas', name: 'Detalle de Ventas', type: 'link' },
+          /* { route: 'facturas', name: 'Facturas', type: 'link' },
+          { route: 'detalle-ventas', name: 'Detalle de Ventas', type: 'link' }, */
         ],
       },
-      {
+      /* {
         route: '',
         name: 'Clientes y Cobros',
         icon: 'people',
         type: 'sub',
         children: [
           { route: 'clientes', name: 'Clientes', type: 'link' },
-          /* { route: 'cuentas-por-cobrar', name: 'Cuentas por Cobrar', type: 'link' }, */
+          { route: 'cuentas-por-cobrar', name: 'Cuentas por Cobrar', type: 'link' },
           { route: 'pagos', name: 'Pagos', type: 'link' },
         ],
-      },
+      }, */
       {
         route: '',
         name: 'Productos',
@@ -53,7 +53,7 @@ export function initNgMateroLayoutFactory(
           { route: 'categorias', name: 'Categorías', type: 'link' },
         ],
       },
-      {
+      /* {
         route: '',
         name: 'Pasarelas de Pago',
         icon: 'credit_card',
@@ -62,7 +62,7 @@ export function initNgMateroLayoutFactory(
           { route: 'pasarelas', name: 'Pasarelas', type: 'link' },
           { route: 'transacciones', name: 'Transacciones', type: 'link' },
         ],
-      },
+      }, */
       {
         route: '',
         name: 'Reportes',
@@ -74,7 +74,7 @@ export function initNgMateroLayoutFactory(
           { route: 'cuentas-por-cobrar', name: 'Cuentas por Cobrar y Pagos', type: 'link' },
         ],
       },
-      {
+      /* {
         route: '',
         name: 'Administración',
         icon: 'settings',
@@ -82,9 +82,9 @@ export function initNgMateroLayoutFactory(
         children: [
           { route: 'usuarios', name: 'Usuarios', type: 'link' },
           { route: 'metodos-pago', name: 'Métodos de Pago', type: 'link' },
-          /* { route: 'pasarelas', name: 'Pasarelas de Pago', type: 'link' }, */
+          { route: 'pasarelas', name: 'Pasarelas de Pago', type: 'link' },
         ],
-      },
+      }, */
     ]);
     settingsService.setOptions({
       navPos: 'side',

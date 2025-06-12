@@ -26,7 +26,7 @@ describe('VentasCreateEditDialogComponent', () => {
         { provide: VentasApiService, useValue: mockVentasApi },
         { provide: ClientesApiService, useValue: mockClientesApi },
         { provide: MetodosPagoApiService, useValue: mockMetodosApi },
-        { provide: MatSnackBar, useValue: { open: () => {} } },
+        { provide: MatSnackBar, useValue: { open: () => null } },
         { provide: MatDialogRef, useValue: { close: () => {} } },
         { provide: MAT_DIALOG_DATA, useValue: {} },
       ],

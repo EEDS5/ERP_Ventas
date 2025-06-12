@@ -10,6 +10,7 @@ public interface ProductoRepository {
     Producto save(Producto producto);
     Producto saveAndFlush(Producto producto);
     Optional<Producto> findById(Integer id);
+    Optional<Producto> findActiveByNombre(String nombre);
     List<Producto> findAll();
     List<Producto> findAllByActivoTrue();
     void deleteById(Integer id); // borrado lógico

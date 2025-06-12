@@ -16,6 +16,8 @@ import { Producto } from 'src/app/core/models/productos/producto.model';
 import { ProductosApiService } from 'src/app/infrastructure/api/productos/productos-api.service';
 import { ProductosCreateEditDialogComponent } from './productos-create-edit-dialog.component';
 
+import { HttpErrorResponse } from '@angular/common/http';
+
 @Component({
   selector: 'app-productos',
   standalone: true,
@@ -108,8 +110,20 @@ export class ProductosComponent implements OnInit {
         this.snackBar.open('Producto eliminado correctamente', '', { duration: 3000 });
         this.cargarProductos();
       },
-      error: (err: Error) => {
-        this.snackBar.open(`Error: ${err.message}`, '', { duration: 5000 });
+      error: (err: HttpErrorResponse) => {
+        // err.error puede ser un objecto { error: "mensaje" } o una cadena
+        interface ErrorResponse { error: string }
+        let msg = 'Ocurrió un error inesperado';
+        if (err.error) {
+          if (typeof err.error === 'string') {
+            msg = err.error; // cuerpo de texto plano
+          } else if ((err.error as ErrorResponse).error) {
+            msg = (err.error as ErrorResponse).error; // { error: "...mensaje..." }
+          }
+        } else {
+          msg = err.message; // fallback
+        }
+        this.snackBar.open(`Error: ${msg}`, '', { duration: 5000 });
       },
     });
   }

@@ -1,13 +1,19 @@
+:host {
+  display: block;
+  padding: var(--gutter);
+}
+
+table {
+  width: auto;
+  min-width: 100%;
+}
+
 .table-container {
   position: relative;
 }
+
 .spinner-container {
   display: flex;
   justify-content: center;
   margin: 20px 0;
-}
-.fab-add {
-  position: absolute;
-  top: -28px;
-  right: 16px;
 }
