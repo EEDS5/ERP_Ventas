@@ -1,8 +1,6 @@
-export interface Producto {
-  productoId: number;
+export interface CreateProductoDTO {
   nombre: string;
   descripcion?: string;
   precio: number;
   stock: number;
-  activo: boolean;
 }
