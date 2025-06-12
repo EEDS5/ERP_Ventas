@@ -27,7 +27,10 @@ describe('VentasCreateEditDialogComponent', () => {
         { provide: ClientesApiService, useValue: mockClientesApi },
         { provide: MetodosPagoApiService, useValue: mockMetodosApi },
         { provide: MatSnackBar, useValue: { open: () => null } },
-        { provide: MatDialogRef, useValue: { close: jasmine.createSpy('close') } },
+        {
+          provide: MatDialogRef,
+          useValue: { close: jasmine.createSpy('close').and.callFake(() => true) },
+        },
         { provide: MAT_DIALOG_DATA, useValue: {} },
       ],
     }).compileComponents();
