@@ -26,13 +26,13 @@ public class CategoriaProductoRepositoryImpl implements CategoriaProductoReposit
     }
 
     @Override
-    public CategoriaProducto save(CategoriaProducto categoriaProducto) {
-        return jpaRepository.save(categoriaProducto);
+    public CategoriaProducto save(CategoriaProducto categoria) {
+        return jpaRepository.save(categoria);
     }
 
     @Override
-    public CategoriaProducto saveAndFlush(CategoriaProducto categoriaProducto) {
-        return jpaRepository.saveAndFlush(categoriaProducto);
+    public CategoriaProducto saveAndFlush(CategoriaProducto categoria) {
+        return jpaRepository.saveAndFlush(categoria);
     }
 
     @Override
@@ -54,11 +54,11 @@ public class CategoriaProductoRepositoryImpl implements CategoriaProductoReposit
     public void softDeleteById(Integer id) {
         Optional<CategoriaProducto> opt = jpaRepository.findById(id.longValue());
         if (opt.isPresent()) {
-            CategoriaProducto categoria = opt.get();
-            categoria.setActivo(false);
-            jpaRepository.save(categoria);
+            CategoriaProducto c = opt.get();
+            c.setActivo(false);
+            jpaRepository.save(c);
         } else {
-            throw new RuntimeException("Categoría de producto no encontrada");
+            throw new RuntimeException("Categoría no encontrada");
         }
     }
 

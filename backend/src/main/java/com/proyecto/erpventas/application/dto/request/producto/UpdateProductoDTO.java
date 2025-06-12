@@ -22,4 +22,7 @@ public class UpdateProductoDTO {
     @NotNull
     @Min(0)
     private Integer stock;
+
+    @NotNull
+    private Integer categoriaId;
 }

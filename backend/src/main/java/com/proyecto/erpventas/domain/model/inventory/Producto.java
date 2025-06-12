@@ -5,6 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import java.math.BigDecimal;
 
+/**
+ * Producto disponible para la venta.
+ */
+
+import com.proyecto.erpventas.domain.model.inventory.CategoriaProducto;
+
 @Entity
 @Table(name = "Productos")
 @Getter
@@ -31,6 +37,10 @@ public class Producto {
 
     @Column(name = "stock", nullable = false)
     private Integer stock;
+
+    @ManyToOne
+    @JoinColumn(name = "categoriaid", nullable = false)
+    private CategoriaProducto categoria;
 
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;

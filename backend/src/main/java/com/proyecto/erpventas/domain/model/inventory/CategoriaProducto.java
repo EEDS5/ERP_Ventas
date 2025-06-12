@@ -15,7 +15,7 @@ public class CategoriaProducto {
     @Column(name = "categoriaid")
     private Integer categoriaId;
 
-    @Column(name = "nombre", nullable = false)
+    @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
     @Column(name = "descripcion")
