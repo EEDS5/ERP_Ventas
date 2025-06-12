@@ -41,18 +41,9 @@ export const routes: Routes = [
           import('./features/ventas/pages/ventas.component').then((m) => m.VentasComponent),
       },
       {
-        path: 'productos',
+        path: 'clientes',
         loadComponent: () =>
-          import('./features/productos/pages/productos.component').then(
-            (m) => m.ProductosComponent,
-          ),
-      },
-      {
-        path: 'categorias',
-        loadComponent: () =>
-          import('./features/categorias/pages/categorias.component').then(
-            (m) => m.CategoriasComponent,
-          ),
+          import('./features/clientes/pages/clientes.component').then((m) => m.ClientesComponent),
       },
       {
         path: 'reporte-ventas',
