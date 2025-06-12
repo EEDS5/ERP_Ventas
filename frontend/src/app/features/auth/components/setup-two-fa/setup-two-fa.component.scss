@@ -272,9 +272,12 @@ $negro: #1e1e1e;
 }
 
 /* ===================  BOTÓN OMITIR  =================== */
+/* ————————————— Separar botón OMITIR en nueva fila ————————————— */
 .actions.skip {
-  margin-top: 1.5rem;
-  justify-content: center;
+  display: block; /* fuerza nueva línea */
+  width: 100%; /* ocupa todo el ancho */
+  margin-top: 1.5rem; /* separación vertical */
+  text-align: center; /* centra el botón horizontalmente */
 }
 
 .skip-btn {

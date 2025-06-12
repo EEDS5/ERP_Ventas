@@ -29,6 +29,14 @@ jobs:
         run: |
           az acr login --name erpventasacr
 
+      - name: Cache npm (Frontend)
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Compilar imagen Backend
         run: |
           docker build -t $ACR/erp-backend:${TAG} ./backend
