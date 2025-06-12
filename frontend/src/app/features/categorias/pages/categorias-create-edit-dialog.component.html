@@ -1,5 +1,7 @@
 <h2 mat-dialog-title>
-  {{ isEdit ? 'Editar Categoría #' + (data.categoria?.categoriaId ?? '') : 'Nueva Categoría' }}
+  {{
+    isEdit ? 'Editar Categoría #' + (data.categoria?.categoriaProductoId ?? '') : 'Nueva Categoría'
+  }}
 </h2>
 
 <form [formGroup]="form" (ngSubmit)="submit()" mat-dialog-content>

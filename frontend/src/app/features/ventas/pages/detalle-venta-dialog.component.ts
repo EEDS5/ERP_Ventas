@@ -15,11 +15,11 @@ import { VentasApiService } from 'src/app/infrastructure/api/ventas/ventas-api.s
     MatDialogModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    MatCardModule
+    MatCardModule,
   ],
   templateUrl: './detalle-venta-dialog.component.html',
   styleUrls: ['./detalle-venta-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class DetalleVentaDialogComponent implements OnInit {
   venta?: Venta;
@@ -28,16 +28,20 @@ export class DetalleVentaDialogComponent implements OnInit {
   constructor(
     private api: VentasApiService,
     @Inject(MAT_DIALOG_DATA) public data: { ventaId: number },
-    private dialogRef: MatDialogRef<DetalleVentaDialogComponent>
+    private dialogRef: MatDialogRef<DetalleVentaDialogComponent>,
   ) {}
 
   ngOnInit() {
     this.api.obtenerVenta(this.data.ventaId).subscribe({
       next: (v: Venta) => {
+        console.log('[VENTA]:', v);
         this.venta = v;
         this.loading = false;
       },
-      error: () => this.loading = false
+      error: (err) => {
+        console.error('[ERROR VENTA]:', err); // 👈 Esto también
+        this.loading = false;
+      },
     });
   }
 

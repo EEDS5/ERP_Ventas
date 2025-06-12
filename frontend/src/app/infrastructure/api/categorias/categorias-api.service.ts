@@ -7,7 +7,7 @@ import { UpdateCategoriaDTO } from 'src/app/core/models/productos/update-categor
 
 @Injectable({ providedIn: 'root' })
 export class CategoriasApiService {
-  private baseUrl = '/api/categorias';
+  private baseUrl = '/api/categorias-producto';
 
   constructor(private http: HttpClient) {}
 
