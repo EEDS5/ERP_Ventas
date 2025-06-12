@@ -10,7 +10,7 @@ import { Venta } from 'src/app/core/models/ventas/venta.model';
   standalone: true,
   imports: [CommonModule, MatTableModule, MatProgressSpinnerModule],
   templateUrl: './ventas.component.html',
-  styleUrls: ['./ventas.component.scss']
+  styleUrls: ['./ventas.component.scss'],
 })
 export class VentasComponent implements OnInit {
   ventas: Venta[] = [];
@@ -26,14 +26,24 @@ export class VentasComponent implements OnInit {
   private cargarVentas() {
     this.loading = true;
     this.ventasApi.obtenerVentas().subscribe({
-      next: (data) => {
+      next: (data: Venta[]) => {
         this.ventas = data;
         this.loading = false;
       },
       error: () => {
         alert('No se pudieron cargar las ventas');
         this.loading = false;
-      }
+      },
     });
+  }
+
+  private onVentasCargadas(data: Venta[]) {
+    this.ventas = data;
+    this.loading = false;
+  }
+
+  private onErrorCargaVentas() {
+    alert('No se pudieron cargar las ventas');
+    this.loading = false;
   }
 }

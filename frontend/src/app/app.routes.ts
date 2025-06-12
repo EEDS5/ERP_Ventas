@@ -37,7 +37,8 @@ export const routes: Routes = [
       },
       {
         path: 'ventas',
-        loadChildren: () => import('./features/ventas/ventas.module').then((m) => m.VentasModule),
+        loadComponent: () =>
+          import('./features/ventas/pages/ventas.component').then((m) => m.VentasComponent),
       },
       {
         path: 'reporte-ventas',
@@ -69,14 +70,14 @@ export const routes: Routes = [
             path: 'overview',
             loadComponent: () =>
               import('./features/profile/pages/profile-overview/profile-overview.component').then(
-                (m) => m.ProfileOverviewComponent
+                (m) => m.ProfileOverviewComponent,
               ),
           },
           {
             path: 'settings',
             loadComponent: () =>
               import('./features/profile/pages/profile-settings/profile-settings.component').then(
-                (m) => m.ProfileSettingsComponent
+                (m) => m.ProfileSettingsComponent,
               ),
           },
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
