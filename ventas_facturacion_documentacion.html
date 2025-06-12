@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ERP Ventas - Documentación de Ventas y Facturación</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+h1, h2, h3 { color: #2c3e50; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+th { background: #f5f5f5; }
+.page-break { page-break-before: always; margin-top: 50px; }
+</style>
+</head>
+<body>
+<h1>ERP Ventas – Módulo de Ventas y Facturación</h1>
+<p>Asignatura: <strong>Gerencia de Tecnologías de Información</strong></p>
+<p>Esta documentación describe de forma detallada el funcionamiento del módulo de Ventas y Facturación del sistema ERP, incluyendo componentes técnicos y conceptos generales. La información se presenta con un enfoque formal y accesible para todo público.</p>
+<h2>Tabla de Contenidos</h2>
+<ol>
+<li><a href="#contexto">Contexto Académico</a></li>
+<li><a href="#overview">Descripción General del Módulo</a></li>
+<li><a href="#entidades">Entidades Principales</a></li>
+<li><a href="#casosdeuso">Casos de Uso</a></li>
+<li><a href="#repositorios">Repositorios y Persistencia</a></li>
+<li><a href="#controladores">Controladores REST</a></li>
+<li><a href="#reportes">Reportes y Dashboards</a></li>
+<li><a href="#despliegue">Despliegue y Configuración</a></li>
+<li><a href="#conclusiones">Conclusiones</a></li>
+</ol>
+<hr>
+<h2 id="contexto">1. Contexto Académico</h2>
+<p>El proyecto fue desarrollado como ejercicio práctico dentro de la asignatura <em>Gerencia de Tecnologías de Información</em>. Se buscó implementar un sistema empresarial de ventas y facturación aplicando principios de arquitectura hexagonal, pruebas automatizadas y contenerización con Docker. La finalidad es que los estudiantes comprendan el ciclo completo de desarrollo de una solución de clase empresarial.</p>
+<div class="page-break"></div>
+<h2 id="overview">2. Descripción General del Módulo</h2>
+<p>El módulo de Ventas y Facturación gestiona el ciclo comercial de la empresa: registro de clientes, creación de ventas, generación de facturas electrónicas y seguimiento de cuentas por cobrar.</p>
+<p>Está compuesto por:</p>
+<ul>
+<li>Servicios y controladores en la capa de <strong>backend</strong> (Spring Boot).</li>
+<li>Componentes de <strong>frontend</strong> en Angular para la interacción del usuario.</li>
+<li>Reportes en PDF/Excel generados con <strong>JasperReports</strong>.</li>
+</ul>
+<h3>2.1 Objetivos del M&oacute;dulo</h3>
+<p>El objetivo principal es digitalizar el ciclo de ventas manteniendo trazabilidad completa desde la cotizaci&oacute;n hasta el cobro. Tambi&eacute;n busca reducir errores manuales y mejorar la experiencia del usuario.</p>
+<h3>2.2 Flujo de Trabajo</h3>
+<p>Una venta comienza con el registro del cliente y la selecci&oacute;n de productos. El sistema calcula impuestos, descuentos y genera la factura electr&oacute;nica correspondiente. Finalmente se crea una cuenta por cobrar asociada hasta registrar el pago.</p>
+<p>[Diagrama de Arquitectura General]</p>
+<div class="page-break"></div>
+<h2 id="entidades">3. Entidades Principales</h2>
+<h3>3.1 Venta</h3>
+<table>
+<tr><th>Atributo</th><th>Tipo</th><th>Descripción</th></tr>
+<tr><td>ventaId</td><td>Integer</td><td>Identificador único de la venta.</td></tr>
+<tr><td>cliente</td><td>Cliente</td><td>Referencia al cliente que realiza la compra.</td></tr>
+<tr><td>fechaVenta</td><td>DateTime</td><td>Fecha y hora de creación.</td></tr>
+<tr><td>total</td><td>BigDecimal</td><td>Importe total de la venta.</td></tr>
+<tr><td>metodoPago</td><td>MetodoPago</td><td>Método utilizado para el pago.</td></tr>
+<tr><td>creadoPorUsuario</td><td>Usuario</td><td>Usuario responsable del registro.</td></tr>
+<tr><td>activo</td><td>Boolean</td><td>Indica si la venta permanece activa (borrado lógico).</td></tr>
+</table>
+<h3>3.2 DetalleVenta</h3>
+<table>
+<tr><th>Atributo</th><th>Tipo</th><th>Descripción</th></tr>
+<tr><td>detalleId</td><td>Integer</td><td>Identificador del detalle.</td></tr>
+<tr><td>venta</td><td>Venta</td><td>Venta asociada.</td></tr>
+<tr><td>producto</td><td>Producto</td><td>Producto vendido.</td></tr>
+<tr><td>cantidad</td><td>Integer</td><td>Cantidad de unidades.</td></tr>
+<tr><td>precioUnitario</td><td>BigDecimal</td><td>Precio por unidad.</td></tr>
+<tr><td>subtotal</td><td>BigDecimal</td><td>Cálculo automático del subtotal.</td></tr>
+<tr><td>activo</td><td>Boolean</td><td>Estado del registro.</td></tr>
+</table>
+<h3>3.3 Factura</h3>
+<table>
+<tr><th>Atributo</th><th>Tipo</th><th>Descripción</th></tr>
+<tr><td>facturaId</td><td>Integer</td><td>Identificador de la factura.</td></tr>
+<tr><td>venta</td><td>Venta</td><td>Venta facturada.</td></tr>
+<tr><td>numeroFactura</td><td>String</td><td>Número consecutivo.</td></tr>
+<tr><td>fechaEmision</td><td>DateTime</td><td>Fecha de emisión.</td></tr>
+<tr><td>xmlFactura</td><td>XML</td><td>Representación electrónica.</td></tr>
+<tr><td>creadoPorUsuario</td><td>Usuario</td><td>Usuario creador.</td></tr>
+<tr><td>activo</td><td>Boolean</td><td>Indica si sigue vigente.</td></tr>
+</table>
+<h3>3.4 CuentaPorCobrar</h3>
+<table>
+<tr><th>Atributo</th><th>Tipo</th><th>Descripción</th></tr>
+<tr><td>cuentaId</td><td>Integer</td><td>Identificador de la cuenta.</td></tr>
+<tr><td>cliente</td><td>Cliente</td><td>Cliente deudor.</td></tr>
+<tr><td>venta</td><td>Venta</td><td>Venta relacionada.</td></tr>
+<tr><td>montoPendiente</td><td>BigDecimal</td><td>Saldo por pagar.</td></tr>
+<tr><td>fechaVencimiento</td><td>DateTime</td><td>Fecha límite de pago.</td></tr>
+<tr><td>estado</td><td>String</td><td>Estado de la cuenta.</td></tr>
+<tr><td>activo</td><td>Boolean</td><td>Control de borrado lógico.</td></tr>
+</table>
+<h3>3.5 Pago</h3>
+<table>
+<tr><th>Atributo</th><th>Tipo</th><th>Descripción</th></tr>
+<tr><td>pagoId</td><td>Integer</td><td>Identificador del pago.</td></tr>
+<tr><td>cuentaPorCobrar</td><td>CuentaPorCobrar</td><td>Cuenta a la que se aplica.</td></tr>
+<tr><td>fechaPago</td><td>DateTime</td><td>Fecha en que se registró.</td></tr>
+<tr><td>monto</td><td>BigDecimal</td><td>Cantidad pagada.</td></tr>
+<tr><td>activo</td><td>Boolean</td><td>Indica validez del registro.</td></tr>
+</table>
+<p>[Diagrama UML de Entidades]</p>
+<div class="page-break"></div>
+<h2 id="casosdeuso">4. Casos de Uso</h2>
+<p>Las operaciones principales se implementan como <em>use cases</em> dentro de la capa de aplicación. Cada caso de uso encapsula la lógica necesaria para interactuar con las entidades y repositorios.</p>
+<ul>
+<li><strong>CreateVentaUseCase</strong>: registra una nueva venta a partir de datos provistos por el usuario.</li>
+<li><strong>ListVentasUseCase</strong>: devuelve todas las ventas activas ordenadas por fecha.</li>
+<li><strong>UpdateVentaUseCase</strong>: modifica el método de pago o el total de una venta existente.</li>
+<li><strong>DeleteVentaUseCase</strong>: realiza el borrado lógico de una venta.</li>
+<li><strong>ReporteFacturacionUseCase</strong>: genera informes de facturación mensual (PDF y Excel).</li>
+<li><strong>ReporteVentasUseCase</strong>: produce reportes de ventas por cliente.</li>
+<li><strong>ReporteCuentasPorCobrarUseCase</strong>: muestra el estado de las cuentas pendientes.</li>
+</ul>
+<p>La ejecuci&oacute;n de estos casos de uso se orquesta mediante un servicio de aplicaci&oacute;n, garantizando la integridad de cada operaci&oacute;n y registrando eventos de auditor&iacute;a para futuras consultas.</p>
+<p>[Diagrama de Flujo de Casos de Uso]</p>
+<div class="page-break"></div>
+<h2 id="repositorios">5. Repositorios y Persistencia</h2>
+<p>La capa de persistencia sigue el patrón de repositorio con implementaciones basadas en Spring Data JPA. Cada entidad posee un repositorio que abstrae las operaciones sobre la base de datos PostgreSQL.</p>
+<table>
+<tr><th>Repositorio</th><th>Responsabilidad</th></tr>
+<tr><td>VentaRepository</td><td>Guardar y consultar ventas.</td></tr>
+<tr><td>DetalleVentaRepository</td><td>Manejar los detalles de cada venta.</td></tr>
+<tr><td>FacturaRepository</td><td>Administrar facturas emitidas.</td></tr>
+<tr><td>CuentaPorCobrarRepository</td><td>Controlar el estado de las cuentas por cobrar.</td></tr>
+<tr><td>PagoRepository</td><td>Registrar los pagos realizados.</td></tr>
+</table>
+<p>Cada implementación utiliza JPA para mapear las tablas correspondientes. Se aplican estrategias de <em>borrado lógico</em> para preservar el historial sin eliminar registros físicamente.</p>
+<p>Los repositorios cuentan con transacciones declarativas para asegurar que las operaciones de guardado y actualizaci&oacute;n se completen de forma at&oacute;mica. Adem&aacute;s, se implementan consultas personalizadas para reportes de facturaci&oacute;n y ventas.</p>
+<div class="page-break"></div>
+<h2 id="controladores">6. Controladores REST</h2>
+<p>La API expone endpoints RESTful para que el frontend interactúe con el sistema. A continuación se resumen los principales controladores relacionados con ventas y facturación:</p>
+<ul>
+<li><strong>VentaController</strong> (<code>/api/ventas</code>) – permite listar, crear, actualizar y eliminar ventas.</li>
+<li><strong>ReporteFacturacionController</strong> (<code>/api/reportes/facturacion-mensual</code>) – ofrece la descarga de reportes de facturación.</li>
+<li><strong>ReporteVentasController</strong> (<code>/api/reportes/ventas</code>) – genera historiales de ventas por cliente.</li>
+<li><strong>ReporteCuentasPorCobrarController</strong> (<code>/api/reportes/cuentas-por-cobrar</code>) – produce reportes de deudas y pagos.</li>
+<li><strong>DashboardController</strong> (<code>/api/dashboard</code>) – muestra métricas clave del sistema, incluyendo facturación actual y ventas del día.</li>
+</ul>
+<p>Todos los endpoints est&aacute;n protegidos con JWT y roles de usuario. La validaci&oacute;n de permisos se define mediante anotaciones de Spring Security para evitar accesos no autorizados.</p>
+<p>Cada controlador transforma las entidades a <em>DTOs</em> de respuesta para garantizar que sólo se exponga la información necesaria.</p>
+<div class="page-break"></div>
+<h2 id="reportes">7. Reportes y Dashboards</h2>
+<p>Las funciones de análisis y reportes son esenciales para la toma de decisiones. El sistema utiliza JasperReports para generar documentos PDF y Excel.</p>
+<ul>
+<li><strong>Reporte de Facturación Mensual</strong> – muestra la facturación agregada mes a mes.</li>
+<li><strong>Reporte de Ventas por Cliente</strong> – detalla las ventas asociadas a cada cliente.</li>
+<li><strong>Reporte de Cuentas por Cobrar</strong> – indica los montos pendientes y fechas de vencimiento.</li>
+<li><strong>Dashboard</strong> – provee un resumen con ventas del día, facturación actual, estado de inventario y usuarios con autenticación 2FA.</li>
+</ul>
+<p>[Gráfico de Ejemplo de Facturación Mensual]</p>
+<div class="page-break"></div>
+<h2 id="despliegue">8. Despliegue y Configuración</h2>
+<p>El proyecto incorpora Docker y Docker Compose para levantar el backend (Spring Boot), la base de datos PostgreSQL y el frontend Angular.</p>
+<h3>Pasos principales</h3>
+<ol>
+<li>Clonar el repositorio.</li>
+<li>Ejecutar <code>docker compose up --build</code> para iniciar los servicios.</li>
+<li>Acceder a <code>http://localhost:4200</code> para la interfaz y a <code>http://localhost:8080/swagger-ui/</code> para la documentación API.</li>
+</ol>
+<p>Las variables de entorno se definen en el archivo <code>docker-compose.yml</code>. Para entornos de producción se recomienda configurar perfiles de Spring Boot y manejar las credenciales mediante almacenes de secretos.</p>
+<p>Para implementaciones en la nube se recomienda usar contenedores orquestados con Kubernetes y configurar pipelines de integraci&oacute;n continua. Los logs se env&iacute;an a herramientas de monitoreo como Grafana y Prometheus para un seguimiento constante.</p>
+<p>[Diagrama de Despliegue]</p>
+<div class="page-break"></div>
+<h2 id="conclusiones">9. Conclusiones</h2>
+<p>El módulo de Ventas y Facturación del ERP demuestra una arquitectura limpia y modular, apta para ampliaciones futuras. Permite registrar ventas, emitir facturas, llevar control de cuentas por cobrar y generar reportes relevantes para la gerencia. Su diseño facilita el mantenimiento y la integración con otros módulos empresariales.</p>
+<p>Esta documentación sirve como guía de consulta para estudiantes y desarrolladores interesados en comprender la estructura del proyecto y aplicar buenas prácticas en soluciones de gestión empresarial.</p>
+<p>Para mayor informaci&oacute;n se recomienda revisar el c&oacute;digo fuente y los comentarios incluidos en cada clase de la aplicaci&oacute;n.</p>
+<p>[Logotipo de la Institución]</p>
+</body>
+</html>
