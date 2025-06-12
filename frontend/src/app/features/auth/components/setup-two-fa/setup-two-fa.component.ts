@@ -10,7 +10,7 @@ import { TwoFactorSetupResponseDTO } from '@core/models/auth/twofactor-setup-res
   standalone: true,
   imports: [CommonModule],
   templateUrl: './setup-two-fa.component.html',
-  styleUrls: ['./setup-two-fa.component.scss']
+  styleUrls: ['./setup-two-fa.component.scss'],
 })
 export class SetupTwoFaComponent implements OnInit {
   private authService = inject(AuthService);
@@ -31,12 +31,11 @@ export class SetupTwoFaComponent implements OnInit {
     document.documentElement.style.setProperty('--bg-shift-y', `${y * 30}px`);
 
     // Tilt específico para la QR card
-    const tiltX = x * 10;   // rotación Y
-    const tiltY = -y * 10;  // rotación X
+    const tiltX = x * 10; // rotación Y
+    const tiltY = -y * 10; // rotación X
     document.documentElement.style.setProperty('--tiltX', `${tiltX}deg`);
     document.documentElement.style.setProperty('--tiltY', `${tiltY}deg`);
   }
-
 
   ngOnInit(): void {
     const user = this.authService.getUser();
@@ -45,23 +44,32 @@ export class SetupTwoFaComponent implements OnInit {
       return;
     }
 
-    this.authService['usuarioApi']
-      .generate2FASecret(user.nombreUsuario)
-      .subscribe({
-        next: (res: TwoFactorSetupResponseDTO) => {
-          this.qrUrl = res.qrUrl;
-          this.secret = res.secret;
-        },
-        error: (err: unknown) => {
-          console.error('Error generando QR 2FA:', err);
-          this.snackBar.open('Error al generar el código 2FA.', 'Cerrar', {
-            duration: 5000,
-          });
-        },
-      });
+    this.authService['usuarioApi'].generate2FASecret(user.nombreUsuario).subscribe({
+      next: (res: TwoFactorSetupResponseDTO) => {
+        this.qrUrl = res.qrUrl;
+        this.secret = res.secret;
+      },
+      error: (err: unknown) => {
+        console.error('Error generando QR 2FA:', err);
+        this.snackBar.open('Error al generar el código 2FA.', 'Cerrar', {
+          duration: 5000,
+        });
+      },
+    });
   }
 
   continuar(): void {
     this.router.navigate(['/auth', 'verify-2fa']);
+  }
+
+  omitir2FA(): void {
+    this.snackBar.open(
+      'Has omitido la configuración de 2FA. Puedes activarlo más adelante desde tu perfil.',
+      'Cerrar',
+      {
+        duration: 5000,
+      },
+    );
+    this.router.navigate(['/dashboard']);
   }
 }
