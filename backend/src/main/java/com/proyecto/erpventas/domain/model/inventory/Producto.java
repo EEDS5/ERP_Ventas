@@ -22,6 +22,10 @@ public class Producto {
     @Column(name = "descripcion")
     private String descripcion;
 
+    @ManyToOne
+    @JoinColumn(name = "categoriaid", nullable = false)
+    private CategoriaProducto categoria;
+
     @Column(name = "precio", nullable = false)
     private BigDecimal precio;
 
