@@ -25,6 +25,7 @@ public class VentaController {
     private final UpdateVentaUseCase updateUC;
     private final UpdateVentaCompletaUseCase updateCompletaUC;
     private final DeleteVentaUseCase deleteUC;
+    private final GetVentaCompletaUseCase getCompletaUC;
 
     public VentaController(CreateVentaUseCase createUC,
                            CreateVentaCompletaUseCase createCompletaUC,
@@ -32,7 +33,7 @@ public class VentaController {
                            GetVentaByIdUseCase getByIdUC,
                            UpdateVentaUseCase updateUC,
                            UpdateVentaCompletaUseCase updateCompletaUC,
-                           DeleteVentaUseCase deleteUC) {
+                           DeleteVentaUseCase deleteUC, GetVentaCompletaUseCase getCompletaUC) {
         this.createUC = createUC;
         this.createCompletaUC = createCompletaUC;
         this.listUC = listUC;
@@ -40,6 +41,7 @@ public class VentaController {
         this.updateUC = updateUC;
         this.updateCompletaUC = updateCompletaUC;
         this.deleteUC = deleteUC;
+        this.getCompletaUC = getCompletaUC;
     }
 
     @GetMapping
@@ -80,6 +82,13 @@ public class VentaController {
                                                            @Valid @RequestBody UpdateVentaCompletaDTO dto) {
         VentaCompletaDTO updated = updateCompletaUC.update(id, dto);
         return ResponseEntity.ok(updated);
+    }
+
+    @GetMapping("/completa/{id}")
+    public ResponseEntity<VentaCompletaDTO> getCompleta(@PathVariable Integer id) {
+        VentaCompletaDTO vc = getCompletaUC.getById(id)
+            .orElseThrow(() -> new RuntimeException("Venta completa no encontrada"));
+        return ResponseEntity.ok(vc);
     }
 
     @DeleteMapping("/{id}")

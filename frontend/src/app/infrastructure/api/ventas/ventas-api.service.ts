@@ -22,6 +22,11 @@ export class VentasApiService {
     return this.http.get<Venta>(`${this.baseUrl}/${id}`);
   }
 
+  /** Trae la venta con todos sus detalles */
+  obtenerVentaCompleta(id: number): Observable<VentaCompleta> {
+    return this.http.get<VentaCompleta>(`${this.baseUrl}/completa/${id}`);
+  }
+
   crearVenta(dto: CreateVentaDTO): Observable<Venta> {
     return this.http.post<Venta>(this.baseUrl, dto);
   }

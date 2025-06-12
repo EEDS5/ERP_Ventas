@@ -13,8 +13,7 @@ import { Observable } from 'rxjs';
 
 import { Venta } from 'src/app/core/models/ventas/venta.model';
 import { VentasApiService } from 'src/app/infrastructure/api/ventas/ventas-api.service';
-import { CreateVentaDTO } from 'src/app/core/models/ventas/create-venta-dto.model';
-import { UpdateVentaDTO } from 'src/app/core/models/ventas/update-venta-dto.model';
+import { UpdateVentaCompletaDTO } from 'src/app/core/models/ventas/update-venta-completa-dto.model';
 import { DetalleVentaForm } from 'src/app/core/models/ventas/detalle-venta-form.model';
 import { ProductoConPrecio } from 'src/app/core/models/ventas/producto-con-precio.model';
 import { CreateVentaCompletaDTO } from 'src/app/core/models/ventas/create-venta-completa-dto.model';
@@ -23,6 +22,7 @@ import { MetodoPago } from 'src/app/core/models/productos/metodo-pago.model';
 import { ClientesApiService } from 'src/app/infrastructure/api/clientes/clientes-api.service';
 import { MetodosPagoApiService } from 'src/app/infrastructure/api/metodos-pago/metodos-pago-api.service';
 import { ProductosApiService } from 'src/app/infrastructure/api/productos/productos-api.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-ventas-create-edit-dialog',
@@ -36,6 +36,7 @@ import { ProductosApiService } from 'src/app/infrastructure/api/productos/produc
     MatSelectModule,
     MatButtonModule,
     MatSnackBarModule,
+    MatIconModule,
   ],
   templateUrl: './ventas-create-edit-dialog.component.html',
   styleUrls: ['./ventas-create-edit-dialog.component.scss'],
@@ -62,16 +63,18 @@ export class VentasCreateEditDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // carga catálogos
     this.clientes$ = this.clientesApi.obtenerClientes();
     this.metodosPago$ = this.metodosApi.obtenerMetodosPago();
-    this.productosApi.obtenerProductos().subscribe(p => {
-      this.productos = p.map(pr => ({
+    this.productosApi.obtenerProductos().subscribe((p) => {
+      this.productos = p.map((pr) => ({
         productoId: pr.productoId,
         nombre: pr.nombre,
         precio: pr.precio,
       }));
     });
 
+    // inicializa form
     this.form = this.fb.group({
       clienteId: [
         { value: this.data.venta?.clienteId ?? '', disabled: this.isEdit },
@@ -81,7 +84,23 @@ export class VentasCreateEditDialogComponent implements OnInit {
       detalles: this.fb.array([], Validators.required),
       total: [{ value: 0, disabled: true }],
     });
-    this.addDetalle();
+
+    if (this.isEdit && this.data.venta) {
+      // carga los detalles desde el backend
+      this.ventasApi.obtenerVentaCompleta(this.data.venta.ventaId).subscribe((vc) => {
+        const fa = this.detalles;
+        fa.clear(); // quita el row vacío
+        vc.detalles.forEach((d) =>
+          this.addDetalle({ productoId: d.productoId, cantidad: d.cantidad }),
+        );
+        this.calcularTotal();
+      });
+    } else {
+      // modo creación, comienzo con una fila vacía
+      this.addDetalle();
+    }
+
+    // recalcular total a cada cambio
     this.detalles.valueChanges.subscribe(() => this.calcularTotal());
   }
 
@@ -89,12 +108,18 @@ export class VentasCreateEditDialogComponent implements OnInit {
     return this.form.get('detalles') as FormArray;
   }
 
-  addDetalle(): void {
+  addDetalle(initial?: { productoId: number; cantidad: number }): void {
     this.detalles.push(
-      this.fb.group<DetalleVentaForm>({
-        productoId: [null as any, Validators.required],
-        cantidad: [1, [Validators.required, Validators.min(1)]],
-      }) as any,
+      this.fb.group({
+        productoId: this.fb.control<number | null>(
+          initial?.productoId ?? null,
+          Validators.required,
+        ),
+        cantidad: this.fb.control<number>(initial?.cantidad ?? 1, [
+          Validators.required,
+          Validators.min(1),
+        ]),
+      }),
     );
   }
 
@@ -106,7 +131,7 @@ export class VentasCreateEditDialogComponent implements OnInit {
   private calcularTotal(): void {
     const total = this.detalles.controls.reduce((sum, grp) => {
       const val = grp.value as DetalleVentaForm;
-      const prod = this.productos.find(p => p.productoId === Number(val.productoId));
+      const prod = this.productos.find((p) => p.productoId === Number(val.productoId));
       const price = prod?.precio ?? 0;
       return sum + price * (val.cantidad ?? 0);
     }, 0);
@@ -117,17 +142,19 @@ export class VentasCreateEditDialogComponent implements OnInit {
     if (this.form.invalid) return;
 
     if (this.isEdit && this.data.venta) {
-      const dto: UpdateVentaDTO = {
+      const dto: UpdateVentaCompletaDTO = {
         metodoPagoId: this.form.value.metodoPagoId,
-        total: this.form.value.total,
+        detalles: this.detalles.value,
       };
-      this.ventasApi.actualizarVenta(this.data.venta.ventaId, dto).subscribe({
+      this.ventasApi.actualizarVentaCompleta(this.data.venta.ventaId, dto).subscribe({
         next: () => {
           this.snackBar.open('Venta actualizada correctamente', '', { duration: 3000 });
           this.dialogRef.close(true);
         },
         error: (err: Error) => {
-          this.snackBar.open(`Error: ${err.message}`, '', { duration: 5000 });
+          this.snackBar.open(`Error al actualizar venta completa: ${err.message}`, '', {
+            duration: 5000,
+          });
         },
       });
     } else {
