@@ -62,6 +62,22 @@ export const routes: Routes = [
           ).then((m) => m.ReporteCuentasPorCobrarComponent),
       },
 
+      // ====== RUTAS DE PRODUCTOS ======
+      {
+        path: 'productos',
+        loadComponent: () =>
+          import('./features/productos/pages/productos.component').then(
+            (m) => m.ProductosComponent,
+          ),
+      },
+      {
+        path: 'categorias',
+        loadComponent: () =>
+          import('./features/categorias/pages/categorias.component').then(
+            (m) => m.CategoriasComponent,
+          ),
+      },
+
       // ====== RUTAS DE PERFIL ======
       {
         path: 'profile',
