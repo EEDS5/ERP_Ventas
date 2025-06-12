@@ -1,0 +1,19 @@
+<mat-card *ngIf="!loading && venta">
+  <mat-card-header>
+    <mat-card-title>Detalle de Venta #{{ venta.ventaId }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p><strong>Fecha:</strong> {{ venta.fechaVenta | date:'short' }}</p>
+    <p><strong>Cliente:</strong> {{ venta.clienteNombre }}</p>
+    <p><strong>Total:</strong> Bs {{ venta.total | number:'1.2-2' }}</p>
+    <p><strong>Método de Pago:</strong> {{ venta.metodoPagoNombre }}</p>
+    <p><strong>Creado por:</strong> {{ venta.creadoPorUsuarioNombre }}</p>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-flat-button color="primary" (click)="cerrar()">Cerrar</button>
+  </mat-card-actions>
+</mat-card>
+
+<div *ngIf="loading" class="spinner-container">
+  <mat-spinner></mat-spinner>
+</div>

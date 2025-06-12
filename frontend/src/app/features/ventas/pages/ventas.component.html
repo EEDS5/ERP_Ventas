@@ -1,35 +1,81 @@
-<section class="ventas-container">
-  <h2>Ventas</h2>
-  <div class="table-container" *ngIf="!loading; else loadingTpl">
-    <table mat-table [dataSource]="ventas" class="mat-elevation-z1">
-      <ng-container matColumnDef="ventaId">
-        <th mat-header-cell *matHeaderCellDef>ID</th>
-        <td mat-cell *matCellDef="let v">{{ v.ventaId }}</td>
+<div class="row mb-3">
+  <mat-form-field class="col-12 col-md-6 form-field-full" appearance="outline">
+    <mat-label>Buscar cliente</mat-label>
+    <input #searchInput matInput (keyup)="filtrarCliente($event)" placeholder="Nombre" />
+    <button
+      *ngIf="dataSource.filter"
+      matSuffix
+      mat-icon-button
+      aria-label="Limpiar búsqueda"
+      (click)="clearFilter()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Listado de Ventas</mat-card-title>
+    <button mat-fab color="primary" class="fab-add" (click)="nuevaVenta()" aria-label="Nueva Venta">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-card-header>
+
+  <mat-card-content class="table-container">
+    <div *ngIf="loading" class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z1">
+      <!-- Fecha -->
+      <ng-container matColumnDef="fechaVenta">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+        <td mat-cell *matCellDef="let v">{{ v.fechaVenta | date: 'shortDate' }}</td>
       </ng-container>
+
+      <!-- Cliente -->
       <ng-container matColumnDef="clienteNombre">
-        <th mat-header-cell *matHeaderCellDef>Cliente</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
         <td mat-cell *matCellDef="let v">{{ v.clienteNombre }}</td>
       </ng-container>
-      <ng-container matColumnDef="fechaVenta">
-        <th mat-header-cell *matHeaderCellDef>Fecha</th>
-        <td mat-cell *matCellDef="let v">{{ v.fechaVenta | date:'short' }}</td>
-      </ng-container>
+
+      <!-- Total -->
       <ng-container matColumnDef="total">
-        <th mat-header-cell *matHeaderCellDef>Total</th>
-        <td mat-cell *matCellDef="let v">{{ v.total | currency:'USD':'symbol' }}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Total (Bs)</th>
+        <td mat-cell *matCellDef="let v">{{ v.total | number: '1.2-2' }}</td>
       </ng-container>
-      <ng-container matColumnDef="metodoPago">
-        <th mat-header-cell *matHeaderCellDef>Método Pago</th>
-        <td mat-cell *matCellDef="let v">{{ v.metodoPagoNombre }}</td>
+
+      <!-- Acciones -->
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let v">
+          <button
+            mat-icon-button
+            color="accent"
+            (click)="verDetalleVenta(v.ventaId)"
+            aria-label="Ver detalle"
+          >
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="editarVenta(v)" aria-label="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="eliminarVenta(v.ventaId)"
+            aria-label="Eliminar"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
       </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-  </div>
-  <ng-template #loadingTpl>
-    <div class="loading-container">
-      <mat-spinner></mat-spinner>
-      <p>Cargando ventas...</p>
-    </div>
-  </ng-template>
-</section>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+  </mat-card-content>
+</mat-card>

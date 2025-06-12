@@ -39,7 +39,7 @@ export function initNgMateroLayoutFactory(
         type: 'sub',
         children: [
           { route: 'clientes', name: 'Clientes', type: 'link' },
-          { route: 'cuentas-por-cobrar', name: 'Cuentas por Cobrar', type: 'link' },
+          /* { route: 'cuentas-por-cobrar', name: 'Cuentas por Cobrar', type: 'link' }, */
           { route: 'pagos', name: 'Pagos', type: 'link' },
         ],
       },

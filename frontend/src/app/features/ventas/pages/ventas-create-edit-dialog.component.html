@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>
+  {{ isEdit ? 'Editar Venta #' + (data.venta?.ventaId ?? '') : 'Nueva Venta' }}
+</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()" mat-dialog-content>
+  <mat-form-field appearance="outline" class="w-100 mb-3">
+    <mat-label>Cliente</mat-label>
+    <mat-select formControlName="clienteId">
+      <mat-option *ngFor="let c of clientes$ | async" [value]="c.clienteId">
+        {{ c.nombre }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100 mb-3">
+    <mat-label>Método de Pago</mat-label>
+    <mat-select formControlName="metodoPagoId">
+      <mat-option *ngFor="let m of metodosPago$ | async" [value]="m.metodoPagoId">
+        {{ m.nombre }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100 mb-3">
+    <mat-label>Total (Bs)</mat-label>
+    <input matInput type="number" formControlName="total" />
+  </mat-form-field>
+</form>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="form.invalid"
+    (click)="submit()"
+  >
+    {{ isEdit ? 'Actualizar' : 'Crear' }}
+  </button>
+</mat-dialog-actions>

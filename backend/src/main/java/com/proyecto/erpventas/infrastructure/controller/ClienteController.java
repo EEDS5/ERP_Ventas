@@ -3,7 +3,11 @@ package com.proyecto.erpventas.infrastructure.controller;
 import com.proyecto.erpventas.application.dto.request.cliente.CreateClienteDTO;
 import com.proyecto.erpventas.application.dto.request.cliente.UpdateClienteDTO;
 import com.proyecto.erpventas.application.dto.response.cliente.ClienteResponseDTO;
-import com.proyecto.erpventas.application.usecases.*;
+import com.proyecto.erpventas.application.usecases.cliente.CreateClienteUseCase;
+import com.proyecto.erpventas.application.usecases.cliente.DeleteClienteUseCase;
+import com.proyecto.erpventas.application.usecases.cliente.GetClienteByIdUseCase;
+import com.proyecto.erpventas.application.usecases.cliente.ListClientesUseCase;
+import com.proyecto.erpventas.application.usecases.cliente.UpdateClienteUseCase;
 import com.proyecto.erpventas.domain.model.people.Cliente;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +16,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clients")
+@RequestMapping("/api/clientes")
 public class ClienteController {
 
     private final CreateClienteUseCase createUC;
