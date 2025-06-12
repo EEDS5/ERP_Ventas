@@ -113,7 +113,7 @@ th { background: #f5f5f5; }
 <li><strong>ReporteVentasUseCase</strong>: produce reportes de ventas por cliente.</li>
 <li><strong>ReporteCuentasPorCobrarUseCase</strong>: muestra el estado de las cuentas pendientes.</li>
 </ul>
-<p>La ejecuci&oacute;n de estos casos de uso se orquesta mediante un servicio de aplicaci&oacute;n, garantizando la integridad de cada operaci&oacute;n y registrando eventos de auditor&iacute;a para futuras consultas.</p>
+<p>La ejecuci&oacute;n de estos casos de uso se gestiona mediante servicios de aplicaci&oacute;n que garantizan la coherencia de cada operaci&oacute;n.</p>
 <p>[Diagrama de Flujo de Casos de Uso]</p>
 <div class="page-break"></div>
 <h2 id="repositorios">5. Repositorios y Persistencia</h2>
@@ -160,7 +160,7 @@ th { background: #f5f5f5; }
 <li>Acceder a <code>http://localhost:4200</code> para la interfaz y a <code>http://localhost:8080/swagger-ui/</code> para la documentación API.</li>
 </ol>
 <p>Las variables de entorno se definen en el archivo <code>docker-compose.yml</code>. Para entornos de producción se recomienda configurar perfiles de Spring Boot y manejar las credenciales mediante almacenes de secretos.</p>
-<p>Para implementaciones en la nube se recomienda usar contenedores orquestados con Kubernetes y configurar pipelines de integraci&oacute;n continua. Los logs se env&iacute;an a herramientas de monitoreo como Grafana y Prometheus para un seguimiento constante.</p>
+<p>Para entornos en la nube puede emplearse un pipeline de integraci&oacute;n continua (ver `azure-pipelines.yml`) que construye las im&aacute;genes Docker y las publica en un registro. Desde all&iacute; se pueden desplegar los contenedores seg&uacute;n la infraestructura disponible.</p>
 <p>[Diagrama de Despliegue]</p>
 <div class="page-break"></div>
 <h2 id="conclusiones">9. Conclusiones</h2>
