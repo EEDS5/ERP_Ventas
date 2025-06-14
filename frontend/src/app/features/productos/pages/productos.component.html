@@ -48,25 +48,50 @@
         <td mat-cell *matCellDef="let p">{{ p.stock }}</td>
       </ng-container>
 
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let p">
+          <span [ngClass]="p.activo ? 'text-success' : 'text-danger'">
+            {{ p.activo ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+      </ng-container>
+
       <!-- Acciones -->
       <ng-container matColumnDef="acciones">
         <th mat-header-cell *matHeaderCellDef>Acciones</th>
         <td mat-cell *matCellDef="let p">
+          <!-- Editar solo si está activo -->
           <button
             mat-icon-button
             color="primary"
             (click)="editarProducto(p)"
             aria-label="Editar"
+            *ngIf="p.activo"
           >
             <mat-icon>edit</mat-icon>
           </button>
+
+          <!-- Eliminar solo si está activo -->
           <button
             mat-icon-button
             color="warn"
             (click)="eliminarProducto(p.productoId)"
             aria-label="Eliminar"
+            *ngIf="p.activo"
           >
             <mat-icon>delete</mat-icon>
+          </button>
+
+          <!-- Restaurar solo si está inactivo -->
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="activarProducto(p.productoId)"
+            aria-label="Restaurar"
+            *ngIf="!p.activo"
+          >
+            <mat-icon>restore</mat-icon>
           </button>
         </td>
       </ng-container>

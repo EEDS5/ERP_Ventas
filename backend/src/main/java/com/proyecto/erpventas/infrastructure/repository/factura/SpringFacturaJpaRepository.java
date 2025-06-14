@@ -10,4 +10,5 @@ public interface SpringFacturaJpaRepository extends JpaRepository<Factura, Long>
     boolean existsByNumeroFactura(String numeroFactura);
     Optional<Factura> findByNumeroFactura(String numeroFactura);
     List<Factura> findAllByActivoTrueOrderByFechaEmisionDesc();
+    boolean existsByVenta_VentaId(Integer ventaId);
 }

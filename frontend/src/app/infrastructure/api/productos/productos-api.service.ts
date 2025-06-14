@@ -23,10 +23,7 @@ export class ProductosApiService {
     return this.http.post<Producto>(this.baseUrl, dto);
   }
 
-  actualizarProducto(
-    id: number,
-    dto: UpdateProductoDTO,
-  ): Observable<Producto> {
+  actualizarProducto(id: number, dto: UpdateProductoDTO): Observable<Producto> {
     return this.http.put<Producto>(`${this.baseUrl}/${id}`, dto);
   }
 
@@ -34,5 +31,12 @@ export class ProductosApiService {
     return this.http.delete<void>(`${this.baseUrl}/${id}`, {
       responseType: 'text' as 'json',
     });
+  }
+
+  /**
+   * Reactiva un producto inactivo (borrado lógico inverso)
+   */
+  activarProducto(id: number): Observable<string> {
+    return this.http.put(`${this.baseUrl}/activate/${id}`, {}, { responseType: 'text' });
   }
 }

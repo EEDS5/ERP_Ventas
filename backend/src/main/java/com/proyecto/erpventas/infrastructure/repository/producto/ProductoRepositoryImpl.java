@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Sort;
 
 @Repository
 public class ProductoRepositoryImpl implements ProductoRepository {
@@ -43,12 +44,15 @@ public class ProductoRepositoryImpl implements ProductoRepository {
 
     @Override
     public Optional<Producto> findById(Integer id) {
-        return jpaRepository.findById(id.longValue()).filter(Producto::getActivo);
+        /* return jpaRepository.findById(id.longValue()).filter(Producto::getActivo); */
+        return jpaRepository.findById(id.longValue());
     }
 
     @Override
     public List<Producto> findAll() {
-        return jpaRepository.findAllByActivoTrueOrderByNombreAsc();
+        /* return jpaRepository.findAllByActivoTrueOrderByNombreAsc(); */
+        return jpaRepository.findAll(
+                Sort.by(Sort.Direction.DESC, "nombre"));
     }
 
     @Override

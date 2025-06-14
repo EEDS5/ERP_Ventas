@@ -34,7 +34,7 @@ export class DetalleVentaDialogComponent implements OnInit {
   ngOnInit() {
     this.api.obtenerVenta(this.data.ventaId).subscribe({
       next: (v: Venta) => {
-        console.log('[VENTA]:', v);
+        /* console.log('[VENTA]:', v); */
         this.venta = v;
         this.loading = false;
       },

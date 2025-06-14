@@ -42,7 +42,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ProductosComponent implements OnInit {
   dataSource = new MatTableDataSource<Producto>();
   loading = false;
-  displayedColumns = ['nombre', 'precio', 'stock', 'acciones'];
+  displayedColumns = ['nombre', 'precio', 'stock', 'estado', 'acciones'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -62,7 +62,7 @@ export class ProductosComponent implements OnInit {
     this.loading = true;
     this.api.obtenerProductos().subscribe({
       next: (data: Producto[]) => {
-        this.dataSource.data = data.filter((p) => p.activo);
+        this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.loading = false;
@@ -112,7 +112,9 @@ export class ProductosComponent implements OnInit {
       },
       error: (err: HttpErrorResponse) => {
         // err.error puede ser un objecto { error: "mensaje" } o una cadena
-        interface ErrorResponse { error: string }
+        interface ErrorResponse {
+          error: string;
+        }
         let msg = 'Ocurrió un error inesperado';
         if (err.error) {
           if (typeof err.error === 'string') {
@@ -124,6 +126,18 @@ export class ProductosComponent implements OnInit {
           msg = err.message; // fallback
         }
         this.snackBar.open(`Error: ${msg}`, '', { duration: 5000 });
+      },
+    });
+  }
+
+  activarProducto(id: number): void {
+    this.api.activarProducto(id).subscribe({
+      next: () => {
+        this.snackBar.open('Producto restaurado correctamente', '', { duration: 3000 });
+        this.cargarProductos();
+      },
+      error: () => {
+        this.snackBar.open('Error al restaurar producto', '', { duration: 5000 });
       },
     });
   }

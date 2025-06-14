@@ -51,4 +51,9 @@ export class VentasApiService {
       responseType: 'text' as 'json',
     });
   }
+
+  activarVenta(id: number): Observable<string> {
+    return this.http.put(`${this.baseUrl}/activate/${id}`, {}, { 
+      responseType: 'text' });
+  }
 }

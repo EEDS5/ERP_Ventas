@@ -1,7 +1,8 @@
 <div class="row mb-3 justify-content-between align-items-center">
+  <!-- Buscar Cliente -->
   <mat-form-field class="col-12 col-md-6 form-field-full" appearance="outline">
     <mat-label>Buscar cliente</mat-label>
-    <input #searchInput matInput (keyup)="filtrarCliente($event)" placeholder="Nombre" />
+    <input #searchInput matInput (keyup)="onSearchTextChange($event)" placeholder="Nombre" />
     <button
       *ngIf="dataSource.filter"
       matSuffix
@@ -12,6 +13,33 @@
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
+
+  <!-- Fecha Desde -->
+  <mat-form-field class="col-6 col-md-2" appearance="outline">
+    <mat-label>Desde</mat-label>
+    <input
+      matInput
+      [matDatepicker]="pickerDesde"
+      [(ngModel)]="fechaDesde"
+      (dateChange)="onDateChange()"
+    />
+    <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+    <mat-datepicker #pickerDesde></mat-datepicker>
+  </mat-form-field>
+
+  <!-- Fecha Hasta -->
+  <mat-form-field class="col-6 col-md-2" appearance="outline">
+    <mat-label>Hasta</mat-label>
+    <input
+      matInput
+      [matDatepicker]="pickerHasta"
+      [(ngModel)]="fechaHasta"
+      (dateChange)="onDateChange()"
+    />
+    <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+    <mat-datepicker #pickerHasta></mat-datepicker>
+  </mat-form-field>
+
   <div class="col-auto">
     <button mat-fab color="primary" (click)="nuevaVenta()" aria-label="Nueva Venta">
       <mat-icon>add</mat-icon>
@@ -60,7 +88,13 @@
           >
             <mat-icon>visibility</mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="editarVenta(v)" aria-label="Editar">
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="editarVenta(v)"
+            aria-label="Editar"
+            *ngIf="!v.facturada"
+          >
             <mat-icon>edit</mat-icon>
           </button>
           <button
@@ -68,9 +102,30 @@
             color="warn"
             (click)="eliminarVenta(v.ventaId)"
             aria-label="Eliminar"
+            *ngIf="v.activo"
           >
             <mat-icon>delete</mat-icon>
           </button>
+
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="activarVenta(v.ventaId)"
+            aria-label="Reactivar"
+            *ngIf="!v.activo"
+          >
+            <mat-icon>restore</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Estado -->
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let v">
+          <span [ngClass]="v.activo ? 'text-success' : 'text-danger'">
+            {{ v.activo ? 'Activa' : 'Anulada' }}
+          </span>
         </td>
       </ng-container>
 

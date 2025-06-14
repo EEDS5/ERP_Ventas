@@ -13,5 +13,6 @@ public record VentaResponseDTO(
   String metodoPagoNombre,
   Integer creadoPorUsuarioId,
   String creadoPorUsuarioNombre,
-  Boolean activo
+  Boolean activo,
+  Boolean facturada
 ) {}

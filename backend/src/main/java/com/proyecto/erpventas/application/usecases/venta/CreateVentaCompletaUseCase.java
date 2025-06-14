@@ -10,14 +10,16 @@ import com.proyecto.erpventas.domain.model.people.Usuario;
 import com.proyecto.erpventas.domain.model.sales.CuentaPorCobrar;
 import com.proyecto.erpventas.domain.model.sales.DetalleVenta;
 import com.proyecto.erpventas.domain.model.sales.Venta;
+import com.proyecto.erpventas.domain.service.VentaRepository;
 import com.proyecto.erpventas.infrastructure.repository.cliente.ClienteRepository;
 import com.proyecto.erpventas.infrastructure.repository.cuenta.CuentaPorCobrarRepository;
 import com.proyecto.erpventas.infrastructure.repository.metodo.MetodoPagoRepository;
 import com.proyecto.erpventas.infrastructure.repository.producto.ProductoRepository;
 import com.proyecto.erpventas.infrastructure.repository.usuario.UserRepository;
 import com.proyecto.erpventas.infrastructure.repository.venta.DetalleVentaRepository;
-import com.proyecto.erpventas.infrastructure.repository.venta.VentaRepository;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -51,6 +53,7 @@ public class CreateVentaCompletaUseCase {
         this.cuentaRepository = cuentaRepository;
     }
 
+    @Transactional
     public VentaCompletaDTO create(CreateVentaCompletaDTO dto) {
         Cliente cliente = clienteRepository.findById(dto.getClienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));

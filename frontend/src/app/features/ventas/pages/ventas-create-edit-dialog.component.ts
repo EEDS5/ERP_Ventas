@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 
+import { Usuario } from 'src/app/core/models/auth/usuario.model';
 import { Venta } from 'src/app/core/models/ventas/venta.model';
 import { VentasApiService } from 'src/app/infrastructure/api/ventas/ventas-api.service';
 import { UpdateVentaCompletaDTO } from 'src/app/core/models/ventas/update-venta-completa-dto.model';
@@ -48,6 +49,7 @@ export class VentasCreateEditDialogComponent implements OnInit {
   metodosPago$!: Observable<MetodoPago[]>;
   productos: ProductoConPrecio[] = [];
   isEdit: boolean;
+  usuarioActual!: Usuario;
 
   constructor(
     private fb: FormBuilder,
@@ -63,7 +65,18 @@ export class VentasCreateEditDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // carga catálogos
+
+    // obtener usuario actual desde localStorage
+    // si no hay usuario, muestra error y cierra el diálogo
+    const userRaw = localStorage.getItem('user');
+    if (!userRaw) {
+      this.snackBar.open('Error: usuario no autenticado', '', { duration: 3000 });
+      this.dialogRef.close();
+      return;
+    }
+    this.usuarioActual = JSON.parse(userRaw);
+
+    // carga datos iniciales
     this.clientes$ = this.clientesApi.obtenerClientes();
     this.metodosPago$ = this.metodosApi.obtenerMetodosPago();
     this.productosApi.obtenerProductos().subscribe((p) => {
@@ -161,7 +174,7 @@ export class VentasCreateEditDialogComponent implements OnInit {
       const dto: CreateVentaCompletaDTO = {
         clienteId: this.form.value.clienteId,
         metodoPagoId: this.form.value.metodoPagoId,
-        creadoPorUsuarioId: 1,
+        creadoPorUsuarioId: this.usuarioActual.usuarioID,
         detalles: this.detalles.value,
       };
       this.ventasApi.crearVentaCompleta(dto).subscribe({

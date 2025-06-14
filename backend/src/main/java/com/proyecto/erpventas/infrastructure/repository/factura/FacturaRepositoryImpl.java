@@ -67,4 +67,9 @@ public class FacturaRepositoryImpl implements FacturaRepository {
     public void deleteById(Integer id) {
         softDeleteById(id);
     }
+
+    @Override
+    public boolean existsByVentaId(Integer ventaId) {
+        return jpaRepository.existsByVenta_VentaId(ventaId);
+    }
 }

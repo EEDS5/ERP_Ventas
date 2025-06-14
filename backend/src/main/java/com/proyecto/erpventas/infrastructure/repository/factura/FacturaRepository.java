@@ -14,4 +14,5 @@ public interface FacturaRepository {
     List<Factura> findAllByActivoTrue();
     void deleteById(Integer id); // borrado lógico
     void softDeleteById(Integer id);
+    boolean existsByVentaId(Integer ventaId);
 }

@@ -17,6 +17,10 @@ import { VentasApiService } from 'src/app/infrastructure/api/ventas/ventas-api.s
 import { DetalleVentaDialogComponent } from './detalle-venta-dialog.component';
 import { VentasCreateEditDialogComponent } from './ventas-create-edit-dialog.component';
 
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-ventas',
   standalone: true,
@@ -33,6 +37,9 @@ import { VentasCreateEditDialogComponent } from './ventas-create-edit-dialog.com
     MatSnackBarModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    FormsModule,
   ],
   templateUrl: './ventas.component.html',
   styleUrls: ['./ventas.component.scss'],
@@ -41,7 +48,13 @@ import { VentasCreateEditDialogComponent } from './ventas-create-edit-dialog.com
 export class VentasComponent implements OnInit {
   dataSource = new MatTableDataSource<Venta>();
   loading = false;
-  displayedColumns = ['fechaVenta', 'clienteNombre', 'total', 'acciones'];
+
+  // NUEVAS VARIABLES PARA FILTRO
+  searchText = '';
+  fechaDesde?: Date;
+  fechaHasta?: Date;
+
+  displayedColumns = ['fechaVenta', 'clienteNombre', 'total', 'estado', 'acciones'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -54,6 +67,15 @@ export class VentasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.dataSource.filterPredicate = (data: Venta, filter: string) => {
+      const { text, from, to } = JSON.parse(filter);
+      const matchesText = data.clienteNombre.toLowerCase().includes(text.toLowerCase());
+      const rowDate = new Date(data.fechaVenta);
+      const afterFrom = !from || rowDate >= new Date(from);
+      const beforeTo = !to || rowDate <= new Date(to);
+      return matchesText && afterFrom && beforeTo;
+    };
+
     this.cargarVentas();
   }
 
@@ -61,9 +83,18 @@ export class VentasComponent implements OnInit {
     this.loading = true;
     this.api.obtenerVentas().subscribe({
       next: (data: Venta[]) => {
-        this.dataSource.data = data.filter((v) => v.activo);
+        // Mostrar todas, sin filtrar por activo
+        this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        // Sort por defecto:
+        this.sort.active = 'fechaVenta';
+        this.sort.direction = 'desc';
+
+        // Emitimos el evento para que la tabla reordene inmediatamente:
+        this.sort.sortChange.emit({ active: 'fechaVenta', direction: 'desc' });
+
         this.loading = false;
       },
       error: () => {
@@ -73,9 +104,23 @@ export class VentasComponent implements OnInit {
     });
   }
 
-  filtrarCliente(event: Event): void {
-    const filtro = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = filtro;
+  onSearchTextChange(event: Event): void {
+    const input = (event.target as HTMLInputElement).value.trim();
+    this.searchText = input;
+    this.applyFilter();
+  }
+
+  onDateChange(): void {
+    this.applyFilter();
+  }
+
+  private applyFilter(): void {
+    const filtro = {
+      text: this.searchText,
+      from: this.fechaDesde?.toISOString() ?? null,
+      to: this.fechaHasta?.toISOString() ?? null,
+    };
+    this.dataSource.filter = JSON.stringify(filtro);
   }
 
   clearFilter(): void {
@@ -117,6 +162,18 @@ export class VentasComponent implements OnInit {
         this.cargarVentas();
       },
       error: (err: Error) => {
+        this.snackBar.open(`Error: ${err.message}`, '', { duration: 5000 });
+      },
+    });
+  }
+
+  activarVenta(id: number): void {
+    this.api.activarVenta(id).subscribe({
+      next: () => {
+        this.snackBar.open('Venta reactivada correctamente', '', { duration: 3000 });
+        this.cargarVentas();
+      },
+      error: (err) => {
         this.snackBar.open(`Error: ${err.message}`, '', { duration: 5000 });
       },
     });

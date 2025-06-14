@@ -3,8 +3,9 @@ package com.proyecto.erpventas.application.usecases.venta;
 import com.proyecto.erpventas.application.dto.response.venta.DetalleVentaDTO;
 import com.proyecto.erpventas.application.dto.response.venta.VentaCompletaDTO;
 import com.proyecto.erpventas.domain.model.sales.DetalleVenta;
+import com.proyecto.erpventas.domain.service.VentaRepository;
 import com.proyecto.erpventas.infrastructure.repository.venta.DetalleVentaRepository;
-import com.proyecto.erpventas.infrastructure.repository.venta.VentaRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
