@@ -14,7 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { CategoriaProducto } from 'src/app/core/models/productos/categoria-producto.model';
 import { CategoriasApiService } from 'src/app/infrastructure/api/categorias/categorias-api.service';
-import { CategoriasCreateEditDialogComponent } from './categorias-create-edit-dialog.component';
+import { CategoriasCreateEditDialogComponent } from './create-edit-dialog/categorias-create-edit-dialog.component';
 
 @Component({
   selector: 'app-categorias',
@@ -40,7 +40,7 @@ import { CategoriasCreateEditDialogComponent } from './categorias-create-edit-di
 export class CategoriasComponent implements OnInit {
   dataSource = new MatTableDataSource<CategoriaProducto>();
   loading = false;
-  displayedColumns = ['nombre', 'acciones'];
+  displayedColumns = ['nombre', 'estado', 'acciones'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -60,7 +60,8 @@ export class CategoriasComponent implements OnInit {
     this.loading = true;
     this.api.obtenerCategorias().subscribe({
       next: (data: CategoriaProducto[]) => {
-        this.dataSource.data = data.filter((c) => c.activo);
+        // Mostrar activos e inactivos
+        this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.loading = false;
@@ -109,6 +110,18 @@ export class CategoriasComponent implements OnInit {
         this.cargarCategorias();
       },
       error: (err: Error) => {
+        this.snackBar.open(`Error: ${err.message}`, '', { duration: 5000 });
+      },
+    });
+  }
+
+  restoreCategoria(id: number): void {
+    this.api.restoreCategoria(id).subscribe({
+      next: () => {
+        this.snackBar.open('Categoría restaurada', '', { duration: 3000 });
+        this.cargarCategorias();
+      },
+      error: (err) => {
         this.snackBar.open(`Error: ${err.message}`, '', { duration: 5000 });
       },
     });

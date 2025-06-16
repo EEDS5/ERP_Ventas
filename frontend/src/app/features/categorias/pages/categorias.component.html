@@ -36,11 +36,23 @@
         <td mat-cell *matCellDef="let c">{{ c.nombre }}</td>
       </ng-container>
 
+      <!-- Estado -->
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+        <td mat-cell *matCellDef="let c">
+          <span [ngClass]="c.activo ? 'text-success' : 'text-danger'">
+            {{ c.activo ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+      </ng-container>
+
       <!-- Acciones -->
       <ng-container matColumnDef="acciones">
         <th mat-header-cell *matHeaderCellDef>Acciones</th>
         <td mat-cell *matCellDef="let c">
+          <!-- Editar sólo si está activo -->
           <button
+            *ngIf="c.activo"
             mat-icon-button
             color="primary"
             (click)="editarCategoria(c)"
@@ -48,13 +60,26 @@
           >
             <mat-icon>edit</mat-icon>
           </button>
+          <!-- Eliminar sólo si está activo -->
           <button
+            *ngIf="c.activo"
             mat-icon-button
             color="warn"
             (click)="eliminarCategoria(c.categoriaId)"
             aria-label="Eliminar"
           >
             <mat-icon>delete</mat-icon>
+          </button>
+
+          <!-- Restaurar si está inactivo -->
+          <button
+            *ngIf="!c.activo"
+            mat-icon-button
+            color="primary"
+            (click)="restoreCategoria(c.categoriaId)"
+            aria-label="Restaurar"
+          >
+            <mat-icon>restore</mat-icon>
           </button>
         </td>
       </ng-container>

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { UsuarioService } from './usuario.service';
-import { UsuarioApiService } from '../../infrastructure/api/usuario-api.service';
+import { UsuarioApiService } from '../../infrastructure/api/usuario/usuario-api.service';
 import { of } from 'rxjs';
 import { Usuario } from '../models/auth/usuario.model';
 

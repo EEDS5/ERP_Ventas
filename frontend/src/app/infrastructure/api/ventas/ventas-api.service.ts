@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Venta } from '../../../core/models/ventas/venta.model';
-import { CreateVentaDTO } from '../../../core/models/ventas/create-venta-dto.model';
-import { UpdateVentaDTO } from '../../../core/models/ventas/update-venta-dto.model';
+/* import { CreateVentaDTO } from '../../../core/models/ventas/create-venta-dto.model'; */
+/* import { UpdateVentaDTO } from '../../../core/models/ventas/update-venta-dto.model'; */
 import { VentaCompleta } from '../../../core/models/ventas/venta-completa.model';
 import { CreateVentaCompletaDTO } from '../../../core/models/ventas/create-venta-completa-dto.model';
 import { UpdateVentaCompletaDTO } from '../../../core/models/ventas/update-venta-completa-dto.model';
@@ -18,8 +18,8 @@ export class VentasApiService {
     return this.http.get<Venta[]>(this.baseUrl);
   }
 
-  obtenerVenta(id: number): Observable<Venta> {
-    return this.http.get<Venta>(`${this.baseUrl}/${id}`);
+  obtenerVenta(id: number): Observable<VentaCompleta> {
+    return this.http.get<VentaCompleta>(`${this.baseUrl}/completa/${id}`);
   }
 
   /** Trae la venta con todos sus detalles */
@@ -27,17 +27,17 @@ export class VentasApiService {
     return this.http.get<VentaCompleta>(`${this.baseUrl}/completa/${id}`);
   }
 
-  crearVenta(dto: CreateVentaDTO): Observable<Venta> {
+  /* crearVenta(dto: CreateVentaDTO): Observable<Venta> {
     return this.http.post<Venta>(this.baseUrl, dto);
-  }
+  } */
 
   crearVentaCompleta(dto: CreateVentaCompletaDTO): Observable<VentaCompleta> {
     return this.http.post<VentaCompleta>(`${this.baseUrl}/completa`, dto);
   }
 
-  actualizarVenta(id: number, dto: UpdateVentaDTO): Observable<Venta> {
+  /* actualizarVenta(id: number, dto: UpdateVentaDTO): Observable<Venta> {
     return this.http.put<Venta>(`${this.baseUrl}/${id}`, dto);
-  }
+  } */
 
   actualizarVentaCompleta(
     id: number,
@@ -53,7 +53,7 @@ export class VentasApiService {
   }
 
   activarVenta(id: number): Observable<string> {
-    return this.http.put(`${this.baseUrl}/activate/${id}`, {}, { 
+    return this.http.put(`${this.baseUrl}/activate/${id}`, {}, {
       responseType: 'text' });
   }
 }

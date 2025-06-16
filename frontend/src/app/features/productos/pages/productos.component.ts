@@ -14,7 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { Producto } from 'src/app/core/models/productos/producto.model';
 import { ProductosApiService } from 'src/app/infrastructure/api/productos/productos-api.service';
-import { ProductosCreateEditDialogComponent } from './productos-create-edit-dialog.component';
+import { ProductosCreateEditDialogComponent } from './create-edit-dialog/productos-create-edit-dialog.component';
 
 import { HttpErrorResponse } from '@angular/common/http';
 

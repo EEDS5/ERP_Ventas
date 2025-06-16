@@ -15,5 +15,6 @@ public record VentaCompletaDTO(
     Integer creadoPorUsuarioId,
     String creadoPorUsuarioNombre,
     Boolean activo,
+    Boolean facturada,
     List<DetalleVentaDTO> detalles
 ) {}

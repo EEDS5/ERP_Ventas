@@ -119,6 +119,7 @@ public class CreateVentaCompletaUseCase {
                 usuario.getUsuarioID(),
                 usuario.getNombreUsuario(),
                 savedVenta.getActivo(),
+                false,
                 detalleDtos
         );
     }

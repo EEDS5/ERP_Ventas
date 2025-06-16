@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
-import { JwtResponseDTO } from '../../../../infrastructure/api/usuario-api.service';
+import { JwtResponseDTO } from '../../../../infrastructure/api/usuario/usuario-api.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

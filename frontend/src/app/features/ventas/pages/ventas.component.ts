@@ -14,8 +14,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { Venta } from 'src/app/core/models/ventas/venta.model';
 import { VentasApiService } from 'src/app/infrastructure/api/ventas/ventas-api.service';
-import { DetalleVentaDialogComponent } from './detalle-venta-dialog.component';
-import { VentasCreateEditDialogComponent } from './ventas-create-edit-dialog.component';
+import { DetalleVentaDialogComponent } from './detalleVenta/detalle-venta-dialog.component';
+import { VentasCreateEditDialogComponent } from './create-edit-dialog/ventas-create-edit-dialog.component';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -111,6 +111,22 @@ export class VentasComponent implements OnInit {
   }
 
   onDateChange(): void {
+    this.applyFilter();
+  }
+
+  /**
+   * Limpia la fecha 'Desde' y reaplica el filtro
+   */
+  clearFechaDesde(): void {
+    this.fechaDesde = undefined;
+    this.applyFilter();
+  }
+
+  /**
+   * Limpia la fecha 'Hasta' y reaplica el filtro
+   */
+  clearFechaHasta(): void {
+    this.fechaHasta = undefined;
     this.applyFilter();
   }
 

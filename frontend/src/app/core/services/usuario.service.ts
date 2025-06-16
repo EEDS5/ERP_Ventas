@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UsuarioApiService } from '../../infrastructure/api/usuario-api.service';
+import { UsuarioApiService } from '../../infrastructure/api/usuario/usuario-api.service';
 import { Observable } from 'rxjs';
 import { Usuario } from '../models/auth/usuario.model';
 import { map } from 'rxjs/operators';

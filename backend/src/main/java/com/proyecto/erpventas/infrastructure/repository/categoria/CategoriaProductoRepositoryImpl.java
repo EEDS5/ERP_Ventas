@@ -44,12 +44,12 @@ public class CategoriaProductoRepositoryImpl implements CategoriaProductoReposit
 
     @Override
     public Optional<CategoriaProducto> findById(Integer id) {
-        return jpaRepository.findById(id.longValue()).filter(CategoriaProducto::getActivo);
+        return jpaRepository.findById(id.longValue());
     }
 
     @Override
     public List<CategoriaProducto> findAll() {
-        return jpaRepository.findAllByActivoTrueOrderByNombreAsc();
+        return jpaRepository.findAll();
     }
 
     @Override

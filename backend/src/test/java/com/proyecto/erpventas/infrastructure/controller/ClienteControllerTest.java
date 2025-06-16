@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.proyecto.erpventas.application.dto.request.cliente.CreateClienteDTO;
 import com.proyecto.erpventas.application.usecases.cliente.*;
 import com.proyecto.erpventas.domain.model.people.Cliente;
+import com.proyecto.erpventas.infrastructure.controller.Cliente.ClienteController;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

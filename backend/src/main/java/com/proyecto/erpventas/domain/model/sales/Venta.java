@@ -12,6 +12,9 @@ import com.proyecto.erpventas.domain.model.people.Usuario;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import java.util.List;
+import java.util.ArrayList;
+
 @Entity
 @Table(name = "Ventas")
 @Getter
@@ -44,4 +47,10 @@ public class Venta {
 
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;
+
+    /**
+     * Detalles asociados a esta venta.
+     */
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleVenta> detalles = new ArrayList<>();
 }

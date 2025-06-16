@@ -24,6 +24,16 @@
       (dateChange)="onDateChange()"
     />
     <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+    <!-- Botón para limpiar fechaDesde -->
+    <button
+      *ngIf="fechaDesde"
+      matSuffix
+      mat-icon-button
+      aria-label="Limpiar fecha desde"
+      (click)="clearFechaDesde()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
     <mat-datepicker #pickerDesde></mat-datepicker>
   </mat-form-field>
 
@@ -37,6 +47,16 @@
       (dateChange)="onDateChange()"
     />
     <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+    <!-- Botón para limpiar fechaHasta -->
+    <button
+      *ngIf="fechaHasta"
+      matSuffix
+      mat-icon-button
+      aria-label="Limpiar fecha hasta"
+      (click)="clearFechaHasta()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
     <mat-datepicker #pickerHasta></mat-datepicker>
   </mat-form-field>
 

@@ -3,7 +3,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { AuthService } from './auth.service';
-import { JwtResponseDTO } from '../../infrastructure/api/usuario-api.service';
+import { JwtResponseDTO } from '../../infrastructure/api/usuario/usuario-api.service';
 
 describe('AuthService', () => {
   let service: AuthService;

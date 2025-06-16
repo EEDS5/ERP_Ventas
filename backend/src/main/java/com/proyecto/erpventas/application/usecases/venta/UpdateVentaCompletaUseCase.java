@@ -1,5 +1,6 @@
 package com.proyecto.erpventas.application.usecases.venta;
 
+import com.proyecto.erpventas.infrastructure.repository.factura.FacturaRepository;
 import com.proyecto.erpventas.application.dto.request.venta.UpdateVentaCompletaDTO;
 import com.proyecto.erpventas.application.dto.response.venta.DetalleVentaDTO;
 import com.proyecto.erpventas.application.dto.response.venta.VentaCompletaDTO;
@@ -30,17 +31,20 @@ public class UpdateVentaCompletaUseCase {
     private final ProductoRepository productoRepository;
     private final MetodoPagoRepository metodoPagoRepository;
     private final CuentaPorCobrarRepository cuentaRepository;
+    private final FacturaRepository facturaRepository;
 
     public UpdateVentaCompletaUseCase(VentaRepository ventaRepository,
                                       DetalleVentaRepository detalleRepository,
                                       ProductoRepository productoRepository,
                                       MetodoPagoRepository metodoPagoRepository,
-                                      CuentaPorCobrarRepository cuentaRepository) {
+                                      CuentaPorCobrarRepository cuentaRepository,
+                                      FacturaRepository facturaRepository) {
         this.ventaRepository = ventaRepository;
         this.detalleRepository = detalleRepository;
         this.productoRepository = productoRepository;
         this.metodoPagoRepository = metodoPagoRepository;
         this.cuentaRepository = cuentaRepository;
+        this.facturaRepository = facturaRepository;
     }
 
     @Transactional
@@ -106,6 +110,7 @@ public class UpdateVentaCompletaUseCase {
                 saved.getCreadoPorUsuario().getUsuarioID(),
                 saved.getCreadoPorUsuario().getNombreUsuario(),
                 saved.getActivo(),
+                facturaRepository.existsByVentaId(saved.getVentaId()),
                 detalleDtos
         );
     }

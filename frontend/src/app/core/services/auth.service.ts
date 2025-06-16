@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UsuarioApiService, JwtResponseDTO } from '../../infrastructure/api/usuario-api.service';
+import { UsuarioApiService, JwtResponseDTO } from '../../infrastructure/api/usuario/usuario-api.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Usuario } from '../models/auth/usuario.model';
 import { isTokenValid } from '../helpers/jwt.helper';

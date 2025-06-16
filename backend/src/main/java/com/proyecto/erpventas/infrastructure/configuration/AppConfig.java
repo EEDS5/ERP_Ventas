@@ -1,8 +1,8 @@
 package com.proyecto.erpventas.infrastructure.configuration;
 
-import com.proyecto.erpventas.application.usecases.LoginUserUseCase;
-import com.proyecto.erpventas.application.usecases.RegisterUserUseCase;
-import com.proyecto.erpventas.application.usecases.VerifyTwoFactorUseCase;
+import com.proyecto.erpventas.application.usecases.auth.LoginUserUseCase;
+import com.proyecto.erpventas.application.usecases.auth.RegisterUserUseCase;
+import com.proyecto.erpventas.application.usecases.auth.VerifyTwoFactorUseCase;
 import com.proyecto.erpventas.infrastructure.repository.usuario.UserRepository;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import org.springframework.context.annotation.Bean;

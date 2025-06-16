@@ -26,4 +26,9 @@ export class CategoriasApiService {
   eliminarCategoria(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`, { responseType: 'text' as 'json' });
   }
+
+  /** Restaura una categoría inactiva */
+  restoreCategoria(id: number): Observable<CategoriaProducto> {
+    return this.http.put<CategoriaProducto>(`${this.baseUrl}/restore/${id}`, {});
+  }
 }

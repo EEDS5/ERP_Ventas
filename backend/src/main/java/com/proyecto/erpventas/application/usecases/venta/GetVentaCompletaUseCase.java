@@ -1,5 +1,6 @@
 package com.proyecto.erpventas.application.usecases.venta;
 
+import com.proyecto.erpventas.infrastructure.repository.factura.FacturaRepository;
 import com.proyecto.erpventas.application.dto.response.venta.DetalleVentaDTO;
 import com.proyecto.erpventas.application.dto.response.venta.VentaCompletaDTO;
 import com.proyecto.erpventas.domain.model.sales.DetalleVenta;
@@ -17,11 +18,14 @@ public class GetVentaCompletaUseCase {
 
     private final VentaRepository ventaRepository;
     private final DetalleVentaRepository detalleRepository;
+    private final FacturaRepository facturaRepository;
 
     public GetVentaCompletaUseCase(VentaRepository ventaRepository,
-                                   DetalleVentaRepository detalleRepository) {
+                                   DetalleVentaRepository detalleRepository,
+                                   FacturaRepository facturaRepository) {
         this.ventaRepository = ventaRepository;
         this.detalleRepository = detalleRepository;
+        this.facturaRepository = facturaRepository;
     }
 
     public Optional<VentaCompletaDTO> getById(Integer id) {
@@ -49,6 +53,7 @@ public class GetVentaCompletaUseCase {
                 v.getCreadoPorUsuario().getUsuarioID(),
                 v.getCreadoPorUsuario().getNombreUsuario(),
                 v.getActivo(),
+                facturaRepository.existsByVentaId(v.getVentaId()),
                 detalles
             );
         });

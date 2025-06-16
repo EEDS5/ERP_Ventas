@@ -17,3 +17,28 @@ table {
   color: #c62828;
   font-weight: 500;
 }
+
+/* 1. Hacemos que el mat-form-field sea relativo, para situar el botón */
+mat-form-field.col-6 {
+  position: relative;
+}
+
+/* 2. Forzamos que el sufijo (toggle + clear) se alinee en el mismo eje */
+mat-form-field.col-6 ::ng-deep .mat-form-field-infix {
+  display: flex !important;
+  align-items: center;
+}
+
+/* 3. Posicionamos el botón de clear por encima, justo a la izquierda del toggle */
+mat-form-field.col-6 button[aria-label^="Limpiar fecha"] {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 2.5rem;  /* Ajusta este valor según el ancho del toggle */
+  z-index: 1;
+}
+
+/* 4. Dejamos el toggle un poco más a la derecha para no solaparse */
+mat-form-field.col-6 ::ng-deep .mat-datepicker-toggle {
+  margin-right: 0.25rem;
+}
