@@ -45,11 +45,13 @@
     <!-- Eliminamos por completo el atributo disabled -->
     <input matInput type="number" formControlName="total" />
   </mat-form-field>
+
+  <div id="paypal-button-container" *ngIf="showPaypal"></div>
 </form>
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="cancelar()">Cancelar</button>
-  <button mat-flat-button class="btn-submit" [disabled]="form.invalid" (click)="submit()">
+  <button mat-flat-button class="btn-submit" [disabled]="form.invalid || showPaypal" (click)="submit()">
     {{ isEdit ? 'Actualizar' : 'Crear' }}
   </button>
 </mat-dialog-actions>

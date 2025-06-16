@@ -5,12 +5,20 @@ import com.proyecto.erpventas.application.dto.request.venta.CreateVentaCompletaD
 import com.proyecto.erpventas.application.dto.request.venta.UpdateVentaCompletaDTO;
 import com.proyecto.erpventas.application.dto.response.venta.VentaCompletaDTO;
 import com.proyecto.erpventas.infrastructure.repository.factura.FacturaRepository;
+import com.proyecto.erpventas.infrastructure.repository.pasarela.PasarelaPagoRepository;
+import com.proyecto.erpventas.infrastructure.repository.transaccion.TransaccionPasarelaRepository;
+import com.proyecto.erpventas.infrastructure.paypal.PayPalClient;
 import com.proyecto.erpventas.application.usecases.venta.*;
 import com.proyecto.erpventas.domain.model.sales.Venta;
+import com.proyecto.erpventas.domain.model.inventory.PasarelaPago;
+import com.proyecto.erpventas.domain.model.sales.TransaccionPasarela;
+import com.proyecto.erpventas.domain.model.people.Usuario;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -24,6 +32,9 @@ public class VentaController {
     private final GetVentaCompletaUseCase getCompletaUC;
     private final FacturaRepository facturaRepository;
     private final ReactivateVentaUseCase reactivateUC;
+    private final PasarelaPagoRepository pasarelaRepository;
+    private final TransaccionPasarelaRepository transaccionRepository;
+    private final PayPalClient payPalClient;
 
     public VentaController(
             CreateVentaCompletaUseCase createCompletaUC,
@@ -32,7 +43,10 @@ public class VentaController {
             DeleteVentaUseCase deleteUC,
             GetVentaCompletaUseCase getCompletaUC,
             FacturaRepository facturaRepository,
-            ReactivateVentaUseCase reactivateUC) {
+            ReactivateVentaUseCase reactivateUC,
+            PasarelaPagoRepository pasarelaRepository,
+            TransaccionPasarelaRepository transaccionRepository,
+            PayPalClient payPalClient) {
         this.createCompletaUC = createCompletaUC;
         this.listUC = listUC;
         this.updateCompletaUC = updateCompletaUC;
@@ -40,6 +54,9 @@ public class VentaController {
         this.getCompletaUC = getCompletaUC;
         this.facturaRepository = facturaRepository;
         this.reactivateUC = reactivateUC;
+        this.pasarelaRepository = pasarelaRepository;
+        this.transaccionRepository = transaccionRepository;
+        this.payPalClient = payPalClient;
     }
 
     @GetMapping
@@ -71,6 +88,47 @@ public class VentaController {
     public ResponseEntity<VentaCompletaDTO> createCompleta(@Valid @RequestBody CreateVentaCompletaDTO dto) {
         VentaCompletaDTO created = createCompletaUC.create(dto);
         return ResponseEntity.ok(created);
+    }
+
+    @PostMapping("/paypal/create-order")
+    public ResponseEntity<String> createOrder(@RequestParam("amount") BigDecimal amount) throws Exception {
+        String token = payPalClient.obtainAccessToken();
+        String orderId = payPalClient.createOrder(token, amount);
+        return ResponseEntity.ok(orderId);
+    }
+
+    @PostMapping("/paypal/capture-order")
+    public ResponseEntity<VentaCompletaDTO> captureOrder(@RequestParam("orderId") String orderId,
+                                                         @Valid @RequestBody CreateVentaCompletaDTO dto) throws Exception {
+        String token = payPalClient.obtainAccessToken();
+        PayPalClient.CaptureResult result = payPalClient.captureOrder(token, orderId);
+        if (!"COMPLETED".equalsIgnoreCase(result.status())) {
+            throw new RuntimeException("Orden no aprobada");
+        }
+        VentaCompletaDTO ventaDto = createCompletaUC.create(dto);
+
+        PasarelaPago pasarela = pasarelaRepository.findByNombre("PayPal")
+                .orElseGet(() -> {
+                    PasarelaPago p = new PasarelaPago();
+                    p.setNombre("PayPal");
+                    return pasarelaRepository.save(p);
+                });
+
+        TransaccionPasarela tx = new TransaccionPasarela();
+        Venta ventaRef = new Venta();
+        ventaRef.setVentaId(ventaDto.getVentaId());
+        tx.setVenta(ventaRef);
+        tx.setPasarela(pasarela);
+        tx.setEstado("Aprobado");
+        tx.setFechaTransaccion(LocalDateTime.now());
+        tx.setMonto(result.amount());
+        tx.setReferenciaTransaccion(result.transactionId());
+        Usuario u = new Usuario();
+        u.setUsuarioID(dto.getCreadoPorUsuarioId());
+        tx.setIniciadaPorUsuario(u);
+        transaccionRepository.save(tx);
+
+        return ResponseEntity.ok(ventaDto);
     }
 
     /*

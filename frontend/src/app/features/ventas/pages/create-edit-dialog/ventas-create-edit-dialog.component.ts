@@ -50,6 +50,45 @@ export class VentasCreateEditDialogComponent implements OnInit {
   productos: ProductoConPrecio[] = [];
   isEdit: boolean;
   usuarioActual!: Usuario;
+  showPaypal = false;
+
+  private initPaypalButtons(): void {
+    const existing = document.getElementById('paypal-script');
+    if (!existing) {
+      const script = document.createElement('script');
+      script.id = 'paypal-script';
+      script.src = 'https://www.paypal.com/sdk/js?client-id=TU_CLIENT_ID_SANDBOX&currency=USD';
+      script.onload = () => this.renderPaypalButtons();
+      document.body.appendChild(script);
+    } else {
+      this.renderPaypalButtons();
+    }
+  }
+
+  private renderPaypalButtons(): void {
+    const paypal = (window as any).paypal;
+    if (!paypal) return;
+    paypal.Buttons({
+      createOrder: () => fetch('/api/ventas/paypal/create-order?amount=' + this.form.get('total')?.value, { method: 'post' })
+        .then(res => res.text()),
+      onApprove: (data: any) => {
+        const dto: CreateVentaCompletaDTO = {
+          clienteId: this.form.value.clienteId,
+          metodoPagoId: this.form.value.metodoPagoId,
+          creadoPorUsuarioId: this.usuarioActual.usuarioID,
+          detalles: this.detalles.value,
+        };
+        fetch('/api/ventas/paypal/capture-order?orderId=' + data.orderID, {
+          method: 'post',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dto),
+        }).then(() => {
+          this.snackBar.open('Venta creada correctamente', '', { duration: 3000 });
+          this.dialogRef.close(true);
+        });
+      }
+    }).render('#paypal-button-container');
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -115,6 +154,12 @@ export class VentasCreateEditDialogComponent implements OnInit {
 
     // recalcular total a cada cambio
     this.detalles.valueChanges.subscribe(() => this.calcularTotal());
+    this.form.get('metodoPagoId')?.valueChanges.subscribe((id) => {
+      this.showPaypal = Number(id) === 2;
+      if (this.showPaypal) {
+        this.initPaypalButtons();
+      }
+    });
   }
 
   get detalles(): FormArray {
@@ -153,6 +198,7 @@ export class VentasCreateEditDialogComponent implements OnInit {
 
   submit(): void {
     if (this.form.invalid) return;
+    if (this.showPaypal) return;
 
     if (this.isEdit && this.data.venta) {
       const dto: UpdateVentaCompletaDTO = {
