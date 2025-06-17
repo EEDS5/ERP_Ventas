@@ -23,12 +23,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -81,7 +81,7 @@ class AuthenticationControllerTest {
         dto.setPassword("password");
 
         when(registerUserUseCase.register(any(RegisterUserDTO.class))).thenReturn(usuario);
-        when(jwtTokenProvider.generateToken("testuser", List.of("ADMINISTRADOR"))).thenReturn("token123");
+        when(jwtTokenProvider.generateToken(eq("testuser"), any())).thenReturn("token123");
 
         mockMvc.perform(post("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -96,7 +96,7 @@ class AuthenticationControllerTest {
                 .andExpect(jsonPath("$.user.activo").value(true));
 
         verify(registerUserUseCase, times(1)).register(any());
-        verify(jwtTokenProvider, times(1)).generateToken("testuser");
+        verify(jwtTokenProvider, times(1)).generateToken(eq("testuser"), any());
     }
 
     @Test
@@ -107,7 +107,7 @@ class AuthenticationControllerTest {
 
         usuario.setTwoFAEnabled(false);
         when(loginUserUseCase.login(any(LoginUserDTO.class))).thenReturn(usuario);
-        when(jwtTokenProvider.generateToken("testuser")).thenReturn("token456");
+        when(jwtTokenProvider.generateToken(eq("testuser"), any())).thenReturn("token456");
 
         mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -117,7 +117,7 @@ class AuthenticationControllerTest {
                 .andExpect(jsonPath("$.user.usuarioID").value(1));
 
         verify(loginUserUseCase, times(1)).login(any());
-        verify(jwtTokenProvider, times(1)).generateToken("testuser");
+        verify(jwtTokenProvider, times(1)).generateToken(eq("testuser"), any());
     }
 
     @Test
@@ -148,7 +148,7 @@ class AuthenticationControllerTest {
 
         when(verifyTwoFactorUseCase.verify2FA(any(TwoFactorVerificationDTO.class))).thenReturn(true);
         when(userRepository.findByNombreUsuario("testuser")).thenReturn(Optional.of(usuario));
-        when(jwtTokenProvider.generateToken("testuser")).thenReturn("token789");
+        when(jwtTokenProvider.generateToken(eq("testuser"), any())).thenReturn("token789");
 
         mockMvc.perform(post("/api/auth/login-2fa")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -158,7 +158,7 @@ class AuthenticationControllerTest {
                 .andExpect(jsonPath("$.user.usuarioID").value(1));
 
         verify(verifyTwoFactorUseCase, times(1)).verify2FA(any());
-        verify(jwtTokenProvider, times(1)).generateToken("testuser");
+        verify(jwtTokenProvider, times(1)).generateToken(eq("testuser"), any());
     }
 
     @Test
