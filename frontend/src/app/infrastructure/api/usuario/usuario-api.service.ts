@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Usuario } from '../../../core/models/auth/usuario.model';
 import { TwoFactorSetupResponseDTO } from '../../../core/models/auth/twofactor-setup-response.dto';
@@ -62,6 +62,17 @@ export class UsuarioApiService {
     return this.http.post<TwoFactorSetupResponseDTO>(
       `${this.apiUrl}/2fa-secret?username=${username}`,
       {},
+    );
+  }
+
+  /**
+   * Actualiza el estado de 2FA (habilitar o deshabilitar).
+   */
+  update2FAStatus(nombreUsuario: string, enabled: boolean): Observable<string> {
+    return this.http.post(
+      `${this.apiUrl}/update-2fa?nombreUsuario=${nombreUsuario}&enabled=${enabled}`,
+      null,
+      { responseType: 'text' },
     );
   }
 

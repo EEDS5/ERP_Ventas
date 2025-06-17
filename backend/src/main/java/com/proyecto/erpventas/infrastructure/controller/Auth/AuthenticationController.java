@@ -152,4 +152,22 @@ public class AuthenticationController {
                 userRepository.save(user);
                 return ResponseEntity.ok("2FA actualizado correctamente!");
         }
+
+        /**
+         * Habilita o deshabilita la verificación en dos pasos.
+         */
+        @PostMapping("/update-2fa")
+        public ResponseEntity<String> updateTwoFactor(
+                        @RequestParam String nombreUsuario,
+                        @RequestParam boolean enabled) {
+                Usuario user = userRepository.findByNombreUsuario(nombreUsuario)
+                                .orElseThrow(() -> new RuntimeException("Usuario no existe"));
+                user.setTwoFAEnabled(enabled);
+                // Si deshabilitas, opcionalmente limpia el secret:
+                if (!enabled) {
+                        user.setSecret2FA(null);
+                }
+                userRepository.save(user);
+                return ResponseEntity.ok("2FA estado actualizado");
+        }
 }

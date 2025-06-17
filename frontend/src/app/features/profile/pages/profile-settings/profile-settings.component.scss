@@ -110,3 +110,67 @@
   align-items: center;
   height: 200px;
 }
+
+/* Bloque centrado para el QR */
+.qr-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Imagen del código QR */
+.qr-image {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 8px;
+  padding: 8px;
+  background-color: var(--mat-sys-surface-container);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Texto del secret */
+.qr-secret {
+  margin-top: 1rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  background-color: var(--mat-sys-surface-container-lowest);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px dashed var(--mat-sys-outline);
+  user-select: text;
+  color: var(--mat-sys-on-surface);
+  word-break: break-all;
+  text-align: center;
+}
+
+/* Etiqueta durante la carga */
+.qr-loading-label {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* Contenedor centrado y alineado en columna para QR + código */
+.qr-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.qr-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-secret-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
