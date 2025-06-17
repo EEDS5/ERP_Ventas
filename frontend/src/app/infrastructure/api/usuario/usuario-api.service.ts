@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Usuario } from '../../../core/models/auth/usuario.model';
 import { TwoFactorSetupResponseDTO } from '../../../core/models/auth/twofactor-setup-response.dto';
+import { UpdateUserDTO } from '../../../core/models/auth/update-user-dto.model';
+import { UpdateUserPasswordDTO } from '../../../core/models/auth/update-user-password-dto.model';
 
 export interface RegisterUserDTO {
   nombreUsuario: string;
@@ -66,5 +68,21 @@ export class UsuarioApiService {
   obtenerUsuarios(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>('/api/usuarios');
     // Endpoint que debe existir en tu backend.
+  }
+
+  updateUsuario(id: number, dto: UpdateUserDTO): Observable<Usuario> {
+    return this.http.put<Usuario>(`/api/users/${id}`, dto);
+  }
+
+  cambiarPassword(id: number, dto: UpdateUserPasswordDTO): Observable<void> {
+    return this.http.put<void>(`/api/users/${id}/password`, dto);
+  }
+
+  eliminarUsuario(id: number): Observable<string> {
+    return this.http.delete(`/api/users/${id}`, { responseType: 'text' });
+  }
+
+  restaurarUsuario(id: number): Observable<Usuario> {
+    return this.http.put<Usuario>(`/api/users/activate/${id}`, {});
   }
 }

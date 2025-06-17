@@ -1,0 +1,31 @@
+@use '@angular/material' as mat;
+
+:host {
+  display: block;
+  padding: var(--gutter);
+}
+
+table {
+  width: auto;
+  min-width: 100%;
+}
+
+.table-container {
+  position: relative;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.text-success {
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.text-danger {
+  color: #c62828;
+  font-weight: 500;
+}

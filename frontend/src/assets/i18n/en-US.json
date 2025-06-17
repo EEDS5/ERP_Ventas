@@ -190,6 +190,25 @@
   "have_an_account": "Already have an account",
   "restore_defaults": "Restore defaults",
 
+  "usuarios": {
+    "titulo": "Users",
+    "nombre_usuario": "Username",
+    "email": "Email",
+    "contrasena": "Password",
+    "twofa_habilitado": "2FA Enabled",
+    "fecha_registro": "Registration Date",
+    "estado": "Status",
+    "acciones": "Actions",
+    "buscar": "Search user",
+    "nuevo": "New User",
+    "editar": "Edit User",
+    "cambiar_password": "Change password",
+    "eliminar": "Delete",
+    "restaurar": "Restore",
+    "activo": "Active",
+    "inactivo": "Inactive"
+  },
+
   "language": {
     "english": "English",
     "spanish": "Español",
