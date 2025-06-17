@@ -206,6 +206,7 @@
     "titulo": "Users",
     "nombre_usuario": "Username",
     "email": "Email",
+    "roles": "Roles",
     "contrasena": "Password",
     "twofa_habilitado": "2FA Enabled",
     "fecha_registro": "Registration Date",
