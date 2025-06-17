@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Seguridad</title>
+  <style>
+    body {font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4;}
+    nav {background:#003366; padding:10px;}
+    nav a {color:white; margin-right:15px; text-decoration:none;}
+    .container {max-width:900px; margin:20px auto; padding:20px; background:white;}
+    h1, h2 {color:#003366;}
+    pre {background:#eee; padding:10px; overflow:auto;}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Introducción</a>
+    <a href="estructura.html">Estructura</a>
+    <a href="despliegue.html">Despliegue</a>
+    <a href="seguridad.html">Seguridad</a>
+    <a href="api.html">API</a>
+    <a href="base_datos.html">Base de datos</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+  <div class="container">
+    <h1>Seguridad</h1>
+    <p>La autenticación se basa en tokens JWT emitidos por el backend después del inicio de sesión. Se implementa además la verificación en dos pasos (2FA) usando TOTP compatible con Google Authenticator.</p>
+    <h2>Flujo general</h2>
+    <ol>
+      <li>El usuario se registra con nombre de usuario, correo y contraseña.</li>
+      <li>Si el usuario habilita 2FA, recibe un código QR con la clave secreta.</li>
+      <li>En cada inicio de sesión se valida la contraseña y, si corresponde, el código 2FA.</li>
+      <li>Al autenticarse correctamente se genera un JWT que incluye los roles del usuario.</li>
+    </ol>
+    <h2>Roles</h2>
+    <p>Los roles determinan el acceso a los distintos endpoints protegidos. El token JWT porta esta información para su validación.</p>
+    <h2>Endpoints relevantes</h2>
+    <pre><code>POST /api/auth/register      # Crear usuario
+POST /api/auth/login         # Iniciar sesión (puede requerir 2FA)
+POST /api/auth/login-2fa     # Validar código 2FA y obtener JWT
+POST /api/auth/2fa-secret    # Generar secreto y QR para 2FA
+POST /api/auth/verify-2fa    # Verificar código 2FA
+</code></pre>
+  </div>
+</body>
+</html>

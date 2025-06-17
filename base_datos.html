@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Base de Datos</title>
+  <style>
+    body {font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4;}
+    nav {background:#003366; padding:10px;}
+    nav a {color:white; margin-right:15px; text-decoration:none;}
+    .container {max-width:900px; margin:20px auto; padding:20px; background:white;}
+    h1, h2 {color:#003366;}
+    pre {background:#eee; padding:10px; overflow:auto;}
+    table {border-collapse: collapse; width:100%; margin-bottom:20px;}
+    th, td {border:1px solid #ccc; padding:8px; text-align:left;}
+    th {background:#e0e0e0;}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Introducción</a>
+    <a href="estructura.html">Estructura</a>
+    <a href="despliegue.html">Despliegue</a>
+    <a href="seguridad.html">Seguridad</a>
+    <a href="api.html">API</a>
+    <a href="base_datos.html">Base de datos</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+  <div class="container">
+    <h1>Modelo de Datos</h1>
+    <p>El sistema utiliza PostgreSQL y las tablas principales se muestran a continuación.</p>
+    <table>
+      <tr><th>Tabla</th><th>Descripción básica</th></tr>
+      <tr><td>Usuarios</td><td>Credenciales y datos para autenticación con 2FA.</td></tr>
+      <tr><td>Roles</td><td>Listado de roles asignables a usuarios.</td></tr>
+      <tr><td>Clientes</td><td>Información de clientes registrados.</td></tr>
+      <tr><td>Productos</td><td>Catálogo de productos disponibles.</td></tr>
+      <tr><td>Ventas</td><td>Registro de ventas realizadas.</td></tr>
+      <tr><td>DetalleVentas</td><td>Productos por venta con precios y cantidades.</td></tr>
+      <tr><td>Facturas</td><td>Facturación electrónica asociada a cada venta.</td></tr>
+      <tr><td>CuentasPorCobrar</td><td>Gestión de pagos pendientes.</td></tr>
+      <tr><td>Pagos</td><td>Pagos aplicados a cuentas por cobrar.</td></tr>
+      <tr><td>PasarelasPago</td><td>Configuración de pasarelas como PayPal.</td></tr>
+      <tr><td>TransaccionesPasarela</td><td>Historial de pagos procesados.</td></tr>
+    </table>
+    <p>Las relaciones clave son:</p>
+    <ul>
+      <li><strong>Ventas</strong> referencia a <strong>Clientes</strong> y <strong>MetodosPago</strong>.</li>
+      <li><strong>DetalleVentas</strong> referencia a <strong>Ventas</strong> y <strong>Productos</strong>.</li>
+      <li><strong>Facturas</strong> y <strong>CuentasPorCobrar</strong> se relacionan uno a uno con <strong>Ventas</strong>.</li>
+      <li><strong>Pagos</strong> se vincula a <strong>CuentasPorCobrar</strong>.</li>
+      <li><strong>TransaccionesPasarela</strong> enlaza <strong>Ventas</strong> con <strong>PasarelasPago</strong>.</li>
+    </ul>
+  </div>
+</body>
+</html>

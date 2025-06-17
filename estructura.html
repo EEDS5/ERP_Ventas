@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Estructura del Proyecto</title>
+  <style>
+    body {font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4;}
+    nav {background:#003366; padding:10px;}
+    nav a {color:white; margin-right:15px; text-decoration:none;}
+    .container {max-width:900px; margin:20px auto; padding:20px; background:white;}
+    h1, h2 {color:#003366;}
+    pre {background:#eee; padding:10px; overflow:auto;}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Introducción</a>
+    <a href="estructura.html">Estructura</a>
+    <a href="despliegue.html">Despliegue</a>
+    <a href="seguridad.html">Seguridad</a>
+    <a href="api.html">API</a>
+    <a href="base_datos.html">Base de datos</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+  <div class="container">
+    <h1>Estructura del Proyecto</h1>
+    <p>El repositorio se organiza siguiendo la arquitectura hexagonal. A grandes rasgos, las carpetas principales son:</p>
+    <pre><code>erp-ventas/
+├── backend/                  # Backend Java con Spring Boot
+│   ├── application/          # Casos de uso (lógica de aplicación)
+│   ├── domain/               # Entidades y puertos
+│   ├── infrastructure/       # Adaptadores REST, Repos, Seguridad
+│   ├── resources/            # yml, reportes Jasper, etc.
+│   ├── Dockerfile
+│   └── pom.xml
+│
+├── frontend/                 # Frontend Angular
+│   ├── app/                  # Features, componentes, core, shared
+│   ├── assets/               # Recursos gráficos y estáticos
+│   ├── environments/         # Configuración por entorno
+│   ├── Dockerfile
+│   ├── angular.json
+│   └── package.json
+│
+├── db/                       # SQL de migración, configuración Flyway
+│   ├── sql/
+│   └── flyway.conf
+│
+├── docker-compose.yml        # Orquestación de todos los servicios
+└── README.md                 # Documentación general
+</code></pre>
+    <p>El backend implementa puertos y adaptadores para mantener la lógica de dominio aislada. El frontend sigue un enfoque modular por características.</p>
+  </div>
+</body>
+</html>

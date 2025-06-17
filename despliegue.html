@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Despliegue</title>
+  <style>
+    body {font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4;}
+    nav {background:#003366; padding:10px;}
+    nav a {color:white; margin-right:15px; text-decoration:none;}
+    .container {max-width:900px; margin:20px auto; padding:20px; background:white;}
+    h1, h2 {color:#003366;}
+    pre {background:#eee; padding:10px; overflow:auto;}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Introducción</a>
+    <a href="estructura.html">Estructura</a>
+    <a href="despliegue.html">Despliegue</a>
+    <a href="seguridad.html">Seguridad</a>
+    <a href="api.html">API</a>
+    <a href="base_datos.html">Base de datos</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+  <div class="container">
+    <h1>Despliegue local</h1>
+    <p>Para ejecutar todos los servicios de forma local se utiliza Docker Compose. Requisitos previos:</p>
+    <ul>
+      <li>Docker &gt;= 20.10 y Docker Compose &gt;= 2.20</li>
+      <li>Git para clonar el repositorio</li>
+      <li>Node.js 20 y Angular CLI si se ejecuta el frontend sin Docker</li>
+      <li>JDK 17 y Maven 3.9 si se ejecuta el backend manualmente</li>
+    </ul>
+    <h2>Uso de Docker Compose</h2>
+    <pre><code>docker compose up --build</code></pre>
+    <p>Este comando compila las imágenes y levanta PostgreSQL, el backend y el frontend. Los contenedores pueden ejecutarse en segundo plano usando <code>-d</code>.</p>
+    <h2>Ejecución manual</h2>
+    <p>Si prefieres correr cada módulo sin Docker:</p>
+    <pre><code>./mvnw spring-boot:run     # Backend
+npm install
+npm run start            # Frontend
+</code></pre>
+    <h2>Acceso al sistema</h2>
+    <ul>
+      <li>Frontend: <a href="http://localhost:4200">http://localhost:4200</a></li>
+      <li>API backend: <a href="http://localhost:8080/api">http://localhost:8080/api</a></li>
+      <li>Swagger UI: <a href="http://localhost:8080/swagger-ui/">http://localhost:8080/swagger-ui/</a></li>
+      <li>Base de datos: <code>localhost:5432</code> (usuario <code>erp_user</code> / contraseña <code>erp_pass</code>)</li>
+    </ul>
+    <h2>Despliegue en producción</h2>
+    <p>Se recomienda el archivo <code>docker-compose.prod.yml</code> para producción:</p>
+    <pre><code>docker compose -f docker-compose.prod.yml up -d</code></pre>
+  </div>
+</body>
+</html>

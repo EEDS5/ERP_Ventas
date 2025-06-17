@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>ERP Ventas - Documentación</title>
+  <style>
+    body {font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4;}
+    nav {background:#003366; padding:10px;}
+    nav a {color:white; margin-right:15px; text-decoration:none;}
+    .container {max-width:900px; margin:20px auto; padding:20px; background:white;}
+    h1, h2 {color:#003366;}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Introducción</a>
+    <a href="estructura.html">Estructura</a>
+    <a href="despliegue.html">Despliegue</a>
+    <a href="seguridad.html">Seguridad</a>
+    <a href="api.html">API</a>
+    <a href="base_datos.html">Base de datos</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+  <div class="container">
+    <h1>Introducción</h1>
+    <p>ERP Ventas es un sistema de gestión de ventas y facturación electrónica. Facilita la administración de clientes, ventas, cuentas por cobrar y reportes empresariales.</p>
+    <p>El proyecto sigue una arquitectura robusta basada en principios Clean Architecture y SOLID, dividida en backend y frontend que se comunican mediante API REST.</p>
+    <h2>Características principales</h2>
+    <ul>
+      <li>Backend: Spring Boot 3.4.4, PostgreSQL, JasperReports, JWT y 2FA.</li>
+      <li>Frontend: Angular 19 con Angular Material.</li>
+      <li>Arquitectura hexagonal en ambos módulos.</li>
+      <li>Contenerización completa con Docker y Docker Compose.</li>
+      <li>Documentación de API generada con Swagger/OpenAPI.</li>
+    </ul>
+  </div>
+</body>
+</html>
