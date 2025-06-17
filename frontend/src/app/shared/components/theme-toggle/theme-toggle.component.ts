@@ -1,4 +1,4 @@
-import { Component, effect, signal } from '@angular/core';
+/* import { Component, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '@core/services/theme.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,3 +29,4 @@ export class ThemeToggleComponent {
     this.isDark.set(this.theme.isDarkMode);
   }
 }
+ */
