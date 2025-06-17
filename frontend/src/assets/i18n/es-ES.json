@@ -194,6 +194,7 @@
     "titulo": "Usuarios",
     "nombre_usuario": "Nombre de usuario",
     "email": "Correo",
+    "roles": "Roles",
     "contrasena": "Contraseña",
     "twofa_habilitado": "2FA habilitado",
     "fecha_registro": "Fecha de registro",

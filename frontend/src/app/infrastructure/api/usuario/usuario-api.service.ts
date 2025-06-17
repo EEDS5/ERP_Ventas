@@ -71,6 +71,10 @@ export class UsuarioApiService {
     // Endpoint que debe existir en tu backend.
   }
 
+  obtenerRolesDeUsuario(id: number): Observable<string[]> {
+    return this.http.get<string[]>(`${this.usersUrl}/${id}/roles`);
+  }
+
   updateUsuario(id: number, dto: UpdateUserDTO): Observable<Usuario> {
     return this.http.put<Usuario>(`/api/users/${id}`, dto);
   }
