@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Manual de Despliegue y Restauración</title>
+<style>
+body {font-family: Arial, sans-serif; margin: 20px; line-height: 1.6;}
+h1 {color: #2c3e50;}
+h2 {color: #34495e;}
+pre {background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto;}
+</style>
+</head>
+<body>
+<h1>Manual de Despliegue y Restauración</h1>
+<p>Este manual describe los pasos recomendados para desplegar y restaurar el sistema ERP Ventas. Está dirigido a desarrolladores y personal técnico que debe administrar el entorno de producción basado en contenedores Docker dentro de una máquina virtual Linux (Azure) con CI/CD en GitHub Actions. Se asume que la máquina virtual cuenta con Docker, Docker Compose y PostgreSQL instalados y configurados correctamente.</p>
+<h2>Preparación del entorno</h2>
+<p>Previo al despliegue, verifique los siguientes requisitos:</p>
+<ul>
+<li>Acceso SSH con privilegios de sudo a la máquina virtual.</li>
+<li>Docker 24+ y Docker Compose 2+ instalados.</li>
+<li>Git instalado y claves de acceso al repositorio.</li>
+<li>Variables de entorno configuradas para la base de datos, credenciales y puertos.</li>
+</ul>
+<p>Clone el repositorio en la ruta deseada y sitúese en el directorio raíz:</p>
+<pre>git clone &lt;url del repositorio&gt;
+cd ERP_Ventas</pre>
+<h2>Pasos de despliegue manual</h2>
+<p>1. Cree un archivo <code>.env</code> (o modifique <code>docker-compose.yml</code>) con las variables necesarias: <code>POSTGRES_USER</code>, <code>POSTGRES_PASSWORD</code>, <code>POSTGRES_DB</code>, <code>SPRING_PROFILES_ACTIVE</code>, entre otras.<br>
+2. Construya las imágenes (opcional, si no están en un registro) y levante los contenedores:</p>
+<pre>docker compose build
+SUPUSE: docker compose up -d</pre>
+<p>3. Asegure los puertos: por defecto se exponen <code>8080</code> para el backend y <code>4200</code> para el frontend. Adapte los valores en caso de haber cambios.</p>
+<h2>Despliegue automatizado</h2>
+<p>El proyecto cuenta con un pipeline en GitHub Actions que puede ejecutarse manualmente o por evento <em>push</em>. La ejecución típica es:</p>
+<pre>git push origin main
+# GitHub Actions generará las imágenes y realizará el despliegue a la máquina destino
+</pre>
+<p>Se requiere que la máquina de destino tenga configurado un runner o se utilicen credenciales de despliegue (por ejemplo con <code>docker login</code> y acceso al servidor remoto).</p>
+<h2>Procedimiento de backup de la base de datos</h2>
+<p>Para generar respaldos consistentes se utiliza <code>pg_dump</code>.. Ejemplo de extracción supuesta:</p>
+<pre>docker exec -t nombre_bd pg_dump -U $POSTGRES_USER -F c -b -v -f /backups/erp_$(date +%Y%m%d).dump $POSTGRES_DB</pre>
+<p>El archivo resultante se almacena en el directorio <code>/backups</code> del contenedor o en una ruta montada del host. Se recomienda programar esta tarea mediante <code>cron</code> o scripts personalizados.</p>
+<h2>Restauración del sistema</h2>
+<p>En caso de fallo, proceda de la siguiente forma:</p>
+<ol>
+<li>Detenga los contenedores afectados:</li>
+</ol>
+<pre>docker compose down</pre>
+<ol start="2">
+<li>Restaure la base de datos desde el dump más reciente:</li>
+</ol>
+<pre>docker compose up -d db
+# Supuesto de ruta local del backup
+docker exec -i nombre_bd pg_restore -U $POSTGRES_USER -d $POSTGRES_DB -v /backups/erp_fecha.dump</pre>
+<ol start="3">
+<li>Recree los contenedores de la aplicación y verifique los logs:</li>
+</ol>
+<pre>docker compose up -d
+SUPUSE: docker compose logs -f</pre>
+<h2>Notas y errores comunes</h2>
+<ul>
+<li>Si los contenedores no pueden iniciarse por puertos ocupados, verifique procesos previos o ajuste las variables en <code>docker-compose.yml</code>.</li>
+<li>Los cambios de versión en Spring Boot o Angular pueden requerir reconstrucción completa (<code>docker compose build --no-cache</code>).</li>
+<li>Compruebe que las credenciales de la base de datos coincidan con las almacenadas en el contenedor.</li>
+<li>Luego de la restauración ejecute breves pruebas funcionales (inicio de sesión, generación de facturas de prueba) para validar la integridad.</li>
+</ul>
+<h2>Flujo de despliegue y restauración (ejemplo)</h2>
+<pre># Clonar repositorio y preparar archivos
+git clone &lt;url&gt;
+cd ERP_Ventas
+
+# Construir y levantar
+docker compose build
+docker compose up -d
+
+# Crear backup
+docker exec -t nombre_bd pg_dump -U user -F c -f /backups/erp.dump bd
+
+# Restaurar en caso de fallo
+docker compose down
+
+docker compose up -d db
+cat /backups/erp.dump | docker exec -i nombre_bd pg_restore -U user -d bd -v
+
+docker compose up -d
+docker compose logs -f
+</pre>
+</body>
+</html>
