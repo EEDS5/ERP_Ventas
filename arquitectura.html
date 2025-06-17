@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Arquitectura General</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:20px;line-height:1.4;}
+h1{color:#2c3e50;}
+h2{color:#34495e;margin-top:1.2em;}
+ul{margin-left:20px;}
+pre{background:#f4f4f4;padding:10px;border:1px solid #ccc;}
+</style>
+</head>
+<body>
+<h1>Arquitectura General del Sistema</h1>
+
+<h2>¿Qué es la Arquitectura Hexagonal?</h2>
+<p>La arquitectura hexagonal o modelo de puertos y adaptadores separa el nucleo de la aplicacion de los mecanismos externos. La logica de negocio queda libre de frameworks o bases de datos. Los puertos definen contratos y los adaptadores permiten intercambiar tecnologias sin modificar el dominio.</p>
+
+<h2>Aplicaci&oacute;n en este proyecto</h2>
+<p>El sistema utiliza Spring Boot 3.4.4 en el backend y Angular 19 en el frontend. La organizaci&oacute;n del c&oacute;digo sigue de forma estricta una estructura por capas:</p>
+<ul>
+<li><strong>Domain:</strong> alberga las entidades y los puertos que definen las operaciones esenciales. Aqu&iacute; reside la l&oacute;gica de negocio pura.</li>
+<li><strong>Application:</strong> implementa los casos de uso, orquesta servicios y expone DTOs. Depende de los puertos definidos en el dominio.</li>
+<li><strong>Infrastructure:</strong> contiene adaptadores REST, repositorios JPA, seguridad y configuraciones de Spring. Esta capa traduce las llamadas externas a los puertos del dominio.</li>
+</ul>
+<p>En el frontend se mantiene el mismo principio pero invertido: los componentes se agrupan por funcionalidad y los servicios se inyectan mediante dependencias. Todo el proyecto se despliega en contenedores Docker y usa PostgreSQL como base de datos.</p>
+
+<h2>Flujo de una solicitud</h2>
+<pre>
+Usuario
+  ↓
+Angular 19 (HTTP)
+  ↓
+Controlador REST (Infrastructure)
+  ↓
+Caso de uso (Application)
+  ↓
+Repositorio (puerto Domain)
+  ↓
+PostgreSQL
+  ↑
+Respuesta DTO
+  ↑
+Controlador REST
+  ↑
+Angular
+  ↑
+Usuario
+</pre>
+
+<h2>Ventajas de este enfoque</h2>
+<ul>
+<li><strong>Mantenibilidad:</strong> al aislar la l&oacute;gica de negocio se facilita el cambio de frameworks sin reescribir el dominio.</li>
+<li><strong>Testabilidad:</strong> los puertos permiten crear adaptadores simulados para pruebas unitarias.</li>
+<li><strong>Escalabilidad:</strong> al tener capas bien definidas es posible extender funcionalidades sin comprometer la estructura.</li>
+<li><strong>Alineaci&oacute;n con principios SOLID y Clean Code:</strong> cada m&oacute;dulo cumple una responsabilidad clara y reduce el acoplamiento.</li>
+<li><strong>Comparacion con enfoques tradicionales:</strong> frente a modelos monoliticos, la hexagonal permite reemplazar tecnologias sin tocar el dominio.</li>
+</ul>
+
+</body>
+</html>
