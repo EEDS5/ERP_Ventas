@@ -1,0 +1,57 @@
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Guía para Desarrolladores</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:2em;line-height:1.6;color:#333;}
+h1,h2{color:#0b5c9a;}
+pre,code{background:#f4f4f4;padding:0.5em;border-radius:4px;}
+</style>
+</head>
+<body>
+<h1>Guía para Desarrolladores</h1>
+
+<h2>1. Introducción al Proyecto</h2>
+<p>Este ERP gestiona clientes, ventas y facturación. Fue desarrollado con Spring Boot 3.4 y Angular 19 bajo arquitectura hexagonal. Todo se ejecuta en Docker y la seguridad se maneja con JWT y 2FA. Busca ofrecer una base extensible y mantenible para futuras mejoras.</p>
+
+<h2>2. Estructura del Repositorio</h2>
+<p>El repositorio se organiza de la siguiente forma:</p>
+<ul>
+<li><strong>backend/</strong>: servicio REST hecho en Spring Boot. Contiene la carpeta <em>src</em> con divisiones por dominio, aplicación e infraestructura.</li>
+<li><strong>frontend/</strong>: aplicación Angular 19 con módulos por funcionalidad y componentes compartidos.</li>
+<li><strong>db/</strong>: scripts de inicialización y configuración de Flyway.</li>
+<li><strong>docker-compose.yml</strong>: orquestación de servicios para desarrollo local.</li>
+<li><strong>azure-pipelines.yml</strong>: definición del pipeline de CI/CD (supuesto para Azure, aunque también se usan GitHub Actions).</li>
+</ul>
+<p>Mantén cada carpeta limpia y consulta su README para más detalles.</p>
+
+<h2>3. Convenciones de Código</h2>
+<p>El estilo de programación sigue los principios SOLID y Clean Code. Se utilizan clases con nombres descriptivos en Inglés, así como métodos y variables en <em>camelCase</em>. Los <strong>DTOs</strong> se ubican dentro de un paquete <em>dto</em> en el backend o en un directorio <em>shared</em> en el frontend. La estructura por capas separa <em>domain</em>, <em>application</em> e <em>infrastructure</em> (o <em>core</em>, <em>features</em> e <em>infrastructure</em> en Angular). Los commits deberían respetar un formato corto: <code>feat:</code>, <code>fix:</code>, <code>docs:</code>, etc., seguido de una descripción breve en presente.</p>
+
+<h2>4. Flujo de Desarrollo</h2>
+<p>Para crear una nueva funcionalidad se parte de una historia de usuario (HU). Se sugiere trabajar en una rama de tipo <code>feature/&lt;descripcion&gt;</code>, por ejemplo <code>feature/login-2fa</code>. Tras implementar la HU, se abre un Pull Request hacia <em>develop</em> o <em>main</em> según la estrategia de ramas. Las correcciones rápidas se manejan en ramas <code>hotfix/</code> y mejoras menores en <code>chore/</code>. En cada PR se deben incluir notas de implementación y referencias a la HU correspondiente. El merge sólo se realiza una vez aprobada la revisión de código y superados los tests automáticos.</p>
+
+<h2>5. Revisión y Testing</h2>
+<p>Antes de integrar cualquier cambio se ejecutan pruebas unitarias en ambos módulos. El backend usa JUnit y Mockito para mockear dependencias; el frontend emplea Jasmine y Karma. También se verifica el estilo de código con linters. Cualquier funcionalidad debe tener cobertura adecuada y las pruebas deben pasar en el pipeline de integración. Se recomienda revisar que los endpoints devuelvan códigos HTTP apropiados y que los componentes de Angular manejen los estados de carga y error.</p>
+
+<h2>6. Entorno Local</h2>
+<p>Instala Docker, Node 20 y JDK 17. Con eso basta para levantar todos los servicios. Desde la raíz del proyecto ejecuta:</p>
+<pre>
+docker compose up --build
+</pre>
+<p>Este comando inicia PostgreSQL, el backend y el frontend. Si prefieres ejecutar los módulos por separado, lanza PostgreSQL en Docker, luego en <em>backend/</em> ejecuta <code>./mvnw spring-boot:run</code> y en <em>frontend/</em> usa <code>npm run start</code>. Las variables de entorno se encuentran en <em>docker-compose.yml</em>; para modificar puertos o credenciales crea un archivo <em>.env</em> (supuesto) y sobreescribe los valores.</p>
+
+<h2>7. Integración con CI/CD</h2>
+<p>El proyecto utiliza GitHub Actions junto con pipelines declarados en <em>azure-pipelines.yml</em> como referencia. Cada <em>push</em> ejecuta la construcción del backend y el frontend, además de los tests. Si todo es exitoso, las imágenes Docker se publican en el registro configurado (supuesto) y se despliegan en el entorno de pruebas. Por ello es importante que la rama principal siempre permanezca estable y que se hagan revisiones antes de fusionar.</p>
+
+<h2>8. Colaboración en Equipo</h2>
+<p>Las Pull Requests son el punto central de la colaboración. Cada desarrollador debe revisar y comentar el código de sus compañeros. Si surgen conflictos de merge, resuélvelos localmente antes de actualizar el PR. Es recomendable usar mensajes claros y referenciar tickets o HU. Para la comunicación diaria se usan canales como Slack o Microsoft Teams (supuesto) y se programan reuniones breves para sincronizar avances.</p>
+
+<h2>9. Problemas Comunes y Solución</h2>
+<p>Entre los errores frecuentes están fallos de conexión a la base de datos, puertos ocupados o dependencias corruptas. Verifica que los contenedores se encuentren arriba con <code>docker ps</code>. Si surgen problemas al compilar el frontend, elimina la carpeta <em>node_modules</em> y ejecuta <code>npm install</code> nuevamente. Para el backend, limpia el proyecto con <code>./mvnw clean</code> y asegúrte de que la versión de Java sea la correcta.</p>
+
+<h2>10. Contacto y Soporte</h2>
+<p>Para dudas técnicas puedes escribir al responsable del proyecto en <a href="mailto:soporte@empresa.com">soporte@empresa.com</a>. También se dispone de un canal de Slack interno llamado <em>#erp-ventas</em> para consultas rápidas y un espacio en Teams para seguimiento de incidencias.</p>
+
+</body>
+</html>
