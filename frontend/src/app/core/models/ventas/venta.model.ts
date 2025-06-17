@@ -9,4 +9,5 @@ export interface Venta {
   creadoPorUsuarioId: number;
   creadoPorUsuarioNombre: string;
   activo: boolean;
+  facturada: boolean;
 }

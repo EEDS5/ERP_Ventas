@@ -25,6 +25,18 @@ import { MetodosPagoApiService } from 'src/app/infrastructure/api/metodos-pago/m
 import { ProductosApiService } from 'src/app/infrastructure/api/productos/productos-api.service';
 import { MatIconModule } from '@angular/material/icon';
 
+// Tipado mínimo para el SDK de PayPal y evitar `any`
+declare global {
+  interface Window {
+    paypal?: {
+      Buttons: (config: {
+        createOrder: () => Promise<string>;
+        onApprove: (data: { orderID: string }) => void;
+      }) => { render: (selector: string) => void };
+    };
+  }
+}
+
 @Component({
   selector: 'app-ventas-create-edit-dialog',
   standalone: true,
@@ -66,12 +78,12 @@ export class VentasCreateEditDialogComponent implements OnInit {
   }
 
   private renderPaypalButtons(): void {
-    const paypal = (window as any).paypal;
+    const paypal = window.paypal;
     if (!paypal) return;
     paypal.Buttons({
       createOrder: () => fetch('/api/ventas/paypal/create-order?amount=' + this.form.get('total')?.value, { method: 'post' })
         .then(res => res.text()),
-      onApprove: (data: any) => {
+      onApprove: (data: { orderID: string }) => {
         const dto: CreateVentaCompletaDTO = {
           clienteId: this.form.value.clienteId,
           metodoPagoId: this.form.value.metodoPagoId,

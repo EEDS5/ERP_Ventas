@@ -74,17 +74,17 @@ export function initNgMateroLayoutFactory(
           { route: 'cuentas-por-cobrar', name: 'Cuentas por Cobrar y Pagos', type: 'link' },
         ],
       },
-      /* {
+      {
         route: '',
         name: 'Administración',
         icon: 'settings',
         type: 'sub',
         children: [
           { route: 'usuarios', name: 'Usuarios', type: 'link' },
-          { route: 'metodos-pago', name: 'Métodos de Pago', type: 'link' },
-          { route: 'pasarelas', name: 'Pasarelas de Pago', type: 'link' },
+          /* { route: 'metodos-pago', name: 'Métodos de Pago', type: 'link' },
+          { route: 'pasarelas', name: 'Pasarelas de Pago', type: 'link' }, */
         ],
-      }, */
+      },
     ]);
     settingsService.setOptions({
       navPos: 'side',

@@ -13,4 +13,5 @@ public interface VentaRepository {
     void deleteById(Integer id); // borrado lógico
     void softDeleteById(Integer id);
     List<Venta> obtenerVentasActivasConCliente();
+    Optional<Venta> findVentaConFactura(Integer id);
 }

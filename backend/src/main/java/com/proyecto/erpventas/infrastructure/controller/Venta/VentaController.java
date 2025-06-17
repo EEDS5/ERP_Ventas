@@ -1,5 +1,8 @@
 package com.proyecto.erpventas.infrastructure.controller.Venta;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.proyecto.erpventas.application.dto.response.venta.DetalleVentaDTO;
 import com.proyecto.erpventas.application.dto.request.venta.CreateVentaCompletaDTO;
 import com.proyecto.erpventas.application.dto.request.venta.UpdateVentaCompletaDTO;
@@ -10,9 +13,12 @@ import com.proyecto.erpventas.infrastructure.repository.transaccion.TransaccionP
 import com.proyecto.erpventas.infrastructure.paypal.PayPalClient;
 import com.proyecto.erpventas.application.usecases.venta.*;
 import com.proyecto.erpventas.domain.model.sales.Venta;
+import com.proyecto.erpventas.domain.service.VentaRepository;
 import com.proyecto.erpventas.domain.model.inventory.PasarelaPago;
 import com.proyecto.erpventas.domain.model.sales.TransaccionPasarela;
+import com.proyecto.erpventas.domain.model.sales.Factura;
 import com.proyecto.erpventas.domain.model.people.Usuario;
+import com.proyecto.erpventas.infrastructure.repository.usuario.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +26,10 @@ import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @RestController
 @RequestMapping("/api/ventas")
@@ -35,6 +45,12 @@ public class VentaController {
     private final PasarelaPagoRepository pasarelaRepository;
     private final TransaccionPasarelaRepository transaccionRepository;
     private final PayPalClient payPalClient;
+    private final VentaRepository ventaRepository;
+    private final UserRepository userRepository;
+    private static final Logger log = LoggerFactory.getLogger(VentaController.class);
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public VentaController(
             CreateVentaCompletaUseCase createCompletaUC,
@@ -46,7 +62,9 @@ public class VentaController {
             ReactivateVentaUseCase reactivateUC,
             PasarelaPagoRepository pasarelaRepository,
             TransaccionPasarelaRepository transaccionRepository,
-            PayPalClient payPalClient) {
+            PayPalClient payPalClient,
+            VentaRepository ventaRepository,
+            UserRepository userRepository) {
         this.createCompletaUC = createCompletaUC;
         this.listUC = listUC;
         this.updateCompletaUC = updateCompletaUC;
@@ -57,6 +75,8 @@ public class VentaController {
         this.pasarelaRepository = pasarelaRepository;
         this.transaccionRepository = transaccionRepository;
         this.payPalClient = payPalClient;
+        this.ventaRepository = ventaRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -97,27 +117,47 @@ public class VentaController {
         return ResponseEntity.ok(orderId);
     }
 
+    @Transactional
     @PostMapping("/paypal/capture-order")
     public ResponseEntity<VentaCompletaDTO> captureOrder(@RequestParam("orderId") String orderId,
-                                                         @Valid @RequestBody CreateVentaCompletaDTO dto) throws Exception {
+            @Valid @RequestBody CreateVentaCompletaDTO dto) throws Exception {
+
+        log.debug("▶ captureOrder START – orderId={}, dto={}", orderId, dto);
+
         String token = payPalClient.obtainAccessToken();
+        log.debug("  obtained PayPal token");
+
         PayPalClient.CaptureResult result = payPalClient.captureOrder(token, orderId);
+        log.debug("  capture result: {}", result);
         if (!"COMPLETED".equalsIgnoreCase(result.status())) {
+            log.warn("  order not COMPLETED: {}", result.status());
             throw new RuntimeException("Orden no aprobada");
         }
-        VentaCompletaDTO ventaDto = createCompletaUC.create(dto);
 
+        // 1) Crear la venta
+        VentaCompletaDTO ventaDtoSinFactura = createCompletaUC.create(dto);
+        log.debug("  venta creada DTO: {}", ventaDtoSinFactura);
+
+        // 2) Recuperar la entidad persistida
+        Venta ventaPersistida = ventaRepository.findVentaConFactura(ventaDtoSinFactura.ventaId())
+                .orElseThrow(() -> {
+                    log.error("  no se encontró ventaPersistida id={}", ventaDtoSinFactura.ventaId());
+                    return new RuntimeException("Venta recién creada no encontrada (con factura)");
+                });
+        log.debug("  ventaPersistida recuperada: {}", ventaPersistida);
+
+        // 3) Transacción
         PasarelaPago pasarela = pasarelaRepository.findByNombre("PayPal")
                 .orElseGet(() -> {
                     PasarelaPago p = new PasarelaPago();
                     p.setNombre("PayPal");
+                    log.debug("  creando nueva PasarelaPago PayPal");
                     return pasarelaRepository.save(p);
                 });
+        log.debug("  pasarela: {}", pasarela);
 
         TransaccionPasarela tx = new TransaccionPasarela();
-        Venta ventaRef = new Venta();
-        ventaRef.setVentaId(ventaDto.getVentaId());
-        tx.setVenta(ventaRef);
+        tx.setVenta(ventaPersistida);
         tx.setPasarela(pasarela);
         tx.setEstado("Aprobado");
         tx.setFechaTransaccion(LocalDateTime.now());
@@ -127,8 +167,45 @@ public class VentaController {
         u.setUsuarioID(dto.getCreadoPorUsuarioId());
         tx.setIniciadaPorUsuario(u);
         transaccionRepository.save(tx);
+        log.debug("  TransaccionPasarela guardada: {}", tx);
 
-        return ResponseEntity.ok(ventaDto);
+        // 4) Factura
+        Factura factura = new Factura();
+        factura.setVenta(ventaPersistida);
+        factura.setNumeroFactura("F-" + System.currentTimeMillis());
+        Usuario usuarioFact = userRepository.findById(dto.getCreadoPorUsuarioId())
+                .orElseThrow(() -> new RuntimeException("Usuario creador no encontrado"));
+        factura.setCreadoPorUsuario(usuarioFact);
+        factura.setActivo(true);
+        facturaRepository.saveAndFlush(factura);
+        log.debug("  Factura guardada: {}", factura);
+
+        // 5) Reconstruir DTO marcando facturada = true (ya acabamos de guardar la
+        // factura)
+        List<DetalleVentaDTO> detallesDto = ventaPersistida.getDetalles().stream()
+                .map(d -> new DetalleVentaDTO(
+                        d.getProducto().getProductoId(),
+                        d.getProducto().getNombre(),
+                        d.getCantidad(),
+                        d.getPrecioUnitario(),
+                        d.getSubtotal()))
+                .toList();
+
+        VentaCompletaDTO actualizado = new VentaCompletaDTO(
+                ventaPersistida.getVentaId(),
+                ventaPersistida.getCliente().getClienteId(),
+                ventaPersistida.getCliente().getNombre(),
+                ventaPersistida.getFechaVenta(),
+                ventaPersistida.getTotal(),
+                ventaPersistida.getMetodoPago().getMetodoPagoId(),
+                ventaPersistida.getMetodoPago().getNombre(),
+                ventaPersistida.getCreadoPorUsuario().getUsuarioID(),
+                ventaPersistida.getCreadoPorUsuario().getNombreUsuario(),
+                ventaPersistida.getActivo(),
+                true, // <— aquí forzamos verdadero
+                detallesDto);
+
+        return ResponseEntity.ok(actualizado);
     }
 
     /*
@@ -170,6 +247,8 @@ public class VentaController {
     private VentaCompletaDTO toDto(Venta v) {
 
         boolean estaFacturada = facturaRepository.existsByVentaId(v.getVentaId());
+
+        log.debug("toDto() – ventaId={}, estaFacturada={}", v.getVentaId(), estaFacturada);
 
         // 1) Mapear cada entidad DetalleVenta a su DTO
         List<DetalleVentaDTO> detalles = v.getDetalles().stream()

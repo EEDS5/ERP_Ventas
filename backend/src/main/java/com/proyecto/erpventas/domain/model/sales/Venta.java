@@ -53,4 +53,10 @@ public class Venta {
      */
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleVenta> detalles = new ArrayList<>();
+
+    /**
+     * Relación inversa a la factura (uno a uno).
+     */
+    @OneToOne(mappedBy = "venta", fetch = FetchType.LAZY)
+    private Factura factura;
 }

@@ -39,6 +39,8 @@ services:
       MAIL_USERNAME: elias674559@gmail.com
       MAIL_PASSWORD: nyrrkwpwjjvdbuwq
       SERVER_PORT: 8080
+      PAYPAL_CLIENT_ID: Ab4msEZJ1ai-ywG5_g6rBsaoR0x0QjKz-IKyI-rZMdXkqmshF5r7Ft_YTU8n1latQ2WyJlMZk3lMD6b8
+      PAYPAL_SECRET: ENmSkBX25fe2pd7fO7bvzjR-jiqBvXkIxWo-VW2DT1kj8otEOTXrfLSNoRSbQxB17_-OSrgR1qVbZijK
     ports:
       - "8080:8080"
     depends_on:

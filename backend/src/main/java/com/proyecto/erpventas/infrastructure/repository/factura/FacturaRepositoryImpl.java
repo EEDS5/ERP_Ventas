@@ -38,7 +38,7 @@ public class FacturaRepositoryImpl implements FacturaRepository {
 
     @Override
     public Optional<Factura> findById(Integer id) {
-        return jpaRepository.findById(id.longValue()).filter(Factura::getActivo);
+        return jpaRepository.findById(id).filter(Factura::getActivo);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class FacturaRepositoryImpl implements FacturaRepository {
 
     @Override
     public void softDeleteById(Integer id) {
-        Optional<Factura> opt = jpaRepository.findById(id.longValue());
+        Optional<Factura> opt = jpaRepository.findById(id);
         if (opt.isPresent()) {
             Factura f = opt.get();
             f.setActivo(false);
