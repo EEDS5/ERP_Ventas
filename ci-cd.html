@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Documentación CI/CD</title>
+</head>
+<body>
+<h1>Documentación CI/CD</h1>
+
+<h2>¿Qué es CI/CD y por qué es importante?</h2>
+<p>
+La Integración Continua (CI) y la Entrega/Despliegue Continuo (CD) son
+prácticas fundamentales para mantener la calidad y la agilidad en entornos
+empresariales. CI permite validar automáticamente cada cambio en el código
+mediante compilaciones y pruebas, mientras que CD automatiza la entrega de
+aplicaciones listas para producción. Implementar este pipeline reduce errores manuales y acelera la retroalimentación.
+</p>
+
+<h2>Pipeline implementado</h2>
+<p>
+Este proyecto, compuesto por un backend en Spring Boot 3.4.4 y un frontend en
+Angular 19, utiliza GitHub como repositorio principal y gestiona su ciclo de vida
+mediante GitHub Actions. Los contenedores se despliegan en una máquina virtual
+Azure utilizando Docker y docker-compose. Se describen a continuación los pasos
+reales de los workflows ubicados en <code>.github/workflows/ci.yml</code> y
+<code>.github/workflows/cd.yml</code>.
+</p>
+
+<h2>Etapas de Integración Continua</h2>
+<ul>
+<li><strong>Clonar repositorio:</strong> los jobs usan
+<code>actions/checkout@v3</code> para obtener la versión actual del código.</li>
+<li><strong>Validación del Backend:</strong> sobre Ubuntu, se configura JDK 17
+con <code>actions/setup-java@v3</code>; se almacena la caché de Maven, se
+concede permiso de ejecución a <code>mvnw</code>, se ejecuta
+<code>./mvnw clean install -DskipTests=false</code> y luego
+<code>./mvnw test</code>.</li>
+<li><strong>Validación del Frontend:</strong> se configura Node.js 20 con
+<code>actions/setup-node@v3</code>, se cachea <code>node_modules</code> y se
+realiza <code>npm ci</code>. A continuación se ejecuta
+<code>npm run lint</code> y finalmente se compila en modo producción con
+<code>npm run build -- --configuration production</code>.</li>
+</ul>
+
+<h2>Etapas de Entrega y Despliegue Continuo</h2>
+<ul>
+<li><strong>Autenticación en Azure y ACR:</strong> el workflow de CD inicia
+sesión con <code>azure/login@v1</code> utilizando credenciales almacenadas en
+secretos. Luego realiza <code>az acr login</code> para interactuar con el
+registro de contenedores.</li>
+<li><strong>Construcción de imágenes Docker:</strong> se generan imágenes para
+backend y frontend mediante <code>docker build</code> y se etiquetan tanto con
+el SHA del commit (<code>${TAG}</code>) como con <code>latest</code>.</li>
+<li><strong>Publicación en Azure Container Registry:</strong> se ejecutan
+<code>docker push</code> para subir ambas etiquetas al ACR.</li>
+<li><strong>Preparación de docker-compose:</strong> se copia el archivo
+<code>docker-compose.prod.yml</code> a <code>docker-compose.yml</code> para usar
+las imágenes recién subidas.</li>
+<li><strong>Transferencia a la VM:</strong> se envía el compose file mediante
+<code>appleboy/scp-action@v0.1.7</code> a la ruta
+<code>/home/azureuser/erp-ventas</code> en la VM.</li>
+<li><strong>Ejecución remota:</strong> con <code>appleboy/ssh-action@v1.0.0</code>
+se ejecuta <code>docker-compose pull</code>,
+<code>docker-compose down --remove-orphans</code> y
+<code>docker-compose up -d</code> en la máquina de destino.</li>
+</ul>
+
+<h2>Buenas prácticas aplicadas</h2>
+<ul>
+<li>Los workflows se ejecutan en las ramas <code>main</code> y
+<code>develop</code> (suponiendo que ambas siguen un ciclo de revisión).</li>
+<li>La compilación se dispara también en Pull Requests para detectar errores
+antes de fusionar cambios.</li>
+<li>Las imágenes se etiquetan con el hash del commit y con
+<code>latest</code>, lo cual facilita rastrear qué versión del código está
+corriendo.</li>
+<li>Separación de entornos: el archivo
+<code>docker-compose.prod.yml</code> solo se usa en la etapa de despliegue y no
+interfiere con el entorno de desarrollo local.</li>
+<li>El acceso a la VM se realiza con claves SSH definidas en secretos de GitHub
+para evitar exponer credenciales.</li>
+</ul>
+
+<h2>Diagrama textual del flujo</h2>
+<pre>
+Desarrollador   ---> Commit/Pull Request
+                    |
+GitHub Actions CI  (compila y prueba backend y frontend)
+                    |
+        Si la rama es main y los tests pasan
+                    |
+GitHub Actions CD  (construye imágenes Docker)
+                    |
+Azure Container Registry <--- docker push
+                    |
+          VM Azure ejecuta docker-compose pull, down, up
+                    |
+                Aplicación en producción
+</pre>
+
+<p>
+Con este flujo se garantiza que cada cambio pase por una validación automática y
+que el despliegue en la VM de Azure sea reproducible. Mantener un pipeline
+transparente y documentado permite a cualquier integrante del equipo comprender
+la cadena completa desde el código fuente hasta el entorno productivo.
+</p>
+</body>
+</html>
