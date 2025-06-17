@@ -1,5 +1,5 @@
 // src/app/infrastructure/ui/theme/admin-layout/admin-layout.component.ts
-import { Component, OnDestroy, ViewChild, HostBinding, inject } from '@angular/core';
+import { Component, OnDestroy, ViewChild, HostBinding, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   Router,
@@ -7,7 +7,7 @@ import {
   NavigationStart,
   NavigationEnd,
   NavigationCancel,
-  NavigationError
+  NavigationError,
 } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
@@ -22,6 +22,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { AppSettings } from '@core/settings';
 import { SettingsService } from '@core/services/settings.service';
+import { MenuService } from '@core/services/menu.service';
+import { RolesService } from '@core/services/roles.service';
+import { initNgMateroLayoutFactory } from '@core/config/init-layout.config';
 
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
@@ -43,32 +46,28 @@ import { TopmenuComponent } from '../topmenu/topmenu.component';
     HeaderComponent,
     SidebarComponent,
     SidebarNoticeComponent,
-    TopmenuComponent
+    TopmenuComponent,
   ],
   templateUrl: './admin-layout.component.html',
   styleUrls: ['./admin-layout.component.scss'],
 })
-export class AdminLayoutComponent implements OnDestroy {
-  @ViewChild('sidenav',    { static: true }) sidenav!: MatSidenav;
-  @ViewChild('content',    { static: true }) content!: MatSidenavContent;
+export class AdminLayoutComponent implements OnInit, OnDestroy {
+  @ViewChild('sidenav', { static: true }) sidenav!: MatSidenav;
+  @ViewChild('content', { static: true }) content!: MatSidenavContent;
 
   /** bandera para mostrar/ocultar la barra de progreso */
   loading = false;
 
   /** suscripciones para limpiar al destruir */
-  private routerEventsSub        = Subscription.EMPTY;
+  private routerEventsSub = Subscription.EMPTY;
   private layoutChangesSubscription = Subscription.EMPTY;
 
-  /** servicios inyectados vía `inject()` */
-  private readonly router            = inject(Router);
-  private readonly breakpointObserver = inject(BreakpointObserver);
-  private readonly settings          = inject(SettingsService);
+  private isMobileScreen = false;
+  private isContentWidthFixed = true;
+  private isCollapsedWidthFixed = false;
 
   /** opciones de UI */
-  options: AppSettings = this.settings.options;
-  private isMobileScreen       = false;
-  private isContentWidthFixed  = true;
-  private isCollapsedWidthFixed = false;
+  options!: AppSettings;
 
   @HostBinding('class.matero-content-width-fix')
   get isOver() {
@@ -92,27 +91,39 @@ export class AdminLayoutComponent implements OnDestroy {
     );
   }
 
-  constructor() {
+  constructor(
+    private router: Router,
+    private breakpointObserver: BreakpointObserver,
+    private settings: SettingsService,
+    private menuService: MenuService,
+    private rolesService: RolesService,
+  ) {
+
+    this.options = this.settings.options;
+
     // 1) Barra de progreso en eventos del router
     this.routerEventsSub = this.router.events
-      .pipe(filter(event =>
-        event instanceof NavigationStart ||
-        event instanceof NavigationEnd ||
-        event instanceof NavigationCancel ||
-        event instanceof NavigationError
-      ))
-      .subscribe(event => {
+      .pipe(
+        filter(
+          (event) =>
+            event instanceof NavigationStart ||
+            event instanceof NavigationEnd ||
+            event instanceof NavigationCancel ||
+            event instanceof NavigationError,
+        ),
+      )
+      .subscribe((event) => {
         this.loading = event instanceof NavigationStart;
       });
 
     // 2) Ajustes de layout según ancho de pantalla
     this.layoutChangesSubscription = this.breakpointObserver
       .observe([
-        '(max-width: 599px)',                                // móvil
-        '(min-width: 600px) and (max-width: 959px)',         // tablet
-        '(min-width: 1280px)'                                // desktop grande
+        '(max-width: 599px)', // móvil
+        '(min-width: 600px) and (max-width: 959px)', // tablet
+        '(min-width: 1280px)', // desktop grande
       ])
-      .subscribe(state => {
+      .subscribe((state) => {
         this.options.sidenavOpened = true;
         this.isMobileScreen = state.breakpoints['(max-width: 599px)'];
         this.options.sidenavCollapsed =
@@ -121,14 +132,16 @@ export class AdminLayoutComponent implements OnDestroy {
       });
 
     // 3) Scroll to top en cada fin de navegación
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        if (this.isOver) {
-          this.sidenav.close();
-        }
-        this.content.scrollTo({ top: 0 });
-      });
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+      if (this.isOver) {
+        this.sidenav.close();
+      }
+      this.content.scrollTo({ top: 0 });
+    });
+  }
+
+  ngOnInit(): void {
+    initNgMateroLayoutFactory(this.menuService, this.settings, this.rolesService)();
   }
 
   ngOnDestroy() {

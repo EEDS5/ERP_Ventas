@@ -2,13 +2,15 @@ package com.proyecto.erpventas.infrastructure.security;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
+import java.util.List;
 
 public class JwtTokenProviderTest {
 
     @Test
     void deberiaGenerarYValidarTokenCorrectamente() {
         JwtTokenProvider provider = new JwtTokenProvider();
-        String token = provider.generateToken("usuarioDemo");
+        String token = provider.generateToken("usuarioDemo", List.of("ADMINISTRADOR"));
+
 
         String resultado = provider.validateToken(token);
         assertThat(resultado).isEqualTo("usuarioDemo");
@@ -27,7 +29,7 @@ public class JwtTokenProviderTest {
     @Test
     void deberiaLanzarExcepcionSiTokenEstaExpirado() throws InterruptedException {
         JwtTokenProvider provider = new JwtTokenProvider(10); // 10 ms de validez
-        String token = provider.generateToken("usuarioDemo");
+        String token = provider.generateToken("usuarioDemo", List.of("ADMINISTRADOR"));
 
         Thread.sleep(20); // esperar a que expire
 

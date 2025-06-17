@@ -21,6 +21,8 @@ import { SettingsService } from './core/services/settings.service';
 
 import { NgxPermissionsModule } from 'ngx-permissions';
 
+import { RolesService } from './core/services/roles.service';
+
 // fábrica para cargar JSON de assets/i18n/*.json
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -72,7 +74,7 @@ export const appConfig = {
     {
       provide: APP_INITIALIZER,
       useFactory: initNgMateroLayoutFactory,
-      deps: [MenuService, SettingsService],
+      deps: [MenuService, SettingsService, RolesService],
       multi: true,
     },
   ],

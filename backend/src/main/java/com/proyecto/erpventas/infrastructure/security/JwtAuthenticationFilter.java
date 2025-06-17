@@ -10,7 +10,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
-import java.util.Collections;
+
+import com.proyecto.erpventas.application.dto.response.usuario.UsuarioTokenPayload;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -34,9 +36,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void autenticarRequestConToken(String token) {
         try {
-            String username = jwtTokenProvider.validateToken(token);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null,
-                    Collections.emptyList());
+            UsuarioTokenPayload payload = jwtTokenProvider.getUsuarioDesdeToken(token);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                    payload.getNombreUsuario(),
+                    null,
+                    payload.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).toList());
             SecurityContextHolder.getContext().setAuthentication(auth);
         } catch (RuntimeException e) {
             SecurityContextHolder.clearContext();

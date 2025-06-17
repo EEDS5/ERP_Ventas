@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
+import java.util.List;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -61,8 +63,11 @@ public class AuthenticationController {
         public ResponseEntity<JwtResponseDTO> register(@Valid @RequestBody RegisterUserDTO nuevoUsuario) {
                 Usuario usuario = registerUserUseCase.register(nuevoUsuario);
 
-                // Generar token temporal solo si aún no tiene 2FA activado
-                String jwt = jwtTokenProvider.generateToken(usuario.getNombreUsuario());
+                // Generar token con lista de roles
+                List<String> roles = usuario.getRoles().stream()
+                                .map(r -> r.getNombre())
+                                .toList();
+                String jwt = jwtTokenProvider.generateToken(usuario.getNombreUsuario(), roles);
 
                 UsuarioResponseDTO responseDTO = new UsuarioResponseDTO(
                                 usuario.getUsuarioID(),
@@ -88,10 +93,14 @@ public class AuthenticationController {
                                         .ok(new JwtResponseDTO("2FA_REQUIRED"));
                 }
 
-                String jwt = jwtTokenProvider.generateToken(user.getNombreUsuario());
+                // Incluir roles en el token
+                List<String> roles = user.getRoles().stream()
+                                .map(r -> r.getNombre())
+                                .toList();
+                String jwt = jwtTokenProvider.generateToken(user.getNombreUsuario(), roles);
+
                 UsuarioResponseDTO userDto = UsuarioResponseDTO.fromEntity(user);
-                return ResponseEntity
-                                .ok(new JwtResponseDTO(jwt, userDto));
+                return ResponseEntity.ok(new JwtResponseDTO(jwt, userDto));
         }
 
         @Operation(summary = "Iniciar sesión con 2FA", description = "Verifica el código 2FA y retorna un token JWT en caso de éxito.")
@@ -103,13 +112,18 @@ public class AuthenticationController {
         public ResponseEntity<JwtResponseDTO> login2FA(@Valid @RequestBody TwoFactorVerificationDTO verificationDTO) {
                 boolean valid = verifyTwoFactorUseCase.verify2FA(verificationDTO);
                 if (!valid) {
-                        throw new RuntimeException("2FA inválido");
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
                 }
                 Usuario user = userRepository.findByNombreUsuario(verificationDTO.getNombreUsuario())
                                 .orElseThrow(() -> new RuntimeException("Usuario no existe o está inactivo"));
-                String token = jwtTokenProvider.generateToken(user.getNombreUsuario());
+                // Generar token con roles
+                List<String> roles = user.getRoles().stream()
+                                .map(r -> r.getNombre())
+                                .toList();
+                String jwt = jwtTokenProvider.generateToken(user.getNombreUsuario(), roles);
+
                 UsuarioResponseDTO userDto = UsuarioResponseDTO.fromEntity(user);
-                return ResponseEntity.ok(new JwtResponseDTO(token, userDto));
+                return ResponseEntity.ok(new JwtResponseDTO(jwt, userDto));
         }
 
         @Operation(summary = "Verificar 2FA", description = "Verifica el código 2FA y retorna '2FA_OK' o '2FA_INVALID'.")

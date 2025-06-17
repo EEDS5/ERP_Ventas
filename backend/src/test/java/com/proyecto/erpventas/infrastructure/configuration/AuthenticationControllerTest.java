@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.nullValue;
@@ -80,7 +81,7 @@ class AuthenticationControllerTest {
         dto.setPassword("password");
 
         when(registerUserUseCase.register(any(RegisterUserDTO.class))).thenReturn(usuario);
-        when(jwtTokenProvider.generateToken("testuser")).thenReturn("token123");
+        when(jwtTokenProvider.generateToken("testuser", List.of("ADMINISTRADOR"))).thenReturn("token123");
 
         mockMvc.perform(post("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
