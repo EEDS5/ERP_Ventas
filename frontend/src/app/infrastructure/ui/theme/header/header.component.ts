@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angu
 import { MatToolbarModule }  from '@angular/material/toolbar';
 import { MatButtonModule }   from '@angular/material/button';
 import { MatIconModule }     from '@angular/material/icon';
+import { ThemeToggleComponent } from '@shared/components/theme-toggle/theme-toggle.component';
 import screenfull from 'screenfull';
 
 import { BrandingComponent }        from '../widgets/branding.component';
@@ -25,7 +26,8 @@ import { CommonModule, NgIf } from '@angular/common';
     /* GithubButtonComponent, */
     /* NotificationComponent, */
     /* TranslateComponent, */
-    UserComponent
+    UserComponent,
+    ThemeToggleComponent
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
