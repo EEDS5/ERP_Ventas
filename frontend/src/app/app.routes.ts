@@ -82,6 +82,13 @@ export const routes: Routes = [
             (m) => m.CategoriasComponent,
           ),
       },
+      {
+        path: 'usuarios',
+        loadComponent: () =>
+          import('./features/usuarios/pages/usuarios.component').then(
+            (m) => m.UsuariosComponent,
+          ),
+      },
 
       // ====== RUTAS DE PERFIL ======
       {

@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>
+  {{ isEdit ? ('usuarios.editar' | translate) + ' #' + (data.usuario?.usuarioID ?? '') : ('usuarios.nuevo' | translate) }}
+</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()" mat-dialog-content>
+  <mat-form-field appearance="outline" class="w-100 mb-3">
+    <mat-label>{{ 'usuarios.nombre_usuario' | translate }}</mat-label>
+    <input matInput formControlName="nombreUsuario" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100 mb-3">
+    <mat-label>{{ 'usuarios.email' | translate }}</mat-label>
+    <input matInput formControlName="email" />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="!isEdit" appearance="outline" class="w-100 mb-3">
+    <mat-label>{{ 'usuarios.contrasena' | translate }}</mat-label>
+    <input matInput type="password" formControlName="password" />
+  </mat-form-field>
+</form>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button class="btn-submit" [disabled]="form.invalid" (click)="submit()">
+    {{ isEdit ? 'Actualizar' : 'Crear' }}
+  </button>
+</mat-dialog-actions>
