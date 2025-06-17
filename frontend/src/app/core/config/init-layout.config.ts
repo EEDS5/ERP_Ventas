@@ -9,7 +9,10 @@ export function initNgMateroLayoutFactory(
   settingsService: SettingsService,
   rolesService: RolesService,
 ) {
-  return () => {
+  return async() => {
+    
+    await rolesService.loadRolesFromToken();
+
     const menu: Menu[] = [];
 
     menu.push({

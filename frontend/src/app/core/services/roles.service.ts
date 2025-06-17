@@ -13,12 +13,19 @@ interface JwtPayloadConRoles {
 export class RolesService {
   private roles: string[] = [];
 
-  constructor(private localStorage: LocalStorageService) {
-    const token = this.localStorage.getToken();
-    if (token && isTokenValid(token)) {
-      const payload = jwtDecode<JwtPayloadConRoles>(token);
-      this.roles = payload.roles || [];
-    }
+  constructor(private localStorage: LocalStorageService) {}
+
+  loadRolesFromToken(): Promise<void> {
+    return new Promise((resolve) => {
+      const token = this.localStorage.getToken();
+      if (token && isTokenValid(token)) {
+        const payload = jwtDecode<JwtPayloadConRoles>(token);
+        this.roles = payload.roles || [];
+      } else {
+        this.roles = [];
+      }
+      resolve();
+    });
   }
 
   hasRole(rol: string): boolean {

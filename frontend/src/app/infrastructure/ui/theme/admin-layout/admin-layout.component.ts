@@ -98,7 +98,6 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     private menuService: MenuService,
     private rolesService: RolesService,
   ) {
-
     this.options = this.settings.options;
 
     // 1) Barra de progreso en eventos del router
@@ -141,7 +140,12 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    initNgMateroLayoutFactory(this.menuService, this.settings, this.rolesService)();
+    const layoutInitFn = initNgMateroLayoutFactory(
+      this.menuService,
+      this.settings,
+      this.rolesService,
+    );
+    Promise.resolve(layoutInitFn()).catch(console.error);
   }
 
   ngOnDestroy() {
