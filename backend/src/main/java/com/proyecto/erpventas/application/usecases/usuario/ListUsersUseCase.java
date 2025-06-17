@@ -17,7 +17,8 @@ public class ListUsersUseCase {
     }
 
     public List<Usuario> listAll() {
-        return userRepository.findAllByActivoTrue();
+        /* return userRepository.findAllByActivoTrue(); */
+        return userRepository.findAll();
     }
     
 }

@@ -80,7 +80,7 @@ export function initNgMateroLayoutFactory(
         icon: 'settings',
         type: 'sub',
         children: [
-          { route: 'usuarios', name: 'Usuarios', type: 'link', icon: 'group' },
+          { route: 'usuarios', name: 'Usuarios', type: 'link'},
           /* { route: 'metodos-pago', name: 'Métodos de Pago', type: 'link' },
           { route: 'pasarelas', name: 'Pasarelas de Pago', type: 'link' }, */
         ],

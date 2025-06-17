@@ -8,6 +8,7 @@ import com.proyecto.erpventas.application.usecases.usuario.GetUserByIdUseCase;
 import com.proyecto.erpventas.application.usecases.usuario.ListUsersUseCase;
 import com.proyecto.erpventas.application.usecases.usuario.UpdateUserPasswordUseCase;
 import com.proyecto.erpventas.application.usecases.usuario.UpdateUserUseCase;
+import com.proyecto.erpventas.application.usecases.usuario.ActivateUserUseCase;
 import com.proyecto.erpventas.domain.model.people.Usuario;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,19 @@ public class UserController {
     private final GetUserByIdUseCase getUserByIdUC;
     private final UpdateUserUseCase updateUserUC;
     private final DeleteUserUseCase deleteUserUC;
+    private final ActivateUserUseCase activateUserUseCase;
 
     @Autowired
-    public UserController(ListUsersUseCase listUsersUC, GetUserByIdUseCase getUserByIdUC,
-            UpdateUserUseCase updateUserUC, DeleteUserUseCase deleteUserUC) {
+    public UserController(ListUsersUseCase listUsersUC, 
+    GetUserByIdUseCase getUserByIdUC,
+            UpdateUserUseCase updateUserUC, 
+            DeleteUserUseCase deleteUserUC,
+            ActivateUserUseCase activateUserUseCase) {
         this.listUsersUC = listUsersUC;
         this.getUserByIdUC = getUserByIdUC;
         this.updateUserUC = updateUserUC;
         this.deleteUserUC = deleteUserUC;
+        this.activateUserUseCase = activateUserUseCase;
     }
 
     @Autowired
@@ -93,5 +99,18 @@ public class UserController {
     public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
         deleteUserUC.delete(id);
         return ResponseEntity.ok("Usuario eliminado correctamente (borrado lógico)");
+    }
+
+    @PutMapping("/activate/{id}")
+    public ResponseEntity<UsuarioResponseDTO> activateUser(@PathVariable Integer id) {
+        Usuario user = activateUserUseCase.activate(id);
+        UsuarioResponseDTO dto = new UsuarioResponseDTO(
+                user.getUsuarioID(),
+                user.getNombreUsuario(),
+                user.getEmail(),
+                user.getTwoFAEnabled(),
+                user.getFechaRegistro(),
+                user.getActivo());
+        return ResponseEntity.ok(dto);
     }
 }

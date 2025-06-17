@@ -19,4 +19,8 @@ public interface UserRepository {
     List<Usuario> findAllByActivoTrue();
     void deleteById(Integer id);    // ahora invoca borrado lógico
     void softDeleteById(Integer id);
+    /**
+     * Recupera un usuario por ID, sin filtrar por activo/inactivo.
+     */
+    Optional<Usuario> findByIdIncludeInactive(Integer id);
 }

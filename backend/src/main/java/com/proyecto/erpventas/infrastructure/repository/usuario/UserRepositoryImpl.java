@@ -49,14 +49,20 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<Usuario> findByIdIncludeInactive(Integer id) {
+        return jpaRepository.findById(id.longValue());
+    }
+
+    @Override
     public List<Usuario> findAll() {
-        return jpaRepository.findAllByActivoTrueOrderByFechaRegistroAsc();
+        /* return jpaRepository.findAllByActivoTrueOrderByFechaRegistroAsc(); */
+        return jpaRepository.findAll();
     }
 
     @Override
     public List<Usuario> findAllByActivoTrue() {
         // Se puede reutilizar findAll() ya que filtra usuarios activos.
-        return findAll();
+        return jpaRepository.findAllByActivoTrueOrderByFechaRegistroAsc();
     }
 
     @Override

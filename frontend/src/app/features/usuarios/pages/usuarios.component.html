@@ -1,13 +1,29 @@
 <div class="row mb-3 justify-content-between align-items-center">
   <mat-form-field class="col-12 col-md-6 form-field-full" appearance="outline">
     <mat-label>{{ 'usuarios.buscar' | translate }}</mat-label>
-    <input #searchInput matInput (keyup)="filtrarUsuario($event)" placeholder="{{ 'usuarios.nombre_usuario' | translate }}" />
-    <button *ngIf="dataSource.filter" matSuffix mat-icon-button aria-label="Limpiar búsqueda" (click)="clearFilter()">
+    <input
+      #searchInput
+      matInput
+      (keyup)="filtrarUsuario($event)"
+      placeholder="{{ 'usuarios.nombre_usuario' | translate }}"
+    />
+    <button
+      *ngIf="dataSource.filter"
+      matSuffix
+      mat-icon-button
+      aria-label="Limpiar búsqueda"
+      (click)="clearFilter()"
+    >
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
   <div class="col-auto">
-    <button mat-fab color="primary" (click)="nuevoUsuario()" aria-label="{{ 'usuarios.nuevo' | translate }}">
+    <button
+      mat-fab
+      color="primary"
+      (click)="nuevoUsuario()"
+      [attr.aria-label]="'usuarios.nuevo' | translate"
+    >
       <mat-icon>add</mat-icon>
     </button>
   </div>
@@ -30,30 +46,38 @@
       </ng-container>
 
       <ng-container matColumnDef="nombreUsuario">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'usuarios.nombre_usuario' | translate }}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ 'usuarios.nombre_usuario' | translate }}
+        </th>
         <td mat-cell *matCellDef="let u">{{ u.nombreUsuario }}</td>
       </ng-container>
 
       <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'usuarios.email' | translate }}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ 'usuarios.email' | translate }}
+        </th>
         <td mat-cell *matCellDef="let u">{{ u.email }}</td>
       </ng-container>
 
       <ng-container matColumnDef="twoFA">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>2FA</th>
         <td mat-cell *matCellDef="let u">
-          <mat-icon color="primary" *ngIf="u.twoFAEnabled">verified</mat-icon>
-          <mat-icon color="warn" *ngIf="!u.twoFAEnabled">highlight_off</mat-icon>
+          <mat-icon class="text-success" *ngIf="u.twoFAEnabled">verified</mat-icon>
+          <mat-icon class="text-danger" *ngIf="!u.twoFAEnabled">highlight_off</mat-icon>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="fechaRegistro">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'usuarios.fecha_registro' | translate }}</th>
-        <td mat-cell *matCellDef="let u">{{ u.fechaRegistro | date:'shortDate' }}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ 'usuarios.fecha_registro' | translate }}
+        </th>
+        <td mat-cell *matCellDef="let u">{{ u.fechaRegistro | date: 'shortDate' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="estado">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'usuarios.estado' | translate }}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ 'usuarios.estado' | translate }}
+        </th>
         <td mat-cell *matCellDef="let u">
           <span [ngClass]="u.activo ? 'text-success' : 'text-danger'">
             {{ u.activo ? ('usuarios.activo' | translate) : ('usuarios.inactivo' | translate) }}
@@ -64,16 +88,40 @@
       <ng-container matColumnDef="acciones">
         <th mat-header-cell *matHeaderCellDef>{{ 'usuarios.acciones' | translate }}</th>
         <td mat-cell *matCellDef="let u">
-          <button *ngIf="u.activo" mat-icon-button color="primary" (click)="editarUsuario(u)" aria-label="Editar">
+          <button
+            *ngIf="u.activo"
+            mat-icon-button
+            color="primary"
+            (click)="editarUsuario(u)"
+            aria-label="Editar"
+          >
             <mat-icon>edit</mat-icon>
           </button>
-          <button *ngIf="u.activo" mat-icon-button color="accent" (click)="cambiarPassword(u)" aria-label="Cambiar contraseña">
+          <button
+            *ngIf="u.activo"
+            mat-icon-button
+            color="accent"
+            (click)="cambiarPassword(u)"
+            aria-label="Cambiar contraseña"
+          >
             <mat-icon>password</mat-icon>
           </button>
-          <button *ngIf="u.activo" mat-icon-button color="warn" (click)="eliminarUsuario(u.usuarioID)" aria-label="Eliminar">
+          <button
+            *ngIf="u.activo"
+            mat-icon-button
+            color="warn"
+            (click)="eliminarUsuario(u.usuarioID)"
+            aria-label="Eliminar"
+          >
             <mat-icon>delete</mat-icon>
           </button>
-          <button *ngIf="!u.activo" mat-icon-button color="primary" (click)="restaurarUsuario(u.usuarioID)" aria-label="Restaurar">
+          <button
+            *ngIf="!u.activo"
+            mat-icon-button
+            color="primary"
+            (click)="restaurarUsuario(u.usuarioID)"
+            aria-label="Restaurar"
+          >
             <mat-icon>restore</mat-icon>
           </button>
         </td>
