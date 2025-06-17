@@ -50,6 +50,65 @@ Los puertos por defecto son:
 - `localhost:8080` para el backend
 - `localhost:4200` para el frontend
 
+## 🚀 Instrucciones de Despliegue
+
+### Requisitos previos
+
+- **Docker** >= 20.10 y **Docker Compose** >= 2.20
+- **Git** para clonar el repositorio
+- **Node.js** 20 y **Angular CLI** (si se desea ejecutar el frontend sin Docker)
+- **JDK** 17 y **Maven** 3.9 (para ejecutar el backend manualmente)
+
+### Despliegue local con Docker Compose
+
+1. Asegúrate de que Docker y Docker Compose estén instalados.
+2. Desde la raíz del proyecto ejecuta:
+
+```bash
+docker compose up --build
+```
+
+Este comando construye las imágenes y levanta PostgreSQL, backend y frontend. Los contenedores permanecerán en segundo plano si añades `-d`.
+
+### Ejecución manual sin Docker
+
+1. Inicia PostgreSQL localmente o usando `docker run postgres`.
+2. En `backend/` ejecuta:
+
+```bash
+./mvnw spring-boot:run
+```
+
+3. En `frontend/` instala dependencias y arranca Angular:
+
+```bash
+npm install
+npm run start
+```
+
+### Acceso a la aplicación
+
+- Frontend: <http://localhost:4200>
+- API backend: <http://localhost:8080/api>
+- Swagger UI: <http://localhost:8080/swagger-ui/>
+- Base de datos: `localhost:5432` (`erp_user` / `erp_pass`)
+
+### Errores comunes
+
+- **Puertos ocupados**: modifica los puertos en `docker-compose.yml` si otros servicios ya utilizan `5432`, `8080` o `4200`.
+- **Node incompatible**: usa Node 20 para evitar problemas al ejecutar `npm install`.
+- **Base de datos no disponible**: verifica que el contenedor `db` esté corriendo y que las variables de entorno coincidan.
+
+### Despliegue en producción (opcional)
+
+Para un entorno productivo se recomienda usar el archivo `docker-compose.prod.yml`:
+
+```bash
+docker compose -f docker-compose.prod.yml up -d
+```
+
+Este comando utiliza imágenes previamente construidas y puede desplegarse en cualquier servidor que tenga Docker instalado (por ejemplo, una máquina Linux o un servicio en la nube).
+
 ---
 
 ## 🔐 Variables de Entorno
