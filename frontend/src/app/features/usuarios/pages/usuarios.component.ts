@@ -12,6 +12,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
+import { forkJoin, switchMap, map } from 'rxjs';
 
 import { Usuario } from 'src/app/core/models/auth/usuario.model';
 import { UsuarioApiService } from 'src/app/infrastructure/api/usuario/usuario-api.service';
@@ -43,7 +44,7 @@ import { UsuariosCambiarPasswordDialogComponent } from './cambiar-password-dialo
 export class UsuariosComponent implements OnInit {
   dataSource = new MatTableDataSource<Usuario>();
   loading = false;
-  displayedColumns = ['usuarioID', 'nombreUsuario', 'email', 'twoFA', 'fechaRegistro', 'estado', 'acciones'];
+  displayedColumns = ['usuarioID', 'nombreUsuario', 'email', 'roles', 'twoFA', 'fechaRegistro', 'estado', 'acciones'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -61,20 +62,35 @@ export class UsuariosComponent implements OnInit {
 
   private cargarUsuarios(): void {
     this.loading = true;
-    this.api.obtenerUsuarios().subscribe({
-      next: (data: Usuario[]) => {
-        this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.dataSource.filterPredicate = (u: Usuario, filter: string) =>
-          u.nombreUsuario.toLowerCase().includes(filter) || u.email.toLowerCase().includes(filter);
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-        this.snackBar.open('Error al cargar usuarios', '', { duration: 3000 });
-      },
-    });
+    this.api
+      .obtenerUsuarios()
+      .pipe(
+        switchMap((users: Usuario[]) => {
+          const requests = users.map((u) =>
+            this.api.obtenerRolesDeUsuario(u.usuarioID).pipe(
+              map((roles) => {
+                u.roles = roles;
+                return u;
+              })
+            )
+          );
+          return forkJoin(requests);
+        })
+      )
+      .subscribe({
+        next: (users: Usuario[]) => {
+          this.dataSource.data = users;
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+          this.dataSource.filterPredicate = (u: Usuario, filter: string) =>
+            u.nombreUsuario.toLowerCase().includes(filter) || u.email.toLowerCase().includes(filter);
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+          this.snackBar.open('Error al cargar usuarios', '', { duration: 3000 });
+        },
+      });
   }
 
   filtrarUsuario(event: Event): void {

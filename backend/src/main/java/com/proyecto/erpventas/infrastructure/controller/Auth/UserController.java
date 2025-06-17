@@ -9,6 +9,7 @@ import com.proyecto.erpventas.application.usecases.usuario.ListUsersUseCase;
 import com.proyecto.erpventas.application.usecases.usuario.UpdateUserPasswordUseCase;
 import com.proyecto.erpventas.application.usecases.usuario.UpdateUserUseCase;
 import com.proyecto.erpventas.application.usecases.usuario.ActivateUserUseCase;
+import com.proyecto.erpventas.application.usecases.usuario.GetRolesPorUsuarioUseCase;
 import com.proyecto.erpventas.domain.model.people.Usuario;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +28,21 @@ public class UserController {
     private final UpdateUserUseCase updateUserUC;
     private final DeleteUserUseCase deleteUserUC;
     private final ActivateUserUseCase activateUserUseCase;
+    private final GetRolesPorUsuarioUseCase getRolesPorUsuarioUseCase;
 
     @Autowired
     public UserController(ListUsersUseCase listUsersUC, 
     GetUserByIdUseCase getUserByIdUC,
             UpdateUserUseCase updateUserUC, 
             DeleteUserUseCase deleteUserUC,
-            ActivateUserUseCase activateUserUseCase) {
+            ActivateUserUseCase activateUserUseCase,
+            GetRolesPorUsuarioUseCase getRolesPorUsuarioUseCase) {
         this.listUsersUC = listUsersUC;
         this.getUserByIdUC = getUserByIdUC;
         this.updateUserUC = updateUserUC;
         this.deleteUserUC = deleteUserUC;
         this.activateUserUseCase = activateUserUseCase;
+        this.getRolesPorUsuarioUseCase = getRolesPorUsuarioUseCase;
     }
 
     @Autowired
@@ -112,5 +116,14 @@ public class UserController {
                 user.getFechaRegistro(),
                 user.getActivo());
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/{id}/roles")
+    public ResponseEntity<List<String>> obtenerRoles(@PathVariable Integer id) {
+        List<String> roles = getRolesPorUsuarioUseCase.obtenerRoles(id)
+                .stream()
+                .map(r -> r.getNombre())
+                .toList();
+        return ResponseEntity.ok(roles);
     }
 }
