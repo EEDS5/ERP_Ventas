@@ -63,8 +63,7 @@ public class SecurityConfig {
                                                 .requestMatchers(HttpMethod.PUT, "/api/users/{id:[0-9]+}/password")
                                                 .authenticated()
 
-                                                // Resto de operaciones (crear, listar, eliminar, activar) solo para
-                                                // ADMINISTRADOR
+                                                // Resto de operaciones (crear, listar, eliminar, activar) solo para ADMINISTRADOR
                                                 .requestMatchers("/api/users/**").hasRole("ADMINISTRADOR")
                                                 .requestMatchers("/api/productos/**")
 
@@ -106,11 +105,9 @@ public class SecurityConfig {
                 CorsConfiguration configuration = new CorsConfiguration();
                 // Permitir llamadas desde tu frontend en http://localhost:4200 (desarrollo)
                 // y desde http://172.190.147.232:4200 (producción en VM):
-                // Permitimos localhost, tu IP fija y cualquier subdominio ngrok-free.app
-                configuration.setAllowedOriginPatterns(List.of(
+                configuration.setAllowedOrigins(List.of(
                                 "http://localhost:4200",
-                                "http://172.190.147.232:4200",
-                                "https://*.ngrok-free.app"));
+                                "http://172.190.147.232:4200"));
                 // Métodos HTTP permitidos:
                 configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 // Todos los headers permitidos:
