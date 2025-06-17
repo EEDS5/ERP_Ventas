@@ -53,8 +53,8 @@ services:
       dockerfile: Dockerfile
     container_name: angular_frontend
     ports:
-      - "4200:4200"
-      # - "4200:80"  # Producción con Nginx
+      #- "4200:4200"
+      - "4200:80"  # Producción con Nginx
 
     # Uncomment the following lines for production with Nginx
     volumes:
